@@ -9,6 +9,20 @@
 // | Author: Dean <zxxjjforever@163.com>
 // +----------------------------------------------------------------------
 
+
+
+use think\Route;
+
+//Route::get('/',function(){
+//    return 'Hello,world!';
+//});
+
+
+
+Route::rule([
+    '/'  =>  'web/Index/Index',
+],'','GET');
+
 if (file_exists(CMF_ROOT . "data/conf/route.php")) {
     $runtimeRoutes = include CMF_ROOT . "data/conf/route.php";
 } else {
