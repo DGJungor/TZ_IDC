@@ -170,6 +170,11 @@
                 </header>
                 <section class="tzidc-popular">
                     <ul>
+                        <foreach name="hotInfo" item="vo">
+                            <li>
+                                <a href="#">{$vo.post_title}</a>
+                            </li>
+                        </foreach>
                         <li>
                             <a href="#">特朗普“退群”，对中国有什么影响？</a>
                         </li>
@@ -179,6 +184,7 @@
                         <li>
                             <a href="#">中国现金贷突袭东南亚，为了活下去只有干掉同行</a>
                         </li>
+
                     </ul>
                 </section>
             </div>

@@ -18,8 +18,6 @@ class IndexController extends HomeBaseController
         $hotInfo = $indexModel->hotInfo();
 
 
-        //获取时间现在时间戳
-
         dump($hotInfo);
 
 
@@ -34,6 +32,7 @@ class IndexController extends HomeBaseController
 
 //        dump($data);
 
+        $this->assign('hotInfo',$hotInfo);
         $this->assign('data',$data);
         $this->assign('friendLink',$friendLink);
         return $this->fetch();

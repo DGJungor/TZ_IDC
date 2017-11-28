@@ -10,7 +10,8 @@ class IndexModel extends Model
 
     public function hotInfo()
     {
-
+        //获取15天前的时间戳
+        $time = strtotime("-15 day");
 
 
         $hotInfo = Db::name('portal_post')
