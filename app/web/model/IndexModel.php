@@ -60,6 +60,7 @@ class IndexModel extends Model
     public function  friendLink()
     {
         $str = Db::name('link')
+            ->where('status','=','1')
             ->select();
 
         return $str;

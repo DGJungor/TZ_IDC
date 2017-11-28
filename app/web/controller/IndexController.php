@@ -24,11 +24,19 @@ class IndexController extends HomeBaseController
         //从模型中取出友情链接的数据
         $friendLink = $indexModel->friendLink();
 
-//        dump($friendLink);
+        $data['friendLink'] = $friendLink;
 
-        $t = $request->param('id');
+        dump($friendLink);
 
-        dump($t);
+//        dump($data);
+
+        $this->assign('data',$data);
+        $this->assign('friendLink',$friendLink);
+        return $this->fetch();
+
+
+
+
 
         //分页demo
 //        $users = Db::name('portal_tag')
@@ -36,7 +44,7 @@ class IndexController extends HomeBaseController
 //            ->paginate(2);
 //        $this->assign('users',$users);
 //        $this->assign('page',$users->render());
-        return $this->fetch();
+
 
 
         //分页demo html部分
