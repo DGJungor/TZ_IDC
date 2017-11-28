@@ -14,12 +14,16 @@ class IndexController extends HomeBaseController
     {
 
         $indexModel = new IndexModel();
-        $a = $indexModel->hotInfo();
+        //从模板中获得热门资讯
+        $hotInfo = $indexModel->hotInfo();
 
-//        $b = json_encode('中文');
-//        $v = json_decode($b);
 
-        $list = $this->indexAjax();
+        //获取时间现在时间戳
+
+        dump($hotInfo);
+
+
+//        $list = $this->indexAjax();
 
         //从模型中取出友情链接的数据
         $friendLink = $indexModel->friendLink();

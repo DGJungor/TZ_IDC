@@ -12,8 +12,9 @@ class IndexModel extends Model
     {
 
 
+
         $hotInfo = Db::name('portal_post')
-            ->field('id')
+            ->field('id,post_title')
             ->limit(7)
             ->select();
 
