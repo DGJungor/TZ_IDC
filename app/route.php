@@ -18,10 +18,13 @@ use think\Route;
 //});
 
 
-
+//首页路由
 Route::rule([
     '/'  =>  'web/Index/Index',
 ],'','GET');
+
+//详情页路由
+Route::rule('detail/:id','web/Detail/Index');
 
 if (file_exists(CMF_ROOT . "data/conf/route.php")) {
     $runtimeRoutes = include CMF_ROOT . "data/conf/route.php";

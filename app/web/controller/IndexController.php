@@ -5,24 +5,52 @@ namespace app\web\controller;
 
 use cmf\controller\HomeBaseController;
 use app\web\model\IndexModel;
+use think\Db;
+use think\Request;
 
 class IndexController extends HomeBaseController
 {
-    public function index()
+    public function index(Request $request)
     {
 
-        $hotInfo = new IndexModel();
-        $a = $hotInfo->hotInfo();
+        $indexModel = new IndexModel();
+        $a = $indexModel->hotInfo();
 
 //        $b = json_encode('中文');
 //        $v = json_decode($b);
 
-        $c = $this->indexAjax();
-        dump($c);
+        $list = $this->indexAjax();
 
+        //从模型中取出友情链接的数据
+        $friendLink = $indexModel->friendLink();
 
+//        dump($friendLink);
 
+        $t = $request->param('id');
+
+        dump($t);
+
+        //分页demo
+//        $users = Db::name('portal_tag')
+//            ->field('id')
+//            ->paginate(2);
+//        $this->assign('users',$users);
+//        $this->assign('page',$users->render());
         return $this->fetch();
+
+
+        //分页demo html部分
+        /**
+         *
+         * <div>
+         * <foreach name="users" item="vo">
+         * <div>{$vo.id}</div>
+         * </foreach>
+         *
+         * <div class="pagination">{$users->render()}</div>
+         *
+         */
+
 
     }
 
@@ -36,7 +64,7 @@ class IndexController extends HomeBaseController
     {
 
         //模拟接收到的中文标签数据
-        $testName = json_encode('网络安全');
+        $testName = json_encode('热门资讯');
 
         $tagName = json_decode($testName);
 
@@ -44,12 +72,25 @@ class IndexController extends HomeBaseController
 
         $tagCode = $indexModel->matchTag($tagName);
 
-        $str =  $indexModel->ajaxTag($tagCode['id']);
+
+        $str = $indexModel->ajaxTag($tagCode['id']);
+//        $str =  $tagCode;
 
 
         return $str;
 
 
     }
+
+    /**
+     * 首页 友情链接
+     *
+     */
+    public function friendLink()
+    {
+
+
+    }
+
 
 }
