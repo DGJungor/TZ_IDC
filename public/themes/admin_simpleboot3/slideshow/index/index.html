@@ -8,6 +8,8 @@
     <title>Document</title>
 
     <link rel="stylesheet" href="__TMPL__/public/layui/css/layui.css">
+
+    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>s
     <!--<link href="__TMPL__/static/css/index.css?de4b0f5cc0583d81b569" rel="stylesheet">-->
     <style>
         body {
@@ -43,7 +45,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">文章ID</label>
                     <div class="layui-input-block">
-                        <input type="text" name="title" required lay-verify="required" placeholder="请输入文章ID"
+                        <input type="text" name="postID" required lay-verify="required" placeholder="请输入文章ID"
                                autocomplete="off"
                                class="layui-input">
                     </div>
@@ -56,7 +58,7 @@
                     </div>
                 </div>
 
-                <input type="hidden" name="pic_address" value="">
+                <input type="hidden" name="pic_address" id="pic_address" value="">
 
                 <!--<div class="layui-form-item">-->
                 <!--<label class="layui-form-label">选择框</label>-->
@@ -98,6 +100,8 @@
                 <!--<textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>-->
                 <!--</div>-->
                 <!--</div>-->
+
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
@@ -123,9 +127,22 @@
 
         //监听提交
         form.on('submit(formDemo)', function (data) {
-            layer.msg(JSON.stringify(data.field));
+//            layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                type: "POST",
+                url: "/slideshow/add/uppost",
+                data: {'__token__': "{$Request.token}",'data':data.field},
+                dataType: "json",
+                success: function (msg) {
+                    layer.msg('成功!');
+
+                },
+            });
+
             return false;
         });
+
+
 
         form.verify({
             username: function(value, item){ //value：表单的值、item：表单的DOM对象
@@ -147,6 +164,9 @@
                 ,'密码必须6到12位，且不能出现空格'
             ]
         });
+
+
+
     });
 
     layui.use('element', function () {
@@ -162,9 +182,12 @@
 
         upload.render({
             elem: '#upPic'
-            , url: '/upload/'
+            , url: '/slideshow/add/uppic'
             , done: function (res) {
-                console.log(res)
+                console.log(res);
+                console.log(res.saveName);
+                layer.msg(res.msg);
+            $("#pic_address").val(res.saveName);
             }
         });
 

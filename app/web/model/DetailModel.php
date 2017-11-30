@@ -11,6 +11,7 @@ class DetailModel extends Model
     public function getPost()
     {
 
+
     }
 
 
