@@ -11,11 +11,13 @@ class IndexModel extends Model
     public function hotInfo()
     {
         //获取15天前的时间戳
-        $time = strtotime("-15 day");
+        $timeAgo = strtotime("-15 day");
 
 
         $hotInfo = Db::name('portal_post')
-            ->field('id,post_title')
+            ->field('id,post_title,create_time,post_hits')
+            ->where('create_time','>',$timeAgo)
+            ->order('post_hits desc')
             ->limit(7)
             ->select();
 
