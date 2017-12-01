@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="__TMPL__/public/layui/css/layui.css">
 
-    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>s
+    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
     <!--<link href="__TMPL__/static/css/index.css?de4b0f5cc0583d81b569" rel="stylesheet">-->
     <style>
         body {
@@ -30,6 +30,13 @@
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
             内容1
+
+
+
+
+
+        </div>
+        <div class="layui-tab-item">
 
 
             <form class="layui-form" action="">
@@ -112,7 +119,6 @@
 
 
         </div>
-        <div class="layui-tab-item">内容2</div>
 
     </div>
 </div>
@@ -134,7 +140,7 @@
                 data: {'__token__': "{$Request.token}",'data':data.field},
                 dataType: "json",
                 success: function (msg) {
-                    layer.msg('成功!');
+                    layer.msg(msg.msg);
 
                 },
             });

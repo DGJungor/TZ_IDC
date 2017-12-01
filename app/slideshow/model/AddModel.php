@@ -8,13 +8,12 @@ use think\Db;
 class AddModel extends Model
 {
 
-    public function addPost()
+    public function addPost($data)
     {
 
-//        $title, $postID, $pic_address
-        $title       = 'IDC快讯';
-        $postID      = 123;
-        $pic_address = '123asdf.jpg';
+        $title       = $data['data']['title'];
+        $postID      = $data['data']['postID'];
+        $pic_address = $data['data']['pic_address'];
         $data        = ['slideshow_title' => $title, 'portal_id' => $postID, 'pic_address' => $pic_address];
         Db::name('slideshow')
             ->insert($data);

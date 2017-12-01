@@ -4,10 +4,12 @@ namespace app\slideshow\validate;
 
 use think\Validate;
 
-class AddSlideshow extends  Validate
+class AddSlideshowValidate extends  Validate
 {
     protected $rule = [
-
+        'title'  =>  'require|token',
+        'email' =>  'email',
     ];
+
 
 }
