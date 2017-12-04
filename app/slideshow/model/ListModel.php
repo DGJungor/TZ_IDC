@@ -7,9 +7,13 @@ use think\Db;
 
 class ListModel extends Model
 {
-    public function show()
+    public function getList()
     {
 
+        $data['list']         = Db::name('slideshow')->select();
+        $data['count'] = db('slideshow')->count();
+
+        return $data;
 
 
     }
