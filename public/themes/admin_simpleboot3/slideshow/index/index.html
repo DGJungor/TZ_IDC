@@ -161,18 +161,18 @@
 
 
             if (layEvent === 'open') {
-                layer.msg("ID:"+data.id+" 已开启");
                 $.ajax({
                     type: "POST",
                     url: "/slideshow/list/alterStatu",
-                    data: {'slideshowId': data.id, 'status': 1},
+                    data: {'__token__': "{$Request.token}", 'slideshowId': data.id, 'status': 1},
                     dataType: "json",
                     success: function (msg) {
-                        if (msg.code == 2) {
-                            layer.msg('已冻结');
+                        if (msg.code == 1) {
                             obj.update({
-                                stateCN: '冻结',
+                                status: '开启',
                             });
+                            layer.msg("ID:"+data.id+" 已开启");
+
                         }
 
                     },
@@ -181,6 +181,22 @@
 
             } else if (layEvent === 'close') {
                 layer.msg("已关闭");
+                $.ajax({
+                    type: "POST",
+                    url: "/slideshow/list/alterStatu",
+                    data: {'__token__': "{$Request.token}", 'slideshowId': data.id, 'status': 0},
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.code == 1) {
+                            obj.update({
+                                status: '关闭',
+                            });
+                            layer.msg("ID:"+data.id+" 已关闭");
+
+                        }
+
+                    },
+                });
 
             } else if (layEvent === 'del') {
                 layer.msg("已删除");
