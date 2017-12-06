@@ -18,7 +18,7 @@ class IndexController extends HomeBaseController
         $hotInfo = $indexModel->hotInfo();
 
 
-        dump($hotInfo);
+//        dump($hotInfo);
 
 
 //        $list = $this->indexAjax();
@@ -28,7 +28,7 @@ class IndexController extends HomeBaseController
 
         $data['friendLink'] = $friendLink;
 
-        dump($friendLink);
+//        dump($friendLink);
 
 //        dump($data);
 

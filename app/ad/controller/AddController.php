@@ -39,7 +39,7 @@ class AddController extends AdminBaseController
     }
 
 
-    public  function  upPost(Request $request)
+    public function upPost(Request $request)
     {
 
         $data = $request->param();
@@ -48,15 +48,14 @@ class AddController extends AdminBaseController
 
         $addModel = new AddModel();
 
-
-
-
+        $info = $addModel->addAd($data);
 
 
         dump($data);
 
-    }
+        dump($info);
 
+    }
 
 
 }

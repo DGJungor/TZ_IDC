@@ -14,12 +14,14 @@ class AddModel extends Model
         $adName  = $data['data']['adName'];
         $adLinke = $data['data']['adLink'];
         $siteId  = $data['data']['siteId'];
-        $data    = ['ad_name' => $adName, 'ad_link' => $adLinke, 'ad_site_id' => $siteId];
+        $picAddress = $data['data']['pic_address'];
+
+        $data    = ['ad_name' => $adName, 'ad_link' => $adLinke, 'ad_site_id' => $siteId,'ad_pic_address'=>$picAddress];
         Db::name('ad')
             ->insert($data);
-        $slideshowId = DB::name('ad')
+        $adId = DB::name('ad')
             ->getLastInsID();
-        return $slideshowId;
+        return $adId;
 
     }
 

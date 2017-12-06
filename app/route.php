@@ -20,7 +20,7 @@ use think\Route;
 
 //首页路由
 Route::rule([
-    '/'  =>  'web/Index/Index',
+    '/'  =>  'web/Index/Index'
 ],'','GET');
 
 //详情页路由
