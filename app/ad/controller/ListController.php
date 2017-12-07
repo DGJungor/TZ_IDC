@@ -24,14 +24,21 @@ class ListController extends AdminBaseController
      * @author 张俊
      *
      */
-    public function getList()
+    public function getList(Request $request)
     {
+
+        //获取分页数据
+        $page  = $request->param('page');
+        $limit = $request->param('limit');
+
+        //计算分页偏移量
+        $offset = ($page - 1) * $limit;
 
         //实例化  广告模型
         $getListModel = new ListModel();
 
         //从广告列表模型中取出 广告数据
-        $dataList = $getListModel->getList();
+        $dataList = $getListModel->getList($offset, $limit);
 
         //将获取的广告列表数据重组成新数组
         $i = 0;
@@ -62,18 +69,14 @@ class ListController extends AdminBaseController
     }
 
     /**
-     * 广告 列表  修改状态
-     * 
+     * 广告列表  修改状态
+     *
      * @author 张俊
      * @param Request $request
      *
      */
     public function alterStatu(Request $request)
     {
-
-//        $data = $request->param();
-//        dump($data);
-//        die();
 
         //从请求信息中获得  数据
         $adId   = $request->param('adId');

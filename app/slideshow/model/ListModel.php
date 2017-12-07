@@ -7,10 +7,12 @@ use think\Db;
 
 class ListModel extends Model
 {
-    public function getList()
+    public function getList($offset, $limit)
     {
 
-        $data['list']  = Db::name('slideshow')->select();
+        $data['list']  = Db::name('slideshow')
+            ->limit($offset, $limit)
+            ->select();
         $data['count'] = db('slideshow')->count();
 
         return $data;
