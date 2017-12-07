@@ -13,12 +13,23 @@ use think\Validate;
 
 class AddController extends AdminBaseController
 {
+
+    /**
+     * @param Request $request
+     * 添加轮播图 上传图片AJAX操作
+     *
+     *
+     */
     public function upPic(Request $request)
     {
 
-        $file = $request->file('file');
-        $info = $file->move(ROOT_PATH . 'public' . DS . 'upload' . DS . 'slideshow');
 
+        //获取添加上传的信息
+        $file = $request->file('file');
+
+        // 将上传的图片移动到 指定的文件加   /public/upload/slideshow/日期/文件名字
+        $info = $file->move(ROOT_PATH . 'public' . DS . 'upload' . DS . 'slideshow');
+        //通过移动文件的信息判断是否上传成功  并添加返回信息和返回码
         if ($info) {
             $res['code']     = 1;
             $res['msg']      = '上传成功!';
@@ -28,17 +39,25 @@ class AddController extends AdminBaseController
             $res['msg'] = '上传失败!';
         }
 
+        //上传结果的状态码和信息 转化成json格式 返回到视图层
         echo json_encode($res);
     }
 
 
+    /**
+     * @param Request $request
+     * 添加轮播图 提交表单AJAX操作
+     *
+     */
     public function upPost(Request $request)
     {
-
+        //获取POST过来的 表单信息
         $data = $request->param();
 
+        //实例化 验证规则
         $validate = Loader::validate('AddSlideshow');
 
+        //判断表单信息是否正确 并将结果添加到数组
         if(!$validate->check($data['data'])){
 //            dump($validate->getError());
             $res['code'] = 0;
@@ -47,10 +66,10 @@ class AddController extends AdminBaseController
             die();
         }
 
-
+        //实例化  轮播图添加 模型
         $addModel = new AddModel();
 
-
+        //判断 表单内容是否全
         if (empty($data['data']['title'])) {
             $res['code'] = 0;
             $res['msg']  = '标题不能为空';
@@ -79,7 +98,7 @@ class AddController extends AdminBaseController
             
         }
 
-
+        //将提交结果的信息和状态码 转换成 json格式返回到视图层
         echo json_encode($res);
 
     }
