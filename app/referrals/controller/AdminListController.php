@@ -99,6 +99,20 @@ class AdminListController extends AdminBaseController
         echo json_encode($res);
     }
 
+    /**
+     *
+     * 删除产品推介
+     *
+     * @author 张俊
+     *
+     */
+    public function delReferrals()
+    {
+
+
+
+    }
+
 
 }
 

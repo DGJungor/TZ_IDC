@@ -4,7 +4,7 @@ namespace app\referrals\model;
 
 use think\Model;
 use think\Db;
-
+use think\File;
 
 /**
  * Class ListModel
@@ -64,5 +64,38 @@ class AdminListModel extends Model
         return $info;
     }
 
+
+    /**
+     *
+     * 删除产品推介
+     *
+     * @author 张俊
+     *
+     */
+    public function delReferrals()
+    {
+
+    }
+
+    /**
+     *
+     * 获取产品推介图片路径
+     *
+     * @author 张俊
+     * @param $referralsId  '产品推介ID'
+     */
+    public function getPicPath($referralsId)
+    {
+        //根据产品产品推介ID 查询相关的图片路径
+        $picPath =  Db::name('referrals')
+            ->field('id,pic_address')
+            ->where('id', $referralsId)
+            ->find();
+
+        return $picPath;
+
+
+
+    }
 
 }
