@@ -3,7 +3,7 @@
 
 namespace app\slideshow\controller;
 
-use app\slideshow\model\ListModel;
+use app\slideshow\model\AdminListModel;
 use cmf\controller\AdminBaseController;
 use think\Db;
 use think\Request;
@@ -20,7 +20,7 @@ use think\Validate;
  *
  *
  */
-class ListController extends AdminBaseController
+class AdminListController extends AdminBaseController
 {
     public function getList(Request $request)
     {
@@ -33,7 +33,7 @@ class ListController extends AdminBaseController
         $offset = ($page - 1) * $limit;
 
         //实例化轮播图 列表模型
-        $getListModel = new ListModel();
+        $getListModel = new AdminListModel();
 
         //查询数据库中轮播图数据
         $dataList = $getListModel->getList($offset, $limit);
@@ -79,7 +79,7 @@ class ListController extends AdminBaseController
         $status      = $request->param('status');
 
         //实例化 轮播图列表模型  向模型发送修改信息
-        $alterStateModel = new ListModel();
+        $alterStateModel = new AdminListModel();
         $info            = $alterStateModel->alterState($slideshowId, $status);
 
         //根据模型返回的信息 判断对否修改成功

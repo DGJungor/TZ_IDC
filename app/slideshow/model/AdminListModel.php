@@ -5,7 +5,7 @@ namespace app\slideshow\model;
 use think\Model;
 use think\Db;
 
-class ListModel extends Model
+class AdminListModel extends Model
 {
     public function getList($offset, $limit)
     {

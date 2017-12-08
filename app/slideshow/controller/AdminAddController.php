@@ -3,7 +3,7 @@
 
 namespace app\slideshow\controller;
 
-use app\slideshow\model\AddModel;
+use app\slideshow\model\AdminAddModel;
 use cmf\controller\AdminBaseController;
 use think\Db;
 use think\Loader;
@@ -11,7 +11,7 @@ use think\Request;
 use think\Validate;
 
 
-class AddController extends AdminBaseController
+class AdminAddController extends AdminBaseController
 {
 
     /**
@@ -67,7 +67,7 @@ class AddController extends AdminBaseController
         }
 
         //实例化  轮播图添加 模型
-        $addModel = new AddModel();
+        $addModel = new AdminAddModel();
 
         //判断 表单内容是否全
         if (empty($data['data']['title'])) {

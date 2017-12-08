@@ -140,7 +140,7 @@
         table.render({
             elem: '#list' //指定原始表格元素选择器（推荐id选择器）
             // , height: 600 //容器高度
-            , url: '/slideshow/list/getList' //数据接口
+            , url: '/slideshow/admin_list/getList' //数据接口
             , page: true //开启分页
             , cols: [[
                 {field: 'id', title: 'ID', sort: true, fixed: 'left'}
@@ -163,7 +163,7 @@
             if (layEvent === 'open') {
                 $.ajax({
                     type: "POST",
-                    url: "/slideshow/list/alterStatu",
+                    url: "/slideshow/admin_list/alterStatu",
                     data: {'__token__': "{$Request.token}", 'slideshowId': data.id, 'status': 1},
                     dataType: "json",
                     success: function (msg) {
@@ -183,7 +183,7 @@
                 // layer.msg("已关闭");
                 $.ajax({
                     type: "POST",
-                    url: "/slideshow/list/alterStatu",
+                    url: "/slideshow/admin_list/alterStatu",
                     data: {'__token__': "{$Request.token}", 'slideshowId': data.id, 'status': 0},
                     dataType: "json",
                     success: function (msg) {
@@ -211,7 +211,7 @@
 //            layer.msg(JSON.stringify(data.field));
             $.ajax({
                 type: "POST",
-                url: "/slideshow/add/uppost",
+                url: "/slideshow/admin_add/uppost",
                 data: {'__token__': "{$Request.token}", 'data': data.field},
                 dataType: "json",
                 success: function (msg) {
@@ -262,7 +262,7 @@
 
         upload.render({
             elem: '#upPic'
-            , url: '/slideshow/add/uppic'
+            , url: '/slideshow/admin_add/uppic'
             , done: function (res) {
                 console.log(res);
                 console.log(res.saveName);

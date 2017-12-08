@@ -7,7 +7,7 @@ use cmf\controller\AdminBaseController;
 use think\Db;
 use think\Request;
 
-class IndexController extends AdminBaseController
+class AdminIndexController extends AdminBaseController
 {
     public function index(Request $request)
     {
