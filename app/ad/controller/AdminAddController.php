@@ -2,7 +2,7 @@
 
 namespace app\ad\controller;
 
-use app\ad\model\AddModel;
+use app\ad\model\AdminAddModel;
 use app\ad\model;
 use cmf\controller\AdminBaseController;
 use think\Loader;
@@ -17,7 +17,7 @@ use think\Validate;
  *     'action' =>'default',
  * )
  */
-class AddController extends AdminBaseController
+class AdminAddController extends AdminBaseController
 {
 
 
@@ -71,7 +71,7 @@ class AddController extends AdminBaseController
         }
 
         //实例化 广告添加模型
-        $addModel = new AddModel();
+        $addModel = new AdminAddModel();
 
         //将表单信息发送至模型层  并更加返回信息 判断是否添加成功
         $info = $addModel->addAd($data);

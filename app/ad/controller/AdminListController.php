@@ -2,7 +2,7 @@
 
 namespace app\ad\controller;
 
-use app\ad\model\ListModel;
+use app\ad\model\AdminListModel;
 use app\ad\model;
 use cmf\controller\AdminBaseController;
 use think\Loader;
@@ -15,7 +15,7 @@ use think\Validate;
  * @author 张俊
  * @package app\ad\controller
  */
-class ListController extends AdminBaseController
+class AdminListController extends AdminBaseController
 {
 
     /**
@@ -35,7 +35,7 @@ class ListController extends AdminBaseController
         $offset = ($page - 1) * $limit;
 
         //实例化  广告模型
-        $getListModel = new ListModel();
+        $getListModel = new AdminListModel();
 
         //从广告列表模型中取出 广告数据
         $dataList = $getListModel->getList($offset, $limit);
@@ -82,7 +82,7 @@ class ListController extends AdminBaseController
         $adId   = $request->param('adId');
         $status = $request->param('status');
 
-        $alterStateModel = new ListModel();
+        $alterStateModel = new AdminListModel();
         $info            = $alterStateModel->alterState($adId, $status);
         if ($info) {
             $res['code'] = 1;

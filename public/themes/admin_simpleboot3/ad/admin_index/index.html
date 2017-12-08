@@ -146,7 +146,7 @@
         table.render({
             elem: '#list' //指定原始表格元素选择器（推荐id选择器）
             // , height: 600 //容器高度
-            , url: '/ad/list/getList' //数据接口
+            , url: '/ad/Admin_List/getList' //数据接口
             , page: true //开启分页
             , cols: [[
                 {field: 'id', title: 'ID', sort: true, fixed: 'left'}
@@ -169,7 +169,7 @@
             if (layEvent === 'open') {
                 $.ajax({
                     type: "POST",
-                    url: "/ad/list/alterStatu",
+                    url: "/ad/Admin_List/alterStatu",
                     data: {'__token__': "{$Request.token}", 'adId': data.id, 'status': 1},
                     dataType: "json",
                     success: function (msg) {
@@ -189,7 +189,7 @@
                 // layer.msg("已关闭");
                 $.ajax({
                     type: "POST",
-                    url: "/ad/list/alterStatu",
+                    url: "/ad/Admin_List/alterStatu",
                     data: {'__token__': "{$Request.token}", 'adId': data.id, 'status': 0},
                     dataType: "json",
                     success: function (msg) {
@@ -217,7 +217,7 @@
 //            layer.msg(JSON.stringify(data.field));
             $.ajax({
                 type: "POST",
-                url: "/ad/add/uppost",
+                url: "/ad/Admin_Add/uppost",
                 data: {'__token__': "{$Request.token}", 'data': data.field},
                 dataType: "json",
                 success: function (msg) {
@@ -246,7 +246,7 @@
 
         upload.render({
             elem: '#upPic'
-            , url: '/ad/add/uppic'
+            , url: '/ad/Admin_Add/uppic'
             , done: function (res) {
                 console.log(res);
                 console.log(res.saveName);

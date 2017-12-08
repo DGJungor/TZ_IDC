@@ -5,7 +5,7 @@ namespace app\ad\model;
 use think\Model;
 use think\Db;
 
-class AddModel extends Model
+class AdminAddModel extends Model
 {
 
     public function addAd($data)

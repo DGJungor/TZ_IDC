@@ -12,7 +12,7 @@ use cmf\controller\AdminBaseController;
  *     'action' =>'default',
  * )
  */
-class AdIndexController extends AdminBaseController
+class AdminIndexController extends AdminBaseController
 {
     public function  index()
     {

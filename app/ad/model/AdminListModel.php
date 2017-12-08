@@ -14,7 +14,7 @@ use think\Db;
  *
  *
  */
-class ListModel extends Model
+class AdminListModel extends Model
 {
 
     /**
