@@ -69,11 +69,18 @@ class AdminListModel extends Model
      *
      * 删除产品推介
      *
+     * 根据推介产品id 删除相关的推介产品信息
      * @author 张俊
      *
      */
-    public function delReferrals()
+    public function delReferrals($referralsId)
     {
+
+        $delInfo = Db::name('referrals')
+            ->where('id', $referralsId)
+            ->delete();
+
+        return $delInfo;
 
     }
 
@@ -82,18 +89,17 @@ class AdminListModel extends Model
      * 获取产品推介图片路径
      *
      * @author 张俊
-     * @param $referralsId  '产品推介ID'
+     * @param $referralsId '产品推介ID'
      */
     public function getPicPath($referralsId)
     {
         //根据产品产品推介ID 查询相关的图片路径
-        $picPath =  Db::name('referrals')
+        $picPath = Db::name('referrals')
             ->field('id,pic_address')
             ->where('id', $referralsId)
             ->find();
 
         return $picPath;
-
 
 
     }
