@@ -95,4 +95,48 @@ class AdminListController extends AdminBaseController
         echo json_encode($res);
     }
 
+    /**
+     *
+     * 删除广告
+     *
+     * @author 张俊
+     *
+     */
+    public function delAd(Request $request)
+    {
+        //获取要删除的id
+        $adId = $request->param('adId');
+
+        //实例化  模型
+        $AdminListModel = new AdminListModel();
+
+        //获取需要删除的图片路径
+        $picPath = $AdminListModel->getPicPath($adId);
+
+        //图片文件的绝对路径
+        $picPath = ROOT_PATH . 'public' . DS . 'upload' . DS . 'ad' . DS . $picPath['ad_pic_address'];
+
+        //若图片文件存在则执行删除
+        if (is_file($picPath)) {
+            $delInfo = unlink($picPath);
+        }
+
+        //图片文件删除成功 或者 图片文件不存在执行删除数据库中的相关产品推介信息
+        if (!is_file($picPath)) {
+            $delAd = $AdminListModel->delAD($adId);
+        }
+
+        //判断操作结果
+        if ($delAd) {
+            $res['code'] = 1;
+            $res['msg']  = '删除成功';
+        } else {
+            $res['code'] = 0;
+            $res['msg']  = '删除失败';
+        }
+
+        echo json_encode($res);
+
+    }
+
 }

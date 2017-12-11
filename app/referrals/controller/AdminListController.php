@@ -106,13 +106,10 @@ class AdminListController extends AdminBaseController
      * @author 张俊
      *
      */
-    public function delReferrals()
+    public function delReferrals(Request $request)
     {
-        //模拟数据
-        $referralsId = 3;
-
-        //==========================================================================================================
-
+        //获取要删除的商品推介id
+        $referralsId = $request->param('referralsId');
 
         //实例化  产品产品推介模型
         $AdminListModel = new AdminListModel();
@@ -129,7 +126,7 @@ class AdminListController extends AdminBaseController
         }
 
         //图片文件删除成功 或者 图片文件不存在执行删除数据库中的相关产品推介信息
-        if ($delInfo || (!is_file($picPath))) {
+        if (!is_file($picPath)) {
             $delReferrals = $AdminListModel->delReferrals($referralsId);
         }
 

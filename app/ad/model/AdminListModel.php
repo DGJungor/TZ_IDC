@@ -56,4 +56,46 @@ class AdminListModel extends Model
     }
 
 
+    /**
+     *
+     * 删除广告推介
+     *
+     * 根据推介产品id 删除相关的推介产品信息
+     * @author 张俊
+     *
+     */
+    public function delAd($adId)
+    {
+
+        $delInfo = Db::name('ad')
+            ->where('id', $adId)
+            ->delete();
+
+        return $delInfo;
+
+    }
+
+    /**
+     *
+     * 获取广告图片路径
+     *
+     * @author 张俊
+     * @param $referralsId '广告ID'
+     */
+    public function getPicPath($adId)
+    {
+        //根据产品产品推介ID 查询相关的图片路径
+        $picPath = Db::name('ad')
+            ->field('id,ad_pic_address')
+            ->where('id', $adId)
+            ->find();
+
+        return $picPath;
+
+
+    }
+
+
+
+
 }
