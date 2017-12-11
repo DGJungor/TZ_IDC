@@ -512,6 +512,11 @@
         <div class="container">
             <h4>友情链接</h4>
             <ul>
+                <foreach name="friendLink" item="vo">
+                    <li>
+                        <a href="http://{$vo.url}">{$vo.name}</a>
+                    </li>
+                </foreach>
                 <li>
                     <a href="#">绿色软件下载</a>
                 </li>

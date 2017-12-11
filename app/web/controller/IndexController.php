@@ -28,15 +28,15 @@ class IndexController extends HomeBaseController
         $friendLink = $indexModel->friendLink();
 
 
-        $data['friendLink'] = $friendLink;
+//        $data['friendLink'] = $friendLink;
 //        dump($friendLink);
 //        dump($data);
 
 
         //模板赋值
+//        $this->assign('data', $data);
         $this->assign('slideshow', $slideshowInfo);
         $this->assign('hotInfo', $hotInfo);
-        $this->assign('data', $data);
         $this->assign('friendLink', $friendLink);
         return $this->fetch();
 
