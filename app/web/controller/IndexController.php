@@ -14,31 +14,32 @@ class IndexController extends HomeBaseController
     {
 
         $indexModel = new IndexModel();
-        //从模板中获得热门资讯
+
+        //从模型中取出轮播图
+        $slideshowInfo = $indexModel->getSlideshow();
+        $test = time();
+
+//        dump($slideshowInfo);
+
+        //从模型中获得热门资讯
         $hotInfo = $indexModel->hotInfo();
 
-
-//        dump($hotInfo);
-
-
-//        $list = $this->indexAjax();
 
         //从模型中取出友情链接的数据
         $friendLink = $indexModel->friendLink();
 
+
         $data['friendLink'] = $friendLink;
-
 //        dump($friendLink);
-
 //        dump($data);
 
-        $this->assign('hotInfo',$hotInfo);
-        $this->assign('data',$data);
-        $this->assign('friendLink',$friendLink);
+
+        //定义向模板发送的变量
+        $this->assign('slideshow', $slideshowInfo);
+        $this->assign('hotInfo', $hotInfo);
+        $this->assign('data', $data);
+        $this->assign('friendLink', $friendLink);
         return $this->fetch();
-
-
-
 
 
         //分页demo
@@ -47,7 +48,6 @@ class IndexController extends HomeBaseController
 //            ->paginate(2);
 //        $this->assign('users',$users);
 //        $this->assign('page',$users->render());
-
 
 
         //分页demo html部分

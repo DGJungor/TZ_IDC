@@ -87,6 +87,7 @@ class AdminAddController extends AdminBaseController
 
         } else {
             $postInfo = $addModel->addPost($data);
+//            $addModel->save();
 
             if (empty($postInfo)) {
                 $res['code'] = 0;

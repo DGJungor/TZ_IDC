@@ -61,13 +61,47 @@ class IndexModel extends Model
         return $str;
     }
 
+
+    /**
+     * 获取友情链接
+     *
+     *
+     * @author 张俊
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     *
+     */
     public function  friendLink()
     {
+        //查询状态为开启的友情链接
         $str = Db::name('link')
             ->where('status','=','1')
             ->select();
 
         return $str;
+    }
+
+
+    /**
+     *获取首页轮播图
+     *
+     * @author 张俊
+     *
+     *
+     */
+    public function getSlideshow()
+    {
+        //取出按时间排序 的前3条数据
+        $getSlideshow = Db::name('slideshow')
+            ->where('status','=','1')
+            ->limit(3)
+            ->order('create_time asc')
+            ->select();
+
+        return $getSlideshow;
+
     }
 
 }
