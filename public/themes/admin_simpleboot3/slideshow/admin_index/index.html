@@ -199,7 +199,30 @@
                 });
 
             } else if (layEvent === 'del') {
-                layer.msg("已删除");
+
+                layer.confirm('删除此轮播图?', function (index) {
+                    layer.close(index);
+
+                    //AJAX 删除相关 的推介信息
+                    $.ajax({
+                        type: "POST",
+                        url: "/slideshow/Admin_List/delSlideshow",
+                        data: {'__token__': "{$Request.token}", 'slideshowId': data.id},
+                        dataType: "json",
+                        success: function (msg) {
+                            if (msg.code == 1) {
+
+                                obj.del(); //删除对应行（tr）的DOM结构
+                                layer.msg("ID:" + data.id + " 已删除");
+
+                            }
+
+                        },
+                    });
+
+//                            layer.msg('删除成功');
+                });
+                // layer.msg("已删除");
 
             }
 

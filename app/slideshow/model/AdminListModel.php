@@ -33,4 +33,45 @@ class AdminListModel extends Model
         return $info;
     }
 
+
+    /**
+     *
+     * 删除轮播图
+     *
+     * 根据推介产品id 删除相关的轮播图信息
+     * @author 张俊
+     *
+     */
+    public function delSlideshow($slideshowId)
+    {
+
+        $delInfo = Db::name('slideshow')
+            ->where('id', $slideshowId)
+            ->delete();
+
+        return $delInfo;
+
+    }
+
+    /**
+     *
+     * 获取轮播图图片路径
+     *
+     * @author 张俊
+     * @param $slideshowId '轮播图ID'
+     */
+    public function getPicPath($slideshowId)
+    {
+        //根据产品产品推介ID 查询相关的图片路径
+        $picPath = Db::name('slideshow')
+            ->field('id,pic_address')
+            ->where('id', $slideshowId)
+            ->find();
+
+        return $picPath;
+
+
+    }
+
+
 }
