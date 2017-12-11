@@ -97,7 +97,7 @@ class IndexModel extends Model
         $getSlideshow = Db::name('slideshow')
             ->where('status','=','1')
             ->limit(3)
-            ->order('create_time asc')
+            ->order('create_time desc')
             ->select();
 
         return $getSlideshow;
