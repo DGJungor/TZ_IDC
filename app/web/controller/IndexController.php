@@ -27,6 +27,11 @@ class IndexController extends HomeBaseController
         //从模型中取出友情链接的数据
         $friendLink = $indexModel->friendLink();
 
+        //从模型中去取出产品推介信息
+        $referralsInfo = $indexModel->getReferrals();
+
+        dump($referralsInfo);
+
 
 //        $data['friendLink'] = $friendLink;
 //        dump($friendLink);
@@ -37,6 +42,7 @@ class IndexController extends HomeBaseController
 //        $this->assign('data', $data);
         $this->assign('slideshow', $slideshowInfo);
         $this->assign('hotInfo', $hotInfo);
+        $this->assign('referralsInfo', $referralsInfo);
         $this->assign('friendLink', $friendLink);
         return $this->fetch();
 

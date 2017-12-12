@@ -16,7 +16,7 @@ class IndexModel extends Model
 
         $hotInfo = Db::name('portal_post')
             ->field('id,post_title,create_time,post_hits')
-            ->where('create_time','>',$timeAgo)
+            ->where('create_time', '>', $timeAgo)
             ->order('post_hits desc')
             ->limit(7)
             ->select();
@@ -35,7 +35,7 @@ class IndexModel extends Model
     {
         $tagCode = Db::name('portal_category')
             ->field('id')
-            ->where('name',$tagName)
+            ->where('name', $tagName)
             ->find();
 
         return $tagCode;
@@ -48,13 +48,13 @@ class IndexModel extends Model
      *
      *
      */
-    public  function ajaxTag($tagCode)
+    public function ajaxTag($tagCode)
     {
 
         $str = Db::table('idckx_portal_post')
             ->alias('p')
-            ->join(['idckx_portal_category_post'=>'cp'],'cp.post_id=p.id')
-            ->join(['idckx_portal_category'=>'c'],'cp.category_id=c.id')
+            ->join(['idckx_portal_category_post' => 'cp'], 'cp.post_id=p.id')
+            ->join(['idckx_portal_category' => 'c'], 'cp.category_id=c.id')
             ->field('p.post_title,p.more,p.post_like,p.comment_count,p.post_excerpt,p.published_time,c.status,c.name,c.id')
             ->select();
 
@@ -73,16 +73,15 @@ class IndexModel extends Model
      * @throws \think\exception\DbException
      *
      */
-    public function  friendLink()
+    public function friendLink()
     {
         //查询状态为开启的友情链接
         $str = Db::name('link')
-            ->where('status','=','1')
+            ->where('status', '=', '1')
             ->select();
 
         return $str;
     }
-
 
     /**
      *获取首页轮播图
@@ -95,12 +94,32 @@ class IndexModel extends Model
     {
         //取出按时间排序 的前3条数据
         $getSlideshow = Db::name('slideshow')
-            ->where('status','=','1')
+            ->where('status', '=', '1')
             ->limit(3)
             ->order('create_time desc')
             ->select();
 
         return $getSlideshow;
+
+    }
+
+    /**
+     *
+     *
+     * 首页获取产品推介
+     *
+     * @author 张俊
+     */
+    public function getReferrals()
+    {
+
+        $getReferrals =Db::name('referrals')
+            ->where('state', '=', '1')
+            ->limit(1)
+            ->order('create_time desc')
+            ->select();
+
+        return $getReferrals;
 
     }
 

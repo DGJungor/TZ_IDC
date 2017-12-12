@@ -296,17 +296,21 @@
                                  alt="">
                         </div>
                         <div class="product-descriptions">
+                            {$referralsInfo.0.intro}
                             全球领先、安全、稳定的云计算产品计算、存储、网络、安全、大数据、人工智能，普惠科技助您飞跃发展
                         </div>
                         <div class="price-score-group">
-                            <p class="product-price">199/月起</p>
+                            <p class="product-price">{$referralsInfo.0.price}</p>
                             <p class="product-score">
                                 用户评价
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
+                                <for start="0" end="$referralsInfo.0.rate">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </for>
+
+                                <!--<span class="glyphicon glyphicon-star"></span>-->
+                                <!--<span class="glyphicon glyphicon-star"></span>-->
+                                <!--<span class="glyphicon glyphicon-star"></span>-->
+                                <!--<span class="glyphicon glyphicon-star"></span>-->
                             </p>
                         </div>
                     </li>
