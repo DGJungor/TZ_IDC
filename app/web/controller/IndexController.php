@@ -3,6 +3,7 @@
 
 namespace app\web\controller;
 
+use app\web\model\AdModel;
 use cmf\controller\HomeBaseController;
 use app\web\model\IndexModel;
 use think\Db;
@@ -17,9 +18,6 @@ class IndexController extends HomeBaseController
 
         //从模型中取出轮播图
         $slideshowInfo = $indexModel->getSlideshow();
-//        $test = time();
-
-//        dump($slideshowInfo);
 
         //从模型中获得热门资讯
         $hotInfo = $indexModel->hotInfo();
@@ -30,23 +28,21 @@ class IndexController extends HomeBaseController
         //从模型中去取出产品推介信息
         $referralsInfo = $indexModel->getReferrals();
 
-//        dump($referralsInfo);
+        //从模型中取出广告信息数据
+        $adInfo = $indexModel->getAd();
 
-
-//        $data['friendLink'] = $friendLink;
-//        dump($friendLink);
-//        dump($data);
+//        dump($adInfo);
 
 
         //模板赋值
 //        $this->assign('data', $data);
         $this->assign('slideshow', $slideshowInfo);
+        $this->assign('ad', $adInfo);
         $this->assign('hotInfo', $hotInfo);
         $this->assign('referralsInfo', $referralsInfo);
         $this->assign('friendLink', $friendLink);
         return $this->fetch();
-
-
+        
         /*
          *
          *         分页demo
@@ -57,7 +53,6 @@ class IndexController extends HomeBaseController
          *   $this->assign('page',$users->render());
          *
          */
-
 
         //分页demo html部分
         /*
@@ -70,7 +65,6 @@ class IndexController extends HomeBaseController
          * <div class="pagination">{$users->render()}</div>
          *
          */
-
 
     }
 

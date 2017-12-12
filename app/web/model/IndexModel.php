@@ -113,13 +113,40 @@ class IndexModel extends Model
     public function getReferrals()
     {
 
-        $getReferrals =Db::name('referrals')
+        $getReferrals = Db::name('referrals')
             ->where('state', '=', '1')
             ->limit(1)
             ->order('create_time desc')
             ->select();
 
         return $getReferrals;
+
+    }
+
+
+    /**
+     *
+     * 获取首页广告信息
+     *
+     * @author 张俊
+     */
+    public function getAd()
+    {
+
+        //在广告表中取出相关表不同广告位的最新一条数据
+        for ($i = 1; $i <= 4; $i++) {
+            $data = Db::name('ad')
+                ->where('ad_site_id', $i)
+                ->where('ad_state', '1')
+                ->order('create_time desc')
+                ->limit(1)
+                ->select();
+            $getAd[$i] = $data[0];
+        }
+
+
+        return $getAd;
+
 
     }
 
