@@ -30,7 +30,7 @@ class IndexController extends HomeBaseController
         //从模型中去取出产品推介信息
         $referralsInfo = $indexModel->getReferrals();
 
-        dump($referralsInfo);
+//        dump($referralsInfo);
 
 
 //        $data['friendLink'] = $friendLink;
@@ -47,16 +47,20 @@ class IndexController extends HomeBaseController
         return $this->fetch();
 
 
-        //分页demo
-//        $users = Db::name('portal_tag')
-//            ->field('id')
-//            ->paginate(2);
-//        $this->assign('users',$users);
-//        $this->assign('page',$users->render());
+        /*
+         *
+         *         分页demo
+         *   $users = Db::name('portal_tag')
+         *   ->field('id')
+         *   ->paginate(2);
+         *   $this->assign('users',$users);
+         *   $this->assign('page',$users->render());
+         *
+         */
 
 
         //分页demo html部分
-        /**
+        /*
          *
          * <div>
          * <foreach name="users" item="vo">
