@@ -17,6 +17,9 @@ class IndexController extends HomeBaseController
         //实例化首页模型
         $indexModel = new IndexModel();
 
+        //实例化首页文章模型
+        $portalPostModel = new PortalPostModel();
+
         //从模型中取出轮播图
         $slideshowInfo = $indexModel->getSlideshow();
 
@@ -32,29 +35,22 @@ class IndexController extends HomeBaseController
         //从模型中取出广告信息数据
         $adInfo = $indexModel->getAd();
 
-        //从模型中获取首页的专题信息
-        $specialInfo = $indexModel->getSpecial('IDC政策');
-//        dump($specialInfo);
+        //从文章模型中获取相关专题的文章信息
+        $specialInfo[0] = $portalPostModel->getSpecial('IDC政策');
+        $specialInfo[1] = $portalPostModel->getSpecial('行业解读');
+        $specialInfo[2] = $portalPostModel->getSpecial('政策解读');
 
-
-//        dump($test['more']->thumbnail);
-//        dump($test['more']);
-//        dump(json_decode($test['more']));
-//        $test2 = json_decode($test['more']);
-//        dump($test2->thumbnail);
-
-//        dump(cmf_get_image_preview_url($test2->thumbnail));
-
+        dump($specialInfo);
 
         //模板赋值
 //        $this->assign('data', $data);
+        $this->assign('special', $specialInfo);
         $this->assign('slideshow', $slideshowInfo);
         $this->assign('ad', $adInfo);
         $this->assign('hotInfo', $hotInfo);
         $this->assign('referralsInfo', $referralsInfo);
         $this->assign('friendLink', $friendLink);
         return $this->fetch();
-
 
 
         //获取图片链接方法 {:cmf_get_image_preview_url($vo.more.thumbnail)}

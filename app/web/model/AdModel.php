@@ -22,7 +22,7 @@ class AdModel extends Model
     protected $pk = 'id';
 
     /**
-     * 获取
+     *
      *
      *
      */

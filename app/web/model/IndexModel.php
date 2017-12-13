@@ -8,12 +8,25 @@ use think\Db;
 class IndexModel extends Model
 {
 
+
+    protected $type = [
+        'more'      =>  'array',
+    ];
+    /**
+     * 获取首页热门信息
+     *
+     * @author 张俊
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function hotInfo()
     {
         //获取15天前的时间戳
         $timeAgo = strtotime("-15 day");
 
-
+        //获取15天内点击数前7条文章数据
         $hotInfo = Db::name('portal_post')
             ->field('id,post_title,create_time,post_hits')
             ->where('create_time', '>', $timeAgo)
@@ -43,9 +56,15 @@ class IndexModel extends Model
     }
 
     /**
-     * 前台首页Ajax  分类显示
      *
+     * 前台ajax分类显示
      *
+     * @author 张俊
+     * @param $tagCode
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      *
      */
     public function ajaxTag($tagCode)
@@ -84,10 +103,13 @@ class IndexModel extends Model
     }
 
     /**
-     *获取首页轮播图
+     * 获取首页轮播图
      *
      * @author 张俊
-     *
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      *
      */
     public function getSlideshow()
@@ -104,11 +126,13 @@ class IndexModel extends Model
     }
 
     /**
-     *
-     *
-     * 首页获取产品推介
+     * 获取手而已产品推介
      *
      * @author 张俊
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function getReferrals()
     {
@@ -125,10 +149,13 @@ class IndexModel extends Model
 
 
     /**
-     *
      * 获取首页广告信息
      *
      * @author 张俊
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function getAd()
     {
@@ -145,40 +172,6 @@ class IndexModel extends Model
         }
 
         return $getAd;
-
-    }
-
-    /**
-     *
-     * 根据专题名  查询相关的文章
-     *
-     * @author 张俊
-     * @param $specialName '专题名字'
-     * @param $limit '查询数量'
-     * @return false|\PDOStatement|string|\think\Collection
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public function getSpecial($specialName, $limit = 5)
-    {
-
-        //获取专题名的ID
-        $specialId = Db::name('portal_category')
-            ->field('id')
-            ->where('name', $specialName)
-            ->find();
-
-        //根据专题ID查询相关的文章信息
-        $getPost = Db::table('idckx_portal_post')
-            ->alias('pp')
-            ->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
-            ->where('pcp.category_id', $specialId['id'])
-            ->limit($limit)
-            ->order('published_time desc')
-            ->select();
-
-        return $getPost;
 
     }
 

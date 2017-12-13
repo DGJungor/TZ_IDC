@@ -192,15 +192,15 @@
                                 <a href="#">{$vo.post_title}</a>
                             </li>
                         </foreach>
-                        <li>
-                            <a href="#">特朗普“退群”，对中国有什么影响？</a>
-                        </li>
-                        <li>
-                            <a href="#">广大网友需谨慎，阅读此文会有人为你买单</a>
-                        </li>
-                        <li>
-                            <a href="#">中国现金贷突袭东南亚，为了活下去只有干掉同行</a>
-                        </li>
+                        <!--<li>-->
+                            <!--<a href="#">特朗普“退群”，对中国有什么影响？</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">广大网友需谨慎，阅读此文会有人为你买单</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">中国现金贷突袭东南亚，为了活下去只有干掉同行</a>-->
+                        <!--</li>-->
                     </ul>
                 </section>
             </div>
@@ -332,25 +332,31 @@
                 <section class="industry-policy-content">
                     <div class="top">
                         <a href="#">
-                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
-                            <p>互联网新闻信息服务管理规定</p>
+                            <img src="{:cmf_get_image_preview_url($special.0.0.more.thumbnail)}" alt="">
+                            <p>{$special.0.0.post_title}</p>
                             <div class="mask"></div>
                         </a>
 
                     </div>
                     <ul>
-                        <li>
-                            <a href="#">网络安全产业白皮书（2017年）</a>
-                        </li>
-                        <li>
-                            <a href="#">电信业务经营许可管理办法</a>
-                        </li>
-                        <li>
-                            <a href="#">中华人民共和国网络安全法</a>
-                        </li>
-                        <li>
-                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
-                        </li>
+                        <!--循环遍历专题标题-->
+                        <volist name="special.0" id="vo" offset="1" length="5">
+                            <li>
+                                <a href="#">{$vo.post_title}</a>
+                            </li>
+                        </volist>
+                        <!--<li>-->
+                            <!--<a href="#">网络安全产业白皮书（2017年）</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">电信业务经营许可管理办法</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">中华人民共和国网络安全法</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">虚拟运营商正式商用牌照即将发放</a>-->
+                        <!--</li>-->
                     </ul>
                 </section>
             </li>
@@ -362,25 +368,31 @@
                 <section class="industry-policy-content">
                     <div class="top">
                         <a href="#">
-                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
-                            <p>互联网新闻信息服务管理规定</p>
+                            <img src="{:cmf_get_image_preview_url($special.1.0.more.thumbnail)}" alt="">
+                            <p>{$special.1.0.post_title}</p>
                             <div class="mask"></div>
                         </a>
 
                     </div>
                     <ul>
-                        <li>
-                            <a href="#">网络安全产业白皮书（2017年）</a>
-                        </li>
-                        <li>
-                            <a href="#">电信业务经营许可管理办法</a>
-                        </li>
-                        <li>
-                            <a href="#">中华人民共和国网络安全法</a>
-                        </li>
-                        <li>
-                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
-                        </li>
+                        <!--循环遍历专题标题-->
+                        <volist name="special.1" id="vo" offset="1" length="5">
+                            <li>
+                                <a href="#">{$vo.post_title}</a>
+                            </li>
+                        </volist>
+                        <!--<li>-->
+                            <!--<a href="#">网络安全产业白皮书（2017年）</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">电信业务经营许可管理办法</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">中华人民共和国网络安全法</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">虚拟运营商正式商用牌照即将发放</a>-->
+                        <!--</li>-->
                     </ul>
                 </section>
             </li>
@@ -393,25 +405,31 @@
                 <section class="industry-policy-content">
                     <div class="top">
                         <a href="#">
-                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
-                            <p>互联网新闻信息服务管理规定</p>
+                            <img src="{:cmf_get_image_preview_url($special.2.0.more.thumbnail)}" alt="">
+                            <p>{$special.2.0.post_title}</p>
                             <div class="mask"></div>
                         </a>
 
                     </div>
                     <ul>
-                        <li>
-                            <a href="#">网络安全产业白皮书（2017年）</a>
-                        </li>
-                        <li>
-                            <a href="#">电信业务经营许可管理办法</a>
-                        </li>
-                        <li>
-                            <a href="#">中华人民共和国网络安全法</a>
-                        </li>
-                        <li>
-                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
-                        </li>
+                        <!--循环遍历专题标题-->
+                        <volist name="special.2" id="vo" offset="1" length="5">
+                            <li>
+                                <a href="#">{$vo.post_title}</a>
+                            </li>
+                        </volist>
+                        <!--<li>-->
+                            <!--<a href="#">网络安全产业白皮书（2017年）</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">电信业务经营许可管理办法</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">中华人民共和国网络安全法</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#">虚拟运营商正式商用牌照即将发放</a>-->
+                        <!--</li>-->
                     </ul>
                 </section>
             </li>
