@@ -40,7 +40,7 @@ class IndexController extends HomeBaseController
         $specialInfo[1] = $portalPostModel->getSpecial('行业解读');
         $specialInfo[2] = $portalPostModel->getSpecial('政策解读');
 
-        dump($specialInfo);
+//        dump($specialInfo);
 
         //模板赋值
 //        $this->assign('data', $data);
