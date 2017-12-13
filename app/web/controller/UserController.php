@@ -13,68 +13,52 @@ use FontLib\Table\Type\glyf;
 use app\web\model\UuserModel;
 use FontLib\Table\Type\name;
 use think\Session;
-use think\Validate;
+use cmf\controller\HomeBaseController;
 use think\Db;
 use think\Request;
 
-class UserController extends Validate
+class UserController extends HomeBaseController
 {
-    public $userID = '';
+    public $userID = 0;   //用户登录ID
+    public $class = '';
     public function __construct()
     {
         $this->userID = cmf_get_current_user_id();
+        $this->class = new UuserModel();  //实例化用户类
     }
 
+    /*
+     * sesion : user   用户信息
+     * 用户管理页面输出
+     * */
     public function index()
     {
-        $UuserModel = new UuserModel();
-        $array = [
-            'id' => $this->userID,
-        ];
-
-        $data = $UuserModel->userfind($array);
-        if($data){
-            $this->assign('user',$data);
+        if(session('?user')){
+            $this->assign('user',session('user'));
         }
-
         return $this->fetch();
     }
+
+    /*
+     * 用户信息修改
+     *
+     * */
     public function Dateuser()
     {
         if(Request::instance()->isPost())
         {
-            $rule = [
-                'user'         =>  'require|chsAlpha|max:25',
-                'text'         =>  'require',
-                'user_qq'      =>  'require|number|min:9|max:11',
-                'user_Mobile' =>   'require|number|min:11',
-            ];
-            $msg = [
-                'user.chsAlpha'          => '用户名只能是汉字或者字母',
-                'user.max'                => '用户名最多不能超过25个字符',
-                'user.require'            => '用户名不能为空',
-                'user_Mobile.number'     => '手机号只能是数字',
-                'user_Mobile.min'        => '手机号至少11位',
-                'user_Mobile.require'    => '手机号不能为空',
-                'text.require'            => '内容不能为空',
-                'user_qq.require'         => 'QQ号不能为空',
-                'user_qq.max'             => 'QQ号最多不能超过11个字符',
-                'user_qq.min'             => 'QQ号至少9位',
-                'user_qq.number'          => 'QQ号只能是数字',
-            ];
             $data = [
-                'user'         => $_POST['user'],
-                'user_qq'      => $_POST['user_qq'],
-                'user_Mobile' => $_POST['mobile'],
-                'text'         => $_POST['text'],
+                'user'         => $_POST['user'],                 //用户名
+                'user_qq'      => $_POST['user_qq'],           //用户QQ
+                'user_Mobile' => $_POST['mobile'],           //用户手机号
+                'email'        => $_POST['email'],           //用户邮箱
             ];
-            $validate = new Validate($rule, $msg);
-            $result = $validate->check($data);
-            if($result){
+            $validate = \think\Loader::validate('User');
+            if($validate->check($data))
+            {
                 $_POST['user_Mobile'] = $_POST['mobile'];
                 $_POST['up_date'] = time();
-                $UuserModel = new UuserModel();
-                $result = $UuserModel->Dateuser($this->userID,$_POST);
+                $result = $this->class->Dateuser($this->userID,$_POST);
                 if($result){
                     return json_encode(['name'=>'修改成功','id'=>1]);
                 }
@@ -83,12 +67,27 @@ class UserController extends Validate
             return json_encode(['name'=>'验证失败','id'=>3]);
         }
     }
+
+
+    /*
+     * 用户密码(password)
+     * 修改
+     * */
     public function Datepass()
     {
-        $result = Db::name('user_vip')->where('userpass',$_POST['password'])->find();
-//        if()
-//        {
-//
-//        }
+        $password = $_POST['password'];
+        if(!empty($_POST['datepass']) and !empty($_POST['repassword']) and $_POST['datepass'] === $_POST['repassword'])
+        {
+            $passwordInDb = $this->class->getpass($this->userID);
+            if(cmf_compare_password($password, $passwordInDb))    //判断提交密码是否跟MySQL里密码一致
+            {
+                $result = $this->class->Datepass($this->userID,$_POST['datepass']);
+                if($result)
+                {
+                    return json(['name'=>'修改成功','id'=>1]);
+                }
+                return json(['name'=>'修改失败','id'=>0]);
+            }
+        }
     }
 }
