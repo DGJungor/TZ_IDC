@@ -4,6 +4,7 @@
 namespace app\web\controller;
 
 use app\web\model\AdModel;
+use app\web\model\PortalPostModel;
 use cmf\controller\HomeBaseController;
 use app\web\model\IndexModel;
 use think\Db;
@@ -31,7 +32,18 @@ class IndexController extends HomeBaseController
         //从模型中取出广告信息数据
         $adInfo = $indexModel->getAd();
 
-//        dump($adInfo);
+        //从模型中获取首页的专题信息
+        $specialInfo = $indexModel->getSpecial('IDC政策');
+//        dump($specialInfo);
+
+
+//        dump($test['more']->thumbnail);
+//        dump($test['more']);
+//        dump(json_decode($test['more']));
+//        $test2 = json_decode($test['more']);
+//        dump($test2->thumbnail);
+
+//        dump(cmf_get_image_preview_url($test2->thumbnail));
 
 
         //模板赋值
@@ -42,7 +54,12 @@ class IndexController extends HomeBaseController
         $this->assign('referralsInfo', $referralsInfo);
         $this->assign('friendLink', $friendLink);
         return $this->fetch();
-        
+
+
+
+        //获取图片链接方法 {:cmf_get_image_preview_url($vo.more.thumbnail)}
+
+
         /*
          *
          *         分页demo
