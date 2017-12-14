@@ -23,8 +23,13 @@ Route::rule([
     '/'  =>  'web/Index/Index'
 ],'','GET');
 
+//首页文章页内容
+Route::rule('article/index/:id','article/index/index','GET|POST');
+
 //详情页路由
-Route::rule('detail/:id','web/Detail/Index');
+//Route::rule('detail/:id','web/Detail/Index');
+
+
 
 if (file_exists(CMF_ROOT . "data/conf/route.php")) {
     $runtimeRoutes = include CMF_ROOT . "data/conf/route.php";
