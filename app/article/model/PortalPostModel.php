@@ -1,6 +1,6 @@
 <?php
 
-namespace app\web\model;
+namespace app\article\model;
 
 use think\Model;
 use think\Db;
@@ -26,18 +26,13 @@ class PortalPostModel extends Model
         'more' => 'array'
     ];
 
-    /**
-     *
-     * 根据文章id获取文章数据
-     *
-     * @author 张俊
-     * @param $postId
-     *
-     */
+    // 开启自动写入时间戳字段
+    protected $autoWriteTimestamp = true;
+
+
     public function getPost($postId)
     {
-//        $postData = $this
-//            ->where()
+
 
     }
 
@@ -47,8 +42,8 @@ class PortalPostModel extends Model
      * 根据专题名称查询专题id 再根据专题id查询相关的文章
      *
      * @author 张俊
-     * @param $specialName  '专题名称'
-     * @param int $limit    '获取的数量'
+     * @param     $specialName '专题名称'
+     * @param int $limit '获取的数量'
      * @return false|\PDOStatement|string|\think\Collection
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -75,5 +70,39 @@ class PortalPostModel extends Model
 
         return $getPost;
 
+    }
+
+    /**
+     * post_content 自动转化
+     *
+     * 可以将原后台添加的html代码 与 图片地址链接转化成端显示的html代码与地址链接
+     *
+     * @author 张俊
+     * @param $value
+     * @return string
+     */
+    public function getPostContentAttr($value)
+    {
+        return cmf_replace_content_file_url(htmlspecialchars_decode($value));
+    }
+
+    /**
+     * post_content 自动转化
+     * @param $value
+     * @return string
+     */
+    public function setPostContentAttr($value)
+    {
+        return htmlspecialchars(cmf_replace_content_file_url(htmlspecialchars_decode($value), true));
+    }
+
+    /**
+     * published_time 自动完成
+     * @param $value
+     * @return false|int
+     */
+    public function setPublishedTimeAttr($value)
+    {
+        return strtotime($value);
     }
 }
