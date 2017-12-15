@@ -30,6 +30,7 @@ class IndexModel extends Model
         $hotInfo = Db::name('portal_post')
             ->field('id,post_title,create_time,post_hits')
             ->where('create_time', '>', $timeAgo)
+			->where('post_status','1')
             ->order('post_hits desc')
             ->limit(7)
             ->select();

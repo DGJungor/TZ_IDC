@@ -163,7 +163,8 @@
                 {$article.post_title}
             </h1>
             <div class="content-info">
-                <p><span>时间：{$article.post_published_time_toStr}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>来源：{$article.post_source}</span></p>
+                <p><span>时间：{$article.post_published_time_toStr}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>来源：{$article.post_source}</span>
+                </p>
                 <!--<p><span>作者：adminz</span></p>-->
             </div>
             <div class="content-descriptions">
@@ -195,22 +196,29 @@
                 </div>
                 <section class="keywords-content pull-left">
                     <p>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
+
+                        <!--文章下方标签-->
+                        <foreach name="keywords" item="vo">
+                            <span><a href="#">{$vo}</a></span>
+                        </foreach>
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
                     </p>
                 </section>
                 <div class="pull-right">
                     <div class="pull-left article-info">
                                 <span>
+                                    <!--点赞数-->
                                     <span class="glyphicon glyphicon-heart"></span>
-                                    <sub>0</sub>
+                                    <sub>{$article.post_like}</sub>
                                 </span>
                         <span>
+                                    <!--评论数-->
                                     <span class="glyphicon glyphicon-comment"></span>
-                                    <sub>0</sub>
+                                    <sub>{$article.comment_count}</sub>
                                 </span>
                     </div>
                     <div class="pull-right article-page-operating">
@@ -326,15 +334,19 @@
             <section class="related-tags-body">
                 <div class="keywords-content pull-left">
                     <p>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
-                        <span><a href="#">京东</a></span>
+                        <foreach name="keywords" item="vo">
+                            <span><a href="#">{$vo}</a></span>
+                        </foreach>
+
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
+                        <!--<span><a href="#">京东</a></span>-->
 
                     </p>
                 </div>
@@ -347,14 +359,18 @@
             <section class="hot-content-list">
                 <ol>
                     <li class="top">
-                        <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
-                        <p data-index="1"><a href="#">第二次光合反应</a></p>
+                        <img src="{:cmf_get_image_preview_url($hotPost.0.more.thumbnail)}" alt="">
+                        <p data-index="1"><a href="#">{$hotPost.0.post_title}</a></p>
                     </li>
-                    <li data-index="2"><a href="#">最近发布的一份报告显示，世界...</a></li>
-                    <li data-index="3"><a href="#">最近发布的一份报告显示，世界...</a></li>
-                    <li data-index="4"><a href="#">最近发布的一份报告显示，世界...</a></li>
-                    <li data-index="5"><a href="#">最近发布的一份报告显示，世界...</a></li>
-                    <li data-index="6"><a href="#">最近发布的一份报告显示，世界...</a></li>
+                    <volist name="hotPost" id="vo" offset="1" length="6">
+                        <li data-index="{$vo.rank}"><a href="#">$vo.post_title</a></li>
+                    </volist>
+
+                    <!--<li data-index="2"><a href="#">最近发布的一份报告显示，世界...</a></li>-->
+                    <!--<li data-index="3"><a href="#">最近发布的一份报告显示，世界...</a></li>-->
+                    <!--<li data-index="4"><a href="#">最近发布的一份报告显示，世界...</a></li>-->
+                    <!--<li data-index="5"><a href="#">最近发布的一份报告显示，世界...</a></li>-->
+                    <!--<li data-index="6"><a href="#">最近发布的一份报告显示，世界...</a></li>-->
 
                 </ol>
             </section>

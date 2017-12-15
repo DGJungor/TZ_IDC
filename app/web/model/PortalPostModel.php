@@ -54,6 +54,7 @@ class PortalPostModel extends Model
             ->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
             ->field('pp.id,pp.post_title,pp.more')
             ->where('pcp.category_id', $specialId['id'])
+			->where('post_status','1')
             ->limit($limit)
             ->order('published_time desc')
             ->select();
