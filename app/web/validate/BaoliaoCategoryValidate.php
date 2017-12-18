@@ -3,21 +3,21 @@
  * Created by PhpStorm.
  * User: 胡志伟
  * Date: 2017/12/14
- * Time: 13:55
+ * Time: 13:22
  */
 namespace app\web\validate;
 
 use app\admin\model\RouteModel;
 use think\Validate;
 
-class AdminPageValidate extends Validate
+class  BaoliaoCategoryValidate extends Validate
 {
     protected $rule = [
-        'post_title' => 'require',
-        'post_alias' => 'checkAlias'
+        'name'  => 'require',
+        'alias' => 'checkAlias',
     ];
     protected $message = [
-        'post_title.require' => '页面标题不能为空',
+        'name.require' => '分类名称不能为空',
     ];
 
     protected $scene = [
@@ -33,7 +33,11 @@ class AdminPageValidate extends Validate
         }
 
         $routeModel = new RouteModel();
-        $fullUrl    = $routeModel->buildFullUrl('webl/Page/index', ['id' => $data['id']]);
+        if (isset($data['id']) && $data['id'] > 0){
+            $fullUrl    = $routeModel->buildFullUrl('web/List/index', ['id' => $data['id']]);
+        }else{
+            $fullUrl    = $routeModel->getFullUrlByUrl($data['alias']);
+        }
         if (!$routeModel->exists($value, $fullUrl)) {
             return true;
         } else {
