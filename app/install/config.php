@@ -6,16 +6,7 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author:kane < chengjin005@163.com>
+// | Author: 老猫 <thinkcmf@126.com>
 // +----------------------------------------------------------------------
-namespace app\portal\model;
+return [];
 
-use think\Model;
-
-class PortalTagModel extends Model
-{
-    public static   $STATUS = array(
-        0=>"未启用",
-        1=>"已启用",
-    );
-}

@@ -72,7 +72,7 @@ class AdminMemberController extends  AdminBaseController
         if ($id) {
             $result = Db::name("user_vip")->where(["id" => $id])->setField('user_status', 0);
             if ($result) {
-                $this->success("会员拉黑成功！", "adminMember/index");
+                $this->success("会员拉黑成功！",'');
             } else {
                 $this->error('会员拉黑失败,会员不存在,或者是管理员！');
             }
