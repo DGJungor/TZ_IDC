@@ -5,7 +5,6 @@ namespace app\article\model;
 use think\Model;
 use think\Db;
 
-
 /**
  * Class AdModel
  *
@@ -29,11 +28,55 @@ class PortalPostModel extends Model
 	// 开启自动写入时间戳字段
 	protected $autoWriteTimestamp = true;
 
-
-	public function getPost($postId)
+	/**
+	 *
+	 * 获取文章页右侧他推荐内容标题
+	 *
+	 * @author 张俊
+	 * @param int $num
+	 * @return false|\PDOStatement|string|\think\Collection
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
+	public function getRecommendPost($num = 5)
 	{
 
+		$getRecommendPost = $this
+			->field('post_title')
+			->where('post_status', 1)
+			->where('recommended', 1)
+			->order('post_hits desc')
+			->limit($num)
+			->select();
 
+		return $getRecommendPost;
+	}
+
+
+
+	public function getRelatePost($postId,$num=6)
+	{
+
+		//获取文章相关的专题ID
+		$specialId = Db::name('portal_category_post')
+			->field('category_id')
+			->where('post_id', $postId)
+			->select();
+
+//		$test = Ad::get(1);
+
+
+
+		//重新组合where条件数组  准备做下一步的查询条件
+//		foreach ($specialId as $item =>$value ){
+//			$where['category_id'][] = $value['category_id'];
+//
+
+
+
+		//根据专题ID查询相关的文章
+		return $specialId;
 	}
 
 	/**
@@ -63,7 +106,7 @@ class PortalPostModel extends Model
 		$getPost = $this->alias('pp')
 			->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
 			->field('pp.id,pp.post_title,pp.more')
-			->where('post_status','1')
+			->where('post_status', '1')
 			->where('pcp.category_id', $specialId['id'])
 			->limit($limit)
 			->order('published_time desc')
@@ -99,7 +142,7 @@ class PortalPostModel extends Model
 		$postData = $this
 			->field('id,post_title,more')
 			->where('published_time', '>', $beforeTime)
-			->where('post_status','1')
+			->where('post_status', '1')
 			->order('post_hits desc')
 			->limit($limit)
 			->select();
@@ -107,6 +150,8 @@ class PortalPostModel extends Model
 		return $postData;
 
 	}
+
+
 
 
 	/**

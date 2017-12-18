@@ -2,7 +2,10 @@
 
 namespace app\article\controller;
 
+use app\article\model\AdModel;
+use app\article\model\PortalCategoryPostModel;
 use app\article\model\PortalPostModel;
+use app\article\model\ReferralsModel;
 use cmf\controller\HomeBaseController;
 use think\Request;
 
@@ -20,14 +23,11 @@ class IndexController extends HomeBaseController
 	public function index(Request $request)
 	{
 
-//		abort(404,"文章不存在!");
-//		die;
-
-		//===========================测试数据=================================================
-//        $test = $request->param('id');
-//        dump($test);
-
-		//===================================================================================
+		//实例化模型
+		$portalPostModel         = new PortalPostModel();
+		$adModel                 = new AdModel();
+		$referralsModel          = new ReferralsModel();
+		$portalCategoryPostModel = new PortalCategoryPostModel();
 
 		//获取文章id
 		$postId = $request->param('id');
@@ -60,13 +60,36 @@ class IndexController extends HomeBaseController
 			$hotPost[$key]->rank = $key + 1;
 		}
 
+		//获取推荐文章
+		$recommendedData = $portalPostModel->getRecommendPost(4);
+
+		//获取3号广告位的广告数据
+		$adData = $adModel->getAd(3);
+
+		//获取产品推荐数据
+		$referralsData = $referralsModel->getReferrals();
+
+		//根据文章id获取相关推荐文章
+		$specialId = $portalCategoryPostModel->getSpecialId(5);
+
+
+		dump($specialId);
+
+
+//		$map['mail'] = ['like', '%thinkphp@qq.com%'];
 
 		//调试数据
-		dump($postData);
-//		dump($hotPost);
+//		dump($map);
+//		dump($postData);
+//		dump($adData);
+//		dump($referralsData);
+//		dump($recommendedData);
 
 		//赋值变量  并渲染模板
 		$this->assign('article', $postData);
+		$this->assign('recommended', $recommendedData);
+		$this->assign('referrals', $referralsData);
+		$this->assign('ad', $adData);
 		$this->assign('hotPost', $hotPost);
 		$this->assign('keywords', $keywords);
 		return $this->fetch();
