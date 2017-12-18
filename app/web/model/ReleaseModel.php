@@ -13,15 +13,6 @@ use think\Db;
 class ReleaseModel extends  Model
 {
     /*
-     * 发布爆料
-     * */
-    public function setbao($data)
-    {
-        $result = Db::name('user_baoliao')->insertGetId($data);
-        return $result;
-    }
-
-    /*
      * 发布评论
      *
      * */
@@ -61,23 +52,4 @@ class ReleaseModel extends  Model
         return $number;
     }
 
-    /*
-     * 查询一个匿名用户是否存在
-     *返回匿名用户信息
-     * */
-    public function getanonymous($data)
-    {
-        $result = Db::name('anonymous')->where(['user_qq'=>$data['user_qq'],'user_Mobile' => $data['mobile']])->find();
-        return $result;
-    }
-
-    /*
-     * 写入匿名用户信息
-     * 返回匿名用户ID
-     * */
-    public function setanonymous($data)
-    {
-        $n_id = Db::name('anonymous')->insertGetId($data);
-        return $n_id;
-    }
 }

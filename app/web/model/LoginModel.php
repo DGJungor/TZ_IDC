@@ -17,7 +17,7 @@ class LoginModel extends Model
      * */
     public function getlog($data)
     {
-        $data = Db::name('user_vip')->where('user_email',$data['email'])->find();
+        $data = Db::name('user_vip')->whereOr($data)->where('user_status',1)->find();
         if(count($data))
         {
             return $data;
@@ -37,6 +37,7 @@ class LoginModel extends Model
             'user_email' => $data['email'],
             'mobile' => $data['mobile'],
             'create_time' => time(),
+            'user_type'   => 1,
         ];
         $result = Db::name('user_vip')->insertGetId($array);
         if($result)
@@ -61,11 +62,12 @@ class LoginModel extends Model
     }
 
     /*
-     * 修改用户最后登录时间
+     * 修改用户最后登录信息
      *
      * */
-    public function logtime()
+    public function information($id)
     {
-        Db::table('idckx_user_vip')->where('id', $data['id'])->update(['last_login_time' => time()]);
+        $user_IP = get_client_ip();
+        Db::table('idckx_user_vip')->where('id', $id)->update(['last_login_ip'=>$user_IP,'last_login_time' => time()]);
     }
 }

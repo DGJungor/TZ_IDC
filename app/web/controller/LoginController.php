@@ -10,19 +10,17 @@ namespace app\web\controller;
 
 use cmf\controller\HomeBaseController;
 use app\web\model\LoginModel;
-use FontLib\Table\Type\glyf;
 use think\Cookie;
 use think\Session;
-//use think\Validate;
-use think\Db;
-use think\Request;
 
 class LoginController extends HomeBaseController
 {
 
     /*
      * AJAX以POST提交值
-     * NAME: emnil ---> 邮箱地址
+     * NAME: user_email ---> 邮箱地址
+     *       user_login  --->用户名
+     *       mobile ----> 用户手机
      *       password ----> 密码
      *       Autologon ----> 自动登陆值
      * ---------登录
@@ -31,17 +29,22 @@ class LoginController extends HomeBaseController
     {
         include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');
         $loginModel = new loginModel();
-        $data = $loginModel->getlog($_POST);
+        $keywordComplex = [];
+        if (!empty($_POST['keyword'])) {
+            $keyword = $_POST['keyword'];
+            $keywordComplex['mobile|user_login|user_email']    = ['like', "%$keyword%"];
+        }
+        $data = $loginModel->getlog($keywordComplex);
         if(count($data))
         {
             if(cmf_compare_password($_POST['password'], $data['user_pass']))
             {
-                $loginModel->logtime();
+                $loginModel->information($data['id']); //  用户登录记录
                 if($_POST['Autologon']=="1")
                 {
                     Session::set('user',$data);   //设置用户信息
                     Session::set('email',$data['user_email']);  //设置用户邮箱
-
+                    Session::set('nickname',$data['user_nickname']);  //设置用户名称
                     Session::set('password',$_POST['password']); //设置用户密码
                     Session::set('user_id',$data['id']); //设置用户id
                 }else{
@@ -98,7 +101,7 @@ class LoginController extends HomeBaseController
 
     /*
      * 点击退出
-     * 删除Session 用户Id
+     * 删除Session  Cookie  用户值
      * */
 
     public function outlogin()

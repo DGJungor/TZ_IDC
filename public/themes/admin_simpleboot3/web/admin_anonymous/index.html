@@ -35,15 +35,15 @@
             <foreach name="list" item="vo">
                 <tr>
                     <td>{$vo.id}</td>
-                    <td>{$vo['user']?$vo['user']:($vo['mobile']?$vo['mobile']:lang('THIRD_PARTY_USER'))}
+                    <td>{$vo['user_login']?$vo['user_login']:($vo['mobile']?$vo['mobile']:lang('THIRD_PARTY_USER'))}
                     </td>
-                    <td>{$vo.user_qq}</td>
-                    <td>{$vo.user_Mobile}</td>
-                    <td>{:date('Y-m-d H:i:s',$vo['time'])}</td>
-                    <td>{$user_statuses[$vo['status']]}</td>
+                    <td>{$vo.user_QQ}</td>
+                    <td>{$vo.mobile}</td>
+                    <td>{:date('Y-m-d H:i:s',$vo['create_time'])}</td>
+                    <td>{$user_statuses[$vo['user_status']]}</td>
                     <td>
                         <neq name="vo.id" value="1">
-                            <empty name="vo.status">
+                            <empty name="vo.user_status">
                                 <a href="{:url('AdminAnonymous/cancelban',array('id'=>$vo['id']))}"
                                    class="js-ajax-dialog-btn"
                                    data-msg="{:lang('ACTIVATE_USER_CONFIRM_MESSAGE')}">{:lang('ACTIVATE_USER')}</a>

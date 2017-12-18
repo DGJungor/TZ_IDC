@@ -38,11 +38,11 @@ class AdminAnonymousController extends  AdminBaseController
         if (!empty($request['keyword'])) {
             $keyword = $request['keyword'];
 
-            $keywordComplex['user|user_qq|user_Mobile']    = ['like', "%$keyword%"];
+            $keywordComplex['user_login|user_QQ|mobile']    = ['like', "%$keyword%"];
         }
-        $usersQuery = Db::name('anonymous');
+        $usersQuery = Db::name('user_vip');
 
-        $list = $usersQuery->whereOr($keywordComplex)->where($where)->order("time DESC")->paginate(10);
+        $list = $usersQuery->whereOr($keywordComplex)->where($where)->where('user_type',0)->order("create_time DESC")->paginate(10);
         // 获取分页显示
         $page = $list->render();
         $this->assign('list', $list);
@@ -68,7 +68,7 @@ class AdminAnonymousController extends  AdminBaseController
     {
         $id = input('param.id', 0, 'intval');
         if ($id) {
-            $result = Db::name("anonymous")->where(["id" => $id])->setField('status', 0);
+            $result = Db::name("user_vip")->where(["id" => $id])->setField('status', 0);
             if ($result) {
                 $this->success("会员拉黑成功！", "adminAnonymous/index");
             } else {

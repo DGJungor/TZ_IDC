@@ -19,7 +19,7 @@ class UuserModel  extends Model
      * */
     public function userfind (array $array)
     {
-        $data = Db::name('user_vip')->where($array )->find();
+        $data = Db::name('user_vip')->where($array )->where('status',1)->find();
         if($data){
             return $data;
         }

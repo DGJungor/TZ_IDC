@@ -44,7 +44,7 @@ class AdminMemberController extends  AdminBaseController
         }
         $usersQuery = Db::name('user_vip');
 
-        $list = $usersQuery->whereOr($keywordComplex)->where($where)->order("create_time DESC")->paginate(10);
+        $list = $usersQuery->whereOr($keywordComplex)->where($where)->where('user_type',1)->order("create_time DESC")->paginate(10);
         // 获取分页显示
         $page = $list->render();
         $this->assign('list', $list);
