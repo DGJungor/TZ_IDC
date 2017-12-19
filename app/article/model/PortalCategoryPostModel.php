@@ -50,20 +50,16 @@ class PortalCategoryPostModel extends Model
 			->where('post_id', $postId)
 			->select();
 
-//		$where['category_id'][] = 'or';
-//		foreach ($specialId as $item => $value) {
-//			$where['category_id']['eq'][] = $value['category_id'];
-//		}
-//		$where['category_id'][] = 'or';
 
-		$where['category_id']  = array(14,10,'or');
-		$test = $this
-//			->where($where)
-			->select();
 
-//		$data = $this->all([]);
 
-		return $where;
+//		$test = $this
+//			->where('category_id','in',$test2)
+//			->select();
+
+
+			return $specialId;
+//		return $test;
 	}
 
 }

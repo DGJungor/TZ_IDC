@@ -69,24 +69,19 @@ class IndexController extends HomeBaseController
 		//获取产品推荐数据
 		$referralsData = $referralsModel->getReferrals();
 
-		//根据文章id获取相关推荐文章
+		//根据文章id获取文章下方相关推荐文章
 		$specialId = $portalCategoryPostModel->getSpecialId(5);
-
-
-		dump($specialId);
-
-
-//		$map['mail'] = ['like', '%thinkphp@qq.com%'];
+		foreach ($specialId as $item => $value) {
+			$where[] = $value['category_id'];
+		}
+		$relatePost = $portalPostModel->getRelatePost(6, $where);
 
 		//调试数据
-//		dump($map);
-//		dump($postData);
-//		dump($adData);
-//		dump($referralsData);
-//		dump($recommendedData);
+		dump($relatePost);
 
 		//赋值变量  并渲染模板
 		$this->assign('article', $postData);
+		$this->assign('relatePost', $relatePost);
 		$this->assign('recommended', $recommendedData);
 		$this->assign('referrals', $referralsData);
 		$this->assign('ad', $adData);

@@ -55,28 +55,21 @@ class PortalPostModel extends Model
 
 
 
-	public function getRelatePost($postId,$num=6)
+	public function getRelatePost($limit=6,$where)
 	{
 
-		//获取文章相关的专题ID
-		$specialId = Db::name('portal_category_post')
-			->field('category_id')
-			->where('post_id', $postId)
+		//根据专题ID查询相关的文章信息
+		$postData = $this->alias('pp')
+			->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
+			->field('pp.id,pp.post_title,pp.more')
+			->where('post_status', '1')
+			->where('pcp.category_id', 'in',$where)
+			->limit($limit)
+			->order('published_time desc')
 			->select();
 
-//		$test = Ad::get(1);
 
-
-
-		//重新组合where条件数组  准备做下一步的查询条件
-//		foreach ($specialId as $item =>$value ){
-//			$where['category_id'][] = $value['category_id'];
-//
-
-
-
-		//根据专题ID查询相关的文章
-		return $specialId;
+		return $postData;
 	}
 
 	/**
