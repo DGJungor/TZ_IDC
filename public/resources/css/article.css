@@ -1138,6 +1138,25 @@ body {
 .main > .main-left .comment .comment-login-tip a {
   color: #4789f5;
 }
+.main > .main-left .comment .reply-send {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.main > .main-left .comment .reply-send .reply-cancel {
+  margin: 0 10px;
+  cursor: pointer;
+}
+.main > .main-left .comment ul.reply-list {
+  margin-bottom: 10px !important;
+}
+.main > .main-left .comment ul.reply-list li {
+  padding: 5px;
+  background-color: #f2f5fb;
+}
+.main > .main-left .comment p.comment-send {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
 .main > .main-left .comment .comment-send button {
   padding: 4px 6px;
   background: transparent;

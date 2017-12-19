@@ -593,18 +593,6 @@ footer div.footer p {
 }
 /*底部样式end*/
 /*弹框样式start*/
-.myAlert {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 5px;
-  padding: 5px 10px;
-  background: #008dd3;
-  box-shadow: none;
-  border-radius: 2px;
-  color: #fff;
-  display: none;
-}
 .myAlert .modal-dialog {
   width: 400px;
 }
@@ -952,7 +940,7 @@ body {
   background: #3ca5f6 !important;
   border-color: transparent;
 }
-.alert {
+.member-alert {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -1300,11 +1288,11 @@ body {
   position: relative;
   padding: 0 34px;
 }
-.change-password .modal-body p:first-of-type input {
-  margin-left: 14px;
-}
 .change-password .modal-body p {
   margin-bottom: 20px;
+}
+.change-password .modal-body p input.newpassword {
+  margin-left: 14px;
 }
 .change-password .modal-body p input {
   border: 1px solid #eeeeee;

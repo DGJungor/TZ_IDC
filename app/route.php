@@ -16,8 +16,10 @@ Route::rule([
     '/'  =>  'web/Index/Index'
 ],'','GET');
 
-//首页文章页内容
-Route::rule('article/index/:id','article/index/index','GET|POST');
+//首页文章页内容   http://www.idckxj.com/article/index?id=13&type=post
+Route::rule('article/index','article/index/index','GET|POST');
+
+
 
 if (file_exists(CMF_ROOT . "data/conf/route.php")) {
     $runtimeRoutes = include CMF_ROOT . "data/conf/route.php";
