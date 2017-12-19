@@ -68,7 +68,7 @@ class AdminAnonymousController extends  AdminBaseController
     {
         $id = input('param.id', 0, 'intval');
         if ($id) {
-            $result = Db::name("user_vip")->where(["id" => $id])->setField('status', 0);
+            $result = Db::name("user_vip")->where(["id" => $id])->setField('user_status', 0);
             if ($result) {
                 $this->success("会员拉黑成功！", "adminAnonymous/index");
             } else {
@@ -96,7 +96,7 @@ class AdminAnonymousController extends  AdminBaseController
     {
         $id = input('param.id', 0, 'intval');
         if ($id) {
-            Db::name("anonymous")->where(["id" => $id,])->setField('status', 1);
+            Db::name("user_vip")->where(["id" => $id,])->setField('user_status', 1);
             $this->success("会员启用成功！", '');
         } else {
             $this->error('数据传入失败！');
