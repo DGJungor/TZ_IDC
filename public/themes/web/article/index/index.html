@@ -155,7 +155,7 @@
         <div class="article-breadcrumb">
             <ol class="breadcrumb">
                 <li><a href="#">首页</a></li>
-                <li class="active">网络数据</li>
+                <li class="active">文章内容</li>
             </ol>
         </div>
         <div class="content-container" id="content_container">
@@ -171,6 +171,7 @@
                 <blockquote>
                     <!--文章摘要-->
                     <p>{$article.post_excerpt}</p>
+
                 </blockquote>
             </div>
 
@@ -236,51 +237,21 @@
             <h3>相关推荐</h3>
             <section class="recommend-content">
                 <div class="row">
-                    <div class="col-xs-6 col-md-4">
-                        <a href="#" class="thumbnail">
-                            <img src="http://image.woshipm.com/wp-files/2017/11/li4CizIYSXO0J6goXpCP.jpg" alt="...">
-                        </a>
-                        <p>浅谈后台产品的实现过程</p>
+                    <volist name="relatePost" id="vo" >
+                        <div class="col-xs-6 col-md-4">
+                            <a href="#" class="thumbnail">
+                                <img src="{:cmf_get_image_preview_url($vo.more.thumbnail)}" alt="...">
+                            </a>
+                            <p>{$vo.post_title}</p>
+                        </div>
+                    </volist>
 
-                    </div>
-                    <div class="col-xs-6 col-md-4">
-                        <a href="#" class="thumbnail">
-                            <img src="http://image.woshipm.com/wp-files/2017/11/li4CizIYSXO0J6goXpCP.jpg" alt="...">
-                        </a>
-                        <p>浅谈后台产品的实现过程</p>
-
-                    </div>
-                    <div class="col-xs-6 col-md-4">
-                        <a href="#" class="thumbnail">
-                            <img src="http://image.woshipm.com/wp-files/2017/11/li4CizIYSXO0J6goXpCP.jpg" alt="...">
-                        </a>
-                        <p>浅谈后台产品的实现过程</p>
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-md-4">
-                        <a href="#" class="thumbnail">
-                            <img src="http://image.woshipm.com/wp-files/2017/11/li4CizIYSXO0J6goXpCP.jpg" alt="...">
-                        </a>
-                        <p>浅谈后台产品的实现过程</p>
-
-                    </div>
-                    <div class="col-xs-6 col-md-4">
-                        <a href="#" class="thumbnail">
-                            <img src="http://image.woshipm.com/wp-files/2017/11/li4CizIYSXO0J6goXpCP.jpg" alt="...">
-                        </a>
-                        <p>浅谈后台产品的实现过程</p>
-
-                    </div>
-                    <div class="col-xs-6 col-md-4">
-                        <a href="#" class="thumbnail">
-                            <img src="http://image.woshipm.com/wp-files/2017/11/li4CizIYSXO0J6goXpCP.jpg" alt="...">
-                        </a>
-                        <p>浅谈后台产品的实现过程</p>
-
-                    </div>
+                    <!--<div class="col-xs-6 col-md-4">-->
+                    <!--<a href="#" class="thumbnail">-->
+                    <!--<img src="http://image.woshipm.com/wp-files/2017/11/li4CizIYSXO0J6goXpCP.jpg" alt="...">-->
+                    <!--</a>-->
+                    <!--<p>浅谈后台产品的实现过程</p>-->
+                    <!--</div>-->
 
                 </div>
             </section>

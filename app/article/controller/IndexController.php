@@ -77,7 +77,7 @@ class IndexController extends HomeBaseController
 		$relatePost = $portalPostModel->getRelatePost(6, $where);
 
 		//调试数据
-		dump($relatePost);
+//		dump($relatePost);
 
 		//赋值变量  并渲染模板
 		$this->assign('article', $postData);

@@ -54,7 +54,18 @@ class PortalPostModel extends Model
 	}
 
 
-
+	/**
+	 *
+	 * 根据根据多个分类id 从数据库中获取  有关类型的文章  按照发布时间排序
+	 *
+	 * @author 张俊
+	 * @param int $limit  '获取文章的数量'
+	 * @param     $where '又关文章的所有的 类型id'
+	 * @return false|\PDOStatement|string|\think\Collection
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
 	public function getRelatePost($limit=6,$where)
 	{
 

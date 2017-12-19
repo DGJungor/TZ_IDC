@@ -40,7 +40,6 @@ class PortalCategoryPostModel extends Model
 	 * @throws \think\db\exception\DataNotFoundException
 	 * @throws \think\db\exception\ModelNotFoundException
 	 * @throws \think\exception\DbException
-	 *
 	 */
 	public function getSpecialId($postId)
 	{
@@ -50,16 +49,7 @@ class PortalCategoryPostModel extends Model
 			->where('post_id', $postId)
 			->select();
 
-
-
-
-//		$test = $this
-//			->where('category_id','in',$test2)
-//			->select();
-
-
 			return $specialId;
-//		return $test;
 	}
 
 }
