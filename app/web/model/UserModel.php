@@ -77,4 +77,13 @@ class UuserModel  extends Model
             ->find();
         return $passwordInDb;
     }
+
+    public function Dateavatar($id,$avatar)
+    {
+        if(!empty($avatar)){
+            $result = Db::name('user_vip')->where('id',$id)->update(['avatar'=>$avatar]);
+            return $result;
+        }
+        return false;
+    }
 }

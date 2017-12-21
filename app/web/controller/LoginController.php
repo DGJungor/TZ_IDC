@@ -54,7 +54,7 @@ class LoginController extends HomeBaseController
                     cookie('user',$data); //设置用户信息
                     cookie('user_id',$data['id']); //设置用户id
                 }
-                return json(['name'=>'登录成功','data'=>$data,'id'=>1]);
+                return json(['name'=>'登录成功','avatar'=>$data['avatar'],'id'=>1]);
             }
             return json(['name'=>'密码错误','id'=>0]);
         }

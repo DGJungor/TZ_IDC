@@ -89,7 +89,7 @@ class AdminPageController extends AdminBaseController
 
         $portalPostModel = new BaoliaoPostModel();
         $portalPostModel->adminAddPage($data['post']);
-        $this->success(lang('ADD_SUCCESS'), url('AdminPage/edit', ['id' => $portalPostModel->id]));
+        $this->success(lang('保存成功'), url('AdminPage/edit', ['id' => $portalPostModel->id]));
 
     }
 
@@ -151,7 +151,7 @@ class AdminPageController extends AdminBaseController
 
         $portalPostModel->adminEditPage($data['post']);
 
-        $this->success(lang('SAVE_SUCCESS'));
+        $this->success(lang('保存成功'));
 
     }
 
@@ -176,9 +176,9 @@ class AdminPageController extends AdminBaseController
 
         $result = $portalPostModel->adminDeletePage($data);
         if ($result) {
-            $this->success(lang('DELETE_SUCCESS'));
+            $this->success(lang('删除成功'));
         } else {
-            $this->error(lang('DELETE_FAILED'));
+            $this->error(lang('删除失败'));
         }
 
     }

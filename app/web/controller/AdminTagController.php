@@ -18,15 +18,15 @@ use think\Db;
 class AdminTagController extends AdminBaseController
 {
     /**
-     * 文章标签管理
+     * 爆料标签管理
      * @adminMenu(
-     *     'name'   => '文章标签',
+     *     'name'   => '爆料标签',
      *     'parent' => 'portal/AdminIndex/default',
      *     'display'=> true,
      *     'hasView'=> true,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '文章标签',
+     *     'remark' => '爆料标签',
      *     'param'  => ''
      * )
      */
@@ -42,15 +42,15 @@ class AdminTagController extends AdminBaseController
     }
 
     /**
-     * 添加文章标签
+     * 添加爆料标签
      * @adminMenu(
-     *     'name'   => '添加文章标签',
+     *     'name'   => '添加爆料标签',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> true,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '添加文章标签',
+     *     'remark' => '添加爆料标签',
      *     'param'  => ''
      * )
      */
@@ -62,32 +62,32 @@ class AdminTagController extends AdminBaseController
     }
 
     /**
-     * 添加文章标签提交
+     * 添加爆料标签提交
      * @adminMenu(
-     *     'name'   => '添加文章标签提交',
+     *     'name'   => '添加爆料标签提交',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> false,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '添加文章标签提交',
+     *     'remark' => '添加爆料标签提交',
      *     'param'  => ''
      * )
      */
     public function addPost()
     {
-
         $arrData = $this->request->param();
-
-        $portalTagModel = new BaoliaoTagModel();
-        $portalTagModel->isUpdate(false)->allowField(true)->save($arrData);
-
-        $this->success(lang("SAVE_SUCCESS"));
+        if(!empty($arrData['name'])){
+            $portalTagModel = new BaoliaoTagModel();
+            $portalTagModel->isUpdate(false)->allowField(true)->save($arrData);
+            $this->success(lang("保存成功"));
+        }
+        $this->success(lang("保存失败"));
 
     }
 
     /**
-     * 更新文章标签状态
+     * 更新爆料标签状态
      * @adminMenu(
      *     'name'   => '更新标签状态',
      *     'parent' => 'index',
@@ -111,20 +111,20 @@ class AdminTagController extends AdminBaseController
         $portalTagModel = new BaoliaoTagModel();
         $portalTagModel->isUpdate(true)->save(["status" => $intStatus], ["id" => $intId]);
 
-        $this->success(lang("SAVE_SUCCESS"));
+        $this->success(lang("保存成功"));
 
     }
 
     /**
-     * 删除文章标签
+     * 删除爆料标签
      * @adminMenu(
-     *     'name'   => '删除文章标签',
+     *     'name'   => '删除爆料标签',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> false,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '删除文章标签',
+     *     'remark' => '删除爆料标签',
      *     'param'  => ''
      * )
      */

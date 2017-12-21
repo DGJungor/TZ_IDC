@@ -18,15 +18,15 @@ use think\Validate;
 class AdminCategoryController extends AdminBaseController
 {
     /**
-     * 文章分类列表
+     * 爆料分类列表
      * @adminMenu(
      *     'name'   => '分类管理',
-     *     'parent' => 'portal/AdminIndex/default',
+     *     'parent' => 'web/AdminIndex/default',
      *     'display'=> true,
      *     'hasView'=> true,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '文章分类列表',
+     *     'remark' => '爆料分类列表',
      *     'param'  => ''
      * )
      */
@@ -40,15 +40,15 @@ class AdminCategoryController extends AdminBaseController
     }
 
     /**
-     * 添加文章分类
+     * 添加爆料分类
      * @adminMenu(
-     *     'name'   => '添加文章分类',
+     *     'name'   => '添加爆料分类',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> true,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '添加文章分类',
+     *     'remark' => '添加爆料分类',
      *     'param'  => ''
      * )
      */
@@ -68,15 +68,15 @@ class AdminCategoryController extends AdminBaseController
     }
 
     /**
-     * 添加文章分类提交
+     * 添加爆料分类提交
      * @adminMenu(
-     *     'name'   => '添加文章分类提交',
+     *     'name'   => '添加爆料分类提交',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> false,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '添加文章分类提交',
+     *     'remark' => '添加爆料分类提交',
      *     'param'  => ''
      * )
      */
@@ -103,15 +103,15 @@ class AdminCategoryController extends AdminBaseController
     }
 
     /**
-     * 编辑文章分类
+     * 编辑爆料分类
      * @adminMenu(
-     *     'name'   => '编辑文章分类',
+     *     'name'   => '编辑爆料分类',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> true,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '编辑文章分类',
+     *     'remark' => '编辑爆料分类',
      *     'param'  => ''
      * )
      */
@@ -144,15 +144,15 @@ class AdminCategoryController extends AdminBaseController
     }
 
     /**
-     * 编辑文章分类提交
+     * 编辑爆料分类提交
      * @adminMenu(
-     *     'name'   => '编辑文章分类提交',
+     *     'name'   => '编辑爆料分类提交',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> false,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '编辑文章分类提交',
+     *     'remark' => '编辑爆料分类提交',
      *     'param'  => ''
      * )
      */
@@ -160,7 +160,7 @@ class AdminCategoryController extends AdminBaseController
     {
         $data = $this->request->param();
 
-        $result = $this->validate($data, 'PortalCategory');
+        $result = $this->validate($data, 'BaoliaoCategory');
 
         if ($result !== true) {
             $this->error($result);
@@ -178,15 +178,15 @@ class AdminCategoryController extends AdminBaseController
     }
 
     /**
-     * 文章分类选择对话框
+     * 爆料分类选择对话框
      * @adminMenu(
-     *     'name'   => '文章分类选择对话框',
+     *     'name'   => '爆料分类选择对话框',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> true,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '文章分类选择对话框',
+     *     'remark' => '爆料分类选择对话框',
      *     'param'  => ''
      * )
      */
@@ -219,15 +219,15 @@ tpl;
     }
 
     /**
-     * 文章分类排序
+     * 爆料分类排序
      * @adminMenu(
-     *     'name'   => '文章分类排序',
+     *     'name'   => '爆料分类排序',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> false,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '文章分类排序',
+     *     'remark' => '爆料分类排序',
      *     'param'  => ''
      * )
      */
@@ -238,15 +238,15 @@ tpl;
     }
 
     /**
-     * 删除文章分类
+     * 删除爆料分类
      * @adminMenu(
-     *     'name'   => '删除文章分类',
+     *     'name'   => '删除爆料分类',
      *     'parent' => 'index',
      *     'display'=> false,
      *     'hasView'=> false,
      *     'order'  => 10000,
      *     'icon'   => '',
-     *     'remark' => '删除文章分类',
+     *     'remark' => '删除爆料分类',
      *     'param'  => ''
      * )
      */
@@ -267,16 +267,16 @@ tpl;
             $this->error('此分类有子类无法删除!');
         }
 
-        $categoryPostCount = Db::name('portal_category_post')->where('category_id', $id)->count();
+        $categoryPostCount = Db::name('baoliao_category_post')->where('category_id', $id)->count();
 
         if ($categoryPostCount > 0) {
-            $this->error('此分类有文章无法删除!');
+            $this->error('此分类有爆料无法删除!');
         }
 
         $data   = [
             'object_id'   => $findCategory['id'],
             'create_time' => time(),
-            'table_name'  => 'portal_category',
+            'table_name'  => 'baoliao_category',
             'name'        => $findCategory['name']
         ];
         $result = $portalCategoryModel

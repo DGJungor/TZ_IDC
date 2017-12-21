@@ -220,7 +220,7 @@ class BaoliaoPostModel extends Model
                 $recycleData = [
                     'object_id'   => $res['id'],
                     'create_time' => time(),
-                    'table_name'  => 'portal_post#page',
+                    'table_name'  => 'baoliao_post#page',
                     'name'        => $res['post_title'],
 
                 ];
@@ -258,7 +258,7 @@ class BaoliaoPostModel extends Model
                 foreach ($res as $key => $value) {
                     $recycleData[$key]['object_id']   = $value['id'];
                     $recycleData[$key]['create_time'] = time();
-                    $recycleData[$key]['table_name']  = 'portal_post';
+                    $recycleData[$key]['table_name']  = 'baoliao_post';
                     $recycleData[$key]['name']        = $value['post_title'];
 
                 }

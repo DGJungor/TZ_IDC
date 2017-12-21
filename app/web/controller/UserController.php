@@ -30,7 +30,6 @@ class UserController extends HomeBaseController
         $this->userID = cmf_get_current_user_id();
         $this->class = new UuserModel();  //实例化用户类
     }
-
     /*
      * sesion : user   用户信息
      * 用户管理页面输出
@@ -44,10 +43,23 @@ class UserController extends HomeBaseController
         return $this->fetch();
     }
 
-    /*
-     * 用户信息修改
-     * @return string
+    /**
+     * 头像替换
+     * @return \think\response\Json
      */
+    public function Dateavatar()
+    {
+        $avatar = $this->class->Dateavatar($this->userID,$_POST['avatar']);
+        if($avatar)
+        {
+            return json(['name'=>'替换成功','id'=>1]);
+        }
+        return json(['name'=>'替换失败','id'=>0]);
+    }
+        /*
+         * 用户信息修改
+         * @return string
+         */
     public function Dateuser()
     {
         if(Request::instance()->isPost())

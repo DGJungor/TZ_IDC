@@ -46,7 +46,7 @@ class ReleaseController extends HomeBaseController
                     }
                     return json(['name' => '发布失败', 'id' => 0]);
                 }
-                return json(['name'=>'不允许评论','id'=>3]);
+                return json(['name' => '不允许评论', 'id' =>3]);
             }
         }
         return json(['name'=>'请登录','id'=>2]);
