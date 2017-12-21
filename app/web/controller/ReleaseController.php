@@ -8,6 +8,7 @@
 
 namespace app\web\controller;
 
+use app\portal\taglib\Portal;
 use cmf\controller\HomeBaseController;
 use app\web\model\ReleaseModel;
 use think\Session;
@@ -31,17 +32,21 @@ class ReleaseController extends HomeBaseController
         if(cmf_is_user_login())
         {
             if(!empty($_POST['text'])){
-                $data = [
-                    'issue_id'    => $_POST['b_id'],             //文章ID
-                    'user_id'     => cmf_get_current_user_id(),  //用户ID
-                    'reply_msg'   => $_POST['text'],          //评论内容
-                    'create_date' => time(),                 //评论时间
-                ];
-                $result = $this->class->setcomment($data);
-                if($result){
-                    return json(['name'=>'发布成功、待审核','id'=>1]);
+                $judge = $this->class->judge($_POST['b_id']);
+                if($judge) {
+                    $data = [
+                        'issue_id' => $_POST['b_id'],                //文章ID
+                        'C_user_id' => cmf_get_current_user_id(),  //用户ID
+                        'comment_msg' => $_POST['text'],          //评论内容
+                        'C_create_date' => time(),                 //评论时间
+                    ];
+                    $result = $this->class->setcomment($data);
+                    if ($result) {
+                        return json(['name' => '发布成功、待审核', 'id' => 1]);
+                    }
+                    return json(['name' => '发布失败', 'id' => 0]);
                 }
-                return json(['name'=>'发布失败','id'=>0]);
+                return json(['name'=>'不允许评论','id'=>3]);
             }
         }
         return json(['name'=>'请登录','id'=>2]);
@@ -50,7 +55,8 @@ class ReleaseController extends HomeBaseController
     /*
     * AJAX以POST提交值
     * ---------文章回复
-    * */
+    * @return \think\response\Json
+    */
     public function  Reply_comment()
     {
         if(cmf_is_user_login())
@@ -61,7 +67,7 @@ class ReleaseController extends HomeBaseController
                     'from_user_id'   => cmf_get_current_user_id(),      //用户ID
                     'reply_msg'      => $_POST['text'],               //回复内容
                     'to_user_id'     => $_POST['h_id'],             //回复对象ID
-                    'create_date'    => time(),                    //回复时间
+                    'R_create_date'    => time(),                  //回复时间
                 ];
                 $result = $this->class->setreply($data);
                 if($result){
@@ -71,5 +77,10 @@ class ReleaseController extends HomeBaseController
             }
         }
         return json(['name'=>'请登录','id'=>2]);
+    }
+    public function viewcomment()
+    {
+        $data = $this->class->getcomment($_POST['id']);
+        var_dump($data);
     }
 }

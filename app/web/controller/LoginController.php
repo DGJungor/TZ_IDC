@@ -24,7 +24,8 @@ class LoginController extends HomeBaseController
      *       password ----> 密码
      *       Autologon ----> 自动登陆值
      * ---------登录
-     * */
+     * @return \think\response\Json
+     */
     public function login()
     {
         include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');
@@ -69,7 +70,8 @@ class LoginController extends HomeBaseController
      *       repassword ---> 确认密码
      * 函数 Validate 验证 data（数据信息）
      * ---------注册
-     * */
+     * @return \think\response\Json
+     */
     public function  register()
     {
         include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');
@@ -103,7 +105,6 @@ class LoginController extends HomeBaseController
      * 点击退出
      * 删除Session  Cookie  用户值
      * */
-
     public function outlogin()
     {
         include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');
@@ -115,7 +116,8 @@ class LoginController extends HomeBaseController
 
     /*
      * 判断是否是登录状态
-     * */
+     * @return \think\response\Json
+     */
     public function islogin()
     {
         include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');

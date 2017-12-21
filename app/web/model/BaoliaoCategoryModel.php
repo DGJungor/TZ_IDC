@@ -96,7 +96,7 @@ class BaoliaoCategoryModel extends Model
     }
 
     /**
-     * 添加文章分类
+     * 添加爆料分类
      * @param $data
      * @return bool
      */

@@ -13,15 +13,7 @@ use app\web\model\BaoliaoModel;
 use think\Db;
 class BaoliaoController  extends  AdminBaseController
 {
-    /*
-    * AJAX以POST提交值
-    * NAME: user ---> 匿名用户名
-    *       user_qq  ---> 匿名用户QQ
-    *       user_Mobile  ---> 匿名用户手机号
-    *       text --->用户爆料
-    *SESSION: baoliaoID  ==  爆料表的ID值
-    * ---------爆料
-    * */
+
     public  $class = false;
 
     public function __construct()
@@ -34,7 +26,16 @@ class BaoliaoController  extends  AdminBaseController
         $categeory =  $this->class->webCategoryTableTree();
         return $categeory;
     }
-
+    /*
+    * AJAX以POST提交值
+    * NAME: user ---> 匿名用户名
+    *       user_qq  ---> 匿名用户QQ
+    *       user_Mobile  ---> 匿名用户手机号
+    *       text --->用户爆料
+    *SESSION: baoliaoID  ==  爆料表的ID值
+    * ---------爆料
+    * @return \think\response\Json
+    */
     public function baoliao()
     {
         $userID = cmf_get_current_user_id();
@@ -52,7 +53,7 @@ class BaoliaoController  extends  AdminBaseController
         }else if(!empty($_POST['anonymous']['user_log']) and count($_POST) >= 3)
         {
             $data = [
-                'user'         => $_POST['anonymous']['user_log'],
+                'user'         => $_POST['anonymous']['user_login'],
                 'user_qq'      => $_POST['anonymous']['user_QQ'],
                 'user_Mobile' => $_POST['anonymous']['mobile'],
                 'text'         => $_POST['post_content'],

@@ -10,11 +10,14 @@ namespace app\web\model;
 
 use think\Model;
 use think\Db;
+
 class LoginModel extends Model
 {
     /*
      * 判断这个用户是否存在
-     * */
+     * @param $data
+     * @return array|bool|false|\PDOStatement|string|Model
+     */
     public function getlog($data)
     {
         $data = Db::name('user_vip')->whereOr($data)->where('user_status',1)->find();
@@ -27,8 +30,9 @@ class LoginModel extends Model
 
     /*
      *注册用户信息
-     *
-     * */
+     * @param $data
+     * @return bool|int|string
+     */
     public function setreg($data)
     {
         $array = [
@@ -49,8 +53,9 @@ class LoginModel extends Model
 
     /*
      * 判断这个用户是否已注册
-     *
-     * */
+     * @param $data
+     * @return bool
+     */
     public function getreg($data)
     {
         $result = Db::name('user_vip')->where(['user_email'=>$data['email'],'mobile'=>$data['mobile']])->select();
@@ -63,8 +68,9 @@ class LoginModel extends Model
 
     /*
      * 修改用户最后登录信息
-     *
-     * */
+     * @param $id
+     * @throws \think\Exception
+     */
     public function information($id)
     {
         $user_IP = get_client_ip();

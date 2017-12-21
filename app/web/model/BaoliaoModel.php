@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Administrator
+ * User: 胡志伟
  * Date: 2017/12/15
  * Time: 15:47
  */
@@ -15,7 +15,9 @@ class BaoliaoModel extends  Model
 {
     /*
     * 发布爆料
-    * */
+    * @param $data
+    * @return int|string
+    */
     public function setbao($data)
     {
         $array = [
@@ -30,8 +32,9 @@ class BaoliaoModel extends  Model
 
 
     /*
-   * 查询爆料
-   * */
+    * 查询爆料
+    * @return false|\PDOStatement|string|\think\Collection
+    */
     public function getbao()
     {
         $result =  Db::name('baoliao_post')->where('status',1)->select();
@@ -41,7 +44,9 @@ class BaoliaoModel extends  Model
     /*
     * 查询一个匿名用户是否存在
     *返回匿名用户信息
-    * */
+    * @param $data
+    * @return array|false|\PDOStatement|string|Model
+    */
     public function getanonymous($data)
     {
         $result = Db::name('user_vip')->where($data)->where('user_type',0)->find();
@@ -51,7 +56,9 @@ class BaoliaoModel extends  Model
     /*
      * 写入匿名用户信息
      * 返回匿名用户ID
-     * */
+     * @param $data
+     * @return int|string
+     */
     public function setanonymous($data)
     {
         $n_id = Db::name('user_vip')->insertGetId($data);
@@ -60,7 +67,10 @@ class BaoliaoModel extends  Model
 
     /*
      * 写入分类与爆料中间联系表
-     * */
+     * @param $id
+     * @param $data
+     * @return bool
+     */
     public function setCategory($id,$data)
     {
         $array = [

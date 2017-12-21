@@ -32,6 +32,7 @@ class BaoliaoPostModel extends Model
 
     /**
      * 关联分类表
+     * @return \think\model\relation\BelongsToMany
      */
     public function categories()
     {

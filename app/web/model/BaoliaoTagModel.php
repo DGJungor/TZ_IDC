@@ -9,6 +9,7 @@ namespace app\web\model;
 
 use think\Model;
 
+
 class BaoliaoTagModel extends Model
 {
     public static   $STATUS = array(

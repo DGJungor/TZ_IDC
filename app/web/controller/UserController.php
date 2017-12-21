@@ -21,6 +21,10 @@ class UserController extends HomeBaseController
 {
     public $userID = 0;   //用户登录ID
     public $class = '';
+
+    /**
+     * UserController constructor.
+     */
     public function __construct()
     {
         $this->userID = cmf_get_current_user_id();
@@ -30,7 +34,8 @@ class UserController extends HomeBaseController
     /*
      * sesion : user   用户信息
      * 用户管理页面输出
-     * */
+     * @return mixed
+     */
     public function index()
     {
         if(session('?user')){
@@ -41,8 +46,8 @@ class UserController extends HomeBaseController
 
     /*
      * 用户信息修改
-     *
-     * */
+     * @return string
+     */
     public function Dateuser()
     {
         if(Request::instance()->isPost())
@@ -72,7 +77,8 @@ class UserController extends HomeBaseController
     /*
      * 用户密码(password)
      * 修改
-     * */
+     * @return \think\response\Json
+     */
     public function Datepass()
     {
         $password = $_POST['password'];

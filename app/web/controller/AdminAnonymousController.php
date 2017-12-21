@@ -42,7 +42,13 @@ class AdminAnonymousController extends  AdminBaseController
         }
         $usersQuery = Db::name('user_vip');
 
-        $list = $usersQuery->whereOr($keywordComplex)->where($where)->where('user_type',0)->order("create_time DESC")->paginate(10);
+        $list = $usersQuery
+            ->field('id,user_login,user_QQ,mobile,create_time,user_status')
+            ->whereOr($keywordComplex)
+            ->where($where)
+            ->where('user_type',0)
+            ->order("create_time DESC")
+            ->paginate(10);
         // 获取分页显示
         $page = $list->render();
         $this->assign('list', $list);
