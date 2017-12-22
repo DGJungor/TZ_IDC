@@ -76,4 +76,15 @@ class LoginModel extends Model
         $user_IP = get_client_ip();
         Db::table('idckx_user_vip')->where('id', $id)->update(['last_login_ip'=>$user_IP,'last_login_time' => time()]);
     }
+
+    /**
+     * token 储存值
+     * @param $data
+     * @return int|string
+     */
+    public function tokenData($data)
+    {
+        $tokenData =  Db::name('user_token')->insert($data);
+        return $tokenData;
+    }
 }

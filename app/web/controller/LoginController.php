@@ -35,7 +35,8 @@ class LoginController extends HomeBaseController
         $loginModel = new loginModel();
         $_POST = [
             'keyword' => '867472519@qq.com',
-            'password' =>'sA123456',
+            'password' =>'aS123456',
+            'Autologon'=> '',
         ];
         $keywordComplex = [];
         if (!empty($_POST['keyword'])) {
@@ -68,7 +69,7 @@ class LoginController extends HomeBaseController
                     "token"=>$this->request->token('__token__',$data['id']),
                     "device_type"=>"web"
                 ];
-                $tokenResult = Db::name('user_token')->insert($tokenData);
+                $tokenResult = $loginModel->tokenData($tokenData);
                 if($tokenResult) {
                     return ajaxEcho(["id"=>$tokenData["user_id"],"token"=>$tokenData["token"],"img"=>$data["avatar"]],"登录成功",1);
                 }else {
