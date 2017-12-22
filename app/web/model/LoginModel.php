@@ -20,6 +20,7 @@ class LoginModel extends Model
      */
     public function getlog($data)
     {
+        if(!count($data)){return false;}
         $data = Db::name('user_vip')->whereOr($data)->where('user_status',1)->find();
         if(count($data))
         {

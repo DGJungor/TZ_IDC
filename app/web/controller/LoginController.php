@@ -32,19 +32,17 @@ class LoginController extends HomeBaseController
     public function login()
     {
         include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');
+        if(empty($_POST['keyword']) and empty($_POST['password'])){
+            return ajaxEcho([],'请收入账号密码',0);
+        }
         $loginModel = new loginModel();
-        $_POST = [
-            'keyword' => '867472519@qq.com',
-            'password' =>'aS123456',
-            'Autologon'=> '',
-        ];
         $keywordComplex = [];
         if (!empty($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
             $keywordComplex['mobile|user_login|user_email']    = ['like', "%$keyword%"];
         }
         $data = $loginModel->getlog($keywordComplex);
-        if(count($data))
+        if($data)
         {
             if(cmf_compare_password($_POST['password'], $data['user_pass']))
             {

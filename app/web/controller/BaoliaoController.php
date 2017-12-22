@@ -8,6 +8,8 @@
 
 namespace app\web\controller;
 
+include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
+include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
 use cmf\controller\AdminBaseController;
 use app\web\model\BaoliaoModel;
 use think\Db;
@@ -24,7 +26,7 @@ class BaoliaoController  extends  AdminBaseController
     public function index()
     {
         $categeory =  $this->class->webCategoryTableTree();
-        return $categeory;
+        return  ajaxEcho(['categeory'=>$categeory],'爆料分类','1');
     }
     /*
     * AJAX以POST提交值
@@ -45,11 +47,11 @@ class BaoliaoController  extends  AdminBaseController
                 $result = $this->class->setCategory($result,$_POST);
                 if($result)
                 {
-                    return json(['name'=>'发布成功','id'=>0]);
+                    return ajaxEcho([],'发布成功',1);
                 }
-                return json(['name'=>'发布失败','id'=>1]);
+                return ajaxEcho([],'发布失败');
             }
-            return json(['name'=>'请编辑,在发布','id'=>2]);
+            return ajaxEcho([],'请编辑,在发布');
         }else if(!empty($_POST['anonymous']['user_log']) and count($_POST) >= 3)
         {
             $data = [

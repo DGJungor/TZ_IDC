@@ -9,6 +9,8 @@
 namespace app\web\controller;
 
 
+include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
+include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
 use FontLib\Table\Type\glyf;
 use app\web\model\UuserModel;
 use FontLib\Table\Type\name;

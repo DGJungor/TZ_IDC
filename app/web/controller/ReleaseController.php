@@ -8,6 +8,8 @@
 
 namespace app\web\controller;
 
+include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
+include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
 use app\portal\taglib\Portal;
 use cmf\controller\HomeBaseController;
 use app\web\model\ReleaseModel;

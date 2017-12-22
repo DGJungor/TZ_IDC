@@ -73,18 +73,23 @@ class BaoliaoModel extends  Model
      */
     public function setCategory($id,$data)
     {
-        $array = [
-            'post_id'=> $id,
-            'category_id'=> $data['category_id'],
-        ];
-        $category_ID = Db::name('baoliao_category_post')->insertGetId($array);
-        $tag_ID = Db::name('baoliao_tag')->insertGetId(['name'=>$data['post_title']]);
-        $tag_post_ID = Db::name('baoliao_tag_post')->insertGetId(['tag_id'=>$tag_ID,'post_id'=>$id]);
-        if($category_ID and $tag_ID and $tag_post_ID)
-        {
+        Db::startTrans();
+        try{
+            $array = [
+                'post_id'=> $id,
+                'category_id'=> $data['category_id'],
+            ];
+            Db::name('baoliao_category_post')->insertGetId($array);
+            $tag_ID = Db::name('baoliao_tag')->insertGetId(['name'=>$data['post_title']]);
+            Db::name('baoliao_tag_post')->insertGetId(['tag_id'=>$tag_ID,'post_id'=>$id]);
+            // 提交事务
+            Db::commit();
             return true;
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return false;
         }
-        return false;
     }
 
     /**
@@ -114,5 +119,16 @@ class BaoliaoModel extends  Model
         $treeStr = $tree->getTree(0, $tpl);
 
         return $treeStr;
+    }
+
+    /**
+     * 点击查询一篇爆料
+     * @param $id
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function webBaoliao($id)
+    {
+        $data = Db::name('baoliao')->where('id',1)->where('post_status')->find();
+        return $data;
     }
 }
