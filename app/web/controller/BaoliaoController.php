@@ -69,7 +69,7 @@ class BaoliaoController  extends  AdminBaseController
                         'n_id' => $result['id'],
                     ];
                     $this->class->setbao($data);
-                    return json(['name'=>'发布成功、待审核','id'=>1]);
+                    return ajaxEcho([],'发布成功、待审核',1);
                 }else{
                     $array = [
                         'user_login'         => $_POST['anonymous']['user_login'],
@@ -85,14 +85,14 @@ class BaoliaoController  extends  AdminBaseController
                             'user_id' => $n_id,
                         ];
                         $this->class->setbao($data);
-                        return json(['name'=>'发布成功、待审核','id'=>1]);
+                        return ajaxEcho([],'发布成功、待审核',1);
                     }
                 }
-                return json(['name'=>'发布失败','id'=>0]);
+                return ajaxEcho([],'发布失败');
             }
-            return json(['name'=>'验证失败','id'=>2]);
+            return ajaxEcho([],'验证失败');
         }
-        return json(['name'=>'请按要求填写','id'=>3]);
+        return ajaxEcho([],'请按要求填写');
     }
 
 }

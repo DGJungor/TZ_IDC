@@ -45,7 +45,7 @@ class AdminMemberController extends  AdminBaseController
         $usersQuery = Db::name('user_vip');
 
         $list = $usersQuery
-            ->field('id,user_login,user_nickname,user_email,user_QQ,mobile,last_login_ip,last_login_time,avatar,create_time,user_status')
+            ->field('id,user_login,user_nickname,user_name,user_email,user_QQ,mobile,last_login_ip,last_login_time,avatar,create_time,user_status')
             ->whereOr($keywordComplex)
             ->where($where)
             ->where('user_type',1)

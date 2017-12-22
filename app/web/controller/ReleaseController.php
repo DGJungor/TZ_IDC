@@ -42,14 +42,14 @@ class ReleaseController extends HomeBaseController
                     ];
                     $result = $this->class->setcomment($data);
                     if ($result) {
-                        return json(['name' => '发布成功、待审核', 'id' => 1]);
+                        return ajaxEcho([],"发布成功",1);
                     }
-                    return json(['name' => '发布失败', 'id' => 0]);
+                    return ajaxEcho([],'发布失败');
                 }
-                return json(['name' => '不允许评论', 'id' =>3]);
+                return ajaxEcho([], '不允许评论');
             }
         }
-        return json(['name'=>'请登录','id'=>2]);
+        return ajaxEcho([],'请登录');
     }
 
     /*
@@ -71,12 +71,12 @@ class ReleaseController extends HomeBaseController
                 ];
                 $result = $this->class->setreply($data);
                 if($result){
-                    return json(['name'=>'回复成功、待审核','id'=>1]);
+                    return ajaxEcho([],'回复成功',1);
                 }
-                return json(['name'=>'回复失败','id'=>0]);
+                return ajaxEcho([],'回复失败');
             }
         }
-        return json(['name'=>'请登录','id'=>2]);
+        return ajaxEcho([],'请登录');
     }
     public function viewcomment()
     {

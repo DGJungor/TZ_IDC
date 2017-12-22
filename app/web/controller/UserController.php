@@ -52,9 +52,9 @@ class UserController extends HomeBaseController
         $avatar = $this->class->Dateavatar($this->userID,$_POST['avatar']);
         if($avatar)
         {
-            return json(['name'=>'替换成功','id'=>1]);
+            return ajaxEcho([],'替换成功',1);
         }
-        return json(['name'=>'替换失败','id'=>0]);
+        return ajaxEcho([],'替换失败');
     }
         /*
          * 用户信息修改
@@ -73,15 +73,13 @@ class UserController extends HomeBaseController
             $validate = \think\Loader::validate('User');
             if($validate->check($data))
             {
-                $_POST['user_Mobile'] = $_POST['mobile'];
-                $_POST['up_date'] = time();
-                $result = $this->class->Dateuser($this->userID,$_POST);
+                $result = cmf_update_current_user($_POST);
                 if($result){
-                    return json(['name'=>'修改成功','id'=>1]);
+                    return ajaxEcho([],'修改成功',1);
                 }
-                return json(['name'=>'修改失败','id'=>0]);
+                return ajaxEcho([],'修改失败');
             }
-            return json(['name'=>'验证失败','id'=>3]);
+            return ajaxEcho([],'验证失败');
         }
     }
 
@@ -102,9 +100,9 @@ class UserController extends HomeBaseController
                 $result = $this->class->Datepass($this->userID,$_POST['datepass']);
                 if($result)
                 {
-                    return json(['name'=>'修改成功','id'=>1]);
+                    return ajaxEcho([],'修改成功',1);
                 }
-                return json(['name'=>'修改失败','id'=>0]);
+                return ajaxEcho([],'修改失败');
             }
         }
     }

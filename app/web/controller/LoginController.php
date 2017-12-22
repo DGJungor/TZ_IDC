@@ -33,6 +33,10 @@ class LoginController extends HomeBaseController
     {
         include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');
         $loginModel = new loginModel();
+        $_POST = [
+            'keyword' => '867472519@qq.com',
+            'password' =>'sA123456',
+        ];
         $keywordComplex = [];
         if (!empty($_POST['keyword'])) {
             $keyword = $_POST['keyword'];
