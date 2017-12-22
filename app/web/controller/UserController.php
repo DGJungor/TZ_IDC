@@ -77,11 +77,11 @@ class UserController extends HomeBaseController
                 $_POST['up_date'] = time();
                 $result = $this->class->Dateuser($this->userID,$_POST);
                 if($result){
-                    return json_encode(['name'=>'修改成功','id'=>1]);
+                    return json(['name'=>'修改成功','id'=>1]);
                 }
-                return json_encode(['name'=>'修改失败','id'=>0]);
+                return json(['name'=>'修改失败','id'=>0]);
             }
-            return json_encode(['name'=>'验证失败','id'=>3]);
+            return json(['name'=>'验证失败','id'=>3]);
         }
     }
 

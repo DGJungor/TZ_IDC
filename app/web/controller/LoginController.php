@@ -8,9 +8,12 @@
 
 namespace app\web\controller;
 
+include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
+include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
 use cmf\controller\HomeBaseController;
 use app\web\model\LoginModel;
 use think\Cookie;
+use think\Request;
 use think\Session;
 
 class LoginController extends HomeBaseController
@@ -24,7 +27,7 @@ class LoginController extends HomeBaseController
      *       password ----> 密码
      *       Autologon ----> 自动登陆值
      * ---------登录
-     * @return \think\response\Json
+     * @return mixed
      */
     public function login()
     {
@@ -54,11 +57,23 @@ class LoginController extends HomeBaseController
                     cookie('user',$data); //设置用户信息
                     cookie('user_id',$data['id']); //设置用户id
                 }
-                return json(['name'=>'登录成功','avatar'=>$data['avatar'],'id'=>1]);
+                $tokenData = [
+                    "user_id"=>$data['id'],
+                    "expire_time"=>time()+(60*60),
+                    "create_time"=>time(),
+                    "token"=>$this->request->token('__token__',$data['id']),
+                    "device_type"=>"web"
+                ];
+                $tokenResult = Db::name('user_token')->insert($tokenData);
+                if($tokenResult) {
+                    return ajaxEcho(["id"=>$tokenData["user_id"],"token"=>$tokenData["token"],"img"=>$data["avatar"]],"登录成功",1);
+                }else {
+                    return ajaxEcho([],"token写入错误");
+                }
             }
-            return json(['name'=>'密码错误','id'=>0]);
+            return ajaxEcho([],"密码错误");
         }
-        return json(['name'=>'用户不存在','id'=>2]);
+        return ajaxEcho([],"用户不存在");
     }
 
     /*
@@ -70,7 +85,7 @@ class LoginController extends HomeBaseController
      *       repassword ---> 确认密码
      * 函数 Validate 验证 data（数据信息）
      * ---------注册
-     * @return \think\response\Json
+     * @return mixed
      */
     public function  register()
     {
@@ -92,43 +107,39 @@ class LoginController extends HomeBaseController
                 $result = $loginModel->setreg($data);
                 if ($result)
                 {
-                    return json(['name' => '注册成功', 'id' => 1]);
+                    return ajaxEcho([],"注册成功",1);
                 }
-                return json(['name' => '注册失败', 'id' => 0]);
+                return ajaxEcho([],"注册失败");
             }
-            return json(['name' => '验证失败', 'id' => 3]);
+            return ajaxEcho([],"验证失败");
         }
-        return json(['name' => '用户以存在:', 'id' => 2]);
+        return ajaxEcho([],"用户以存在");
     }
 
     /*
      * 点击退出
-     * 删除Session  Cookie  用户值
-     * */
+     * @throws \think\Exception
+     */
     public function outlogin()
     {
-        include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');
-        Session::delete('user_id');
-        Session::delete('user');
-        Cookie::delete('user_id');
-        Cookie::delete('user');
+        $result = db("user_token")->where('user_id',byTokenGetUser(Request::instance()->header()["token"])["userId"])->delete();
+        if($result) {
+            $this->success("退出成功");
+        }else {
+            $this->error("退出失败");
+        }
     }
 
     /*
      * 判断是否是登录状态
-     * @return \think\response\Json
+     * @return mixed
      */
     public function islogin()
     {
-        include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');
-        if(session('?user_id'))
-        {
-            return json(['id'=> session('user_id'),'img'=>session('user')['avatar']]);
+        if(byTokenGetUser(Request::instance()->header()["token"])["userId"]==-1) {
+            return ajaxEcho([],byTokenGetUser(Request::instance()->header()["token"])["msg"],5000);
         }
-        if(cookie('user_id'))
-        {
-            return json(['id'=> cookie('user_id'),'img'=>cookie('user')['avatar']]);
-        }
-        return json(['name'=>'未登陆','id'=>0]);
+        $result = Db::name('user_vip')->where('id',byTokenGetUser(Request::instance()->header()["token"])["userId"])->find();
+        return ajaxEcho(["id"=>byTokenGetUser(Request::instance()->header()["token"])["userId"],"img"=>$result["avatar"]]);
     }
 }
