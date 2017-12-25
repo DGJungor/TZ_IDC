@@ -123,12 +123,65 @@ class BaoliaoModel extends  Model
 
     /**
      * 点击查询一篇爆料
-     * @param $id
+     * @param $id  爆料ID
      * @return array|false|\PDOStatement|string|Model
      */
     public function webBaoliao($id)
     {
         $data = Db::name('baoliao')->where('id',1)->where('post_status')->find();
         return $data;
+    }
+
+    /**
+     * WEB爆料
+     * @param bool|false $id 分类ID
+     * @return \think\Paginator
+     */
+    public function categorybaoliao($id=false)
+    {
+        $where = ['b.post_status'=>1,'b.post_type'=>1]; //查询所有爆料跟爆料分类
+
+        if($id) {
+
+            $where = ['c.id'=> $id,'b.post_status'=>1,'b.post_type'=>1];  //查询分类是 $id 的爆料
+
+        }
+
+        $data = Db::table('idckx_baoliao_category')
+            ->alias('c')
+            ->join('idckx_baoliao_category_post p', 'c.id = p.category_id', 'LEFT ')
+            ->join('idckx_baoliao_post b', 'p.post_id = b.id', 'LEFT ')
+            ->field('c.id,c.name,b.id,b.post_title,b.post_content,b.published_time')
+            ->where($where)
+            ->order('b.published_time', 'DESC')
+            ->paginate(10);
+        if(count($data))
+        {
+            return $data;
+        }
+
+        return false;
+    }
+
+    /**
+     * 我的爆料
+     * @param bool|false $id  会员ID
+     * @return \think\Paginator
+     */
+    public function Mybaoliao($id =false)
+    {
+        $data = Db::table('idckx_baoliao_post')
+            ->alias('b')
+            ->join('idckx_baoliao_category_post p', 'b.id = p.post_id', 'LEFT ')
+            ->join('idckx_baoliao_category c', 'c.id = p.category_id', 'LEFT ')
+            ->field('c.id,c.name,b.id,b.post_title,b.post_content,b.published_time')
+            ->where(['b.user_id'=> $id,'b.post_status'=>1,'b.post_type'=>1])
+            ->order('b.published_time', 'DESC')
+            ->paginate(10);
+        if(count($data))
+        {
+            return $data;
+        }
+        return false;
     }
 }

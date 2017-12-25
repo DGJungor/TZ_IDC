@@ -25,8 +25,14 @@ class BaoliaoController  extends  AdminBaseController
 
     public function index()
     {
+        if(!empty($_POST['id']))
+        {
+            $data =  $this->class->categorybaoliao($_POST['id']);
+        }else{
+            $data =  $this->class->categorybaoliao();
+        }
         $categeory =  $this->class->webCategoryTableTree();
-        return  ajaxEcho(['categeory'=>$categeory],'爆料分类','1');
+        return  ajaxEcho(['categeory'=>$categeory,'baoliao'=>$data],'爆料质料','1');
     }
     /*
     * AJAX以POST提交值
