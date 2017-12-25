@@ -43,7 +43,7 @@ class PortalPostModel extends Model
 	{
 
 		$getRecommendPost = $this
-			->field('post_title')
+			->field('post_title,id')
 			->where('post_status', 1)
 			->where('recommended', 1)
 			->order('post_hits desc')

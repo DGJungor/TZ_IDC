@@ -239,7 +239,7 @@
                 <div class="row">
                     <volist name="relatePost" id="vo" >
                         <div class="col-xs-6 col-md-4">
-                            <a href="#" class="thumbnail">
+                            <a href="/article/index?id={$vo.id}&type=post" class="thumbnail">
                                 <img src="{:cmf_get_image_preview_url($vo.more.thumbnail)}" alt="...">
                             </a>
                             <p>{$vo.post_title}</p>
@@ -331,10 +331,10 @@
                 <ol>
                     <li class="top">
                         <img src="{:cmf_get_image_preview_url($hotPost.0.more.thumbnail)}" alt="">
-                        <p data-index="1"><a href="#">{$hotPost.0.post_title}</a></p>
+                        <p data-index="1"><a href="/article/index?id={$hotPost.0.id}&type=post">{$hotPost.0.post_title}</a></p>
                     </li>
                     <volist name="hotPost" id="vo" offset="1" length="6">
-                        <li data-index="{$vo.rank}"><a href="#">{$vo.post_title}</a></li>
+                        <li data-index="{$vo.rank}"><a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a></li>
                     </volist>
 
                     <!--<li data-index="2"><a href="#">最近发布的一份报告显示，世界...</a></li>-->
@@ -353,7 +353,7 @@
             <section class="recommended-content-list">
                 <ul>
                     <volist name="recommended" id="vo">
-                        <li><a href="#">{$vo.post_title}</a></li>
+                        <li><a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a></li>
                     </volist>
                     <!--<li><a href="#">你所不知的 CSS ::before ...</a></li>-->
                     <!--<li><a href="#">你所不知的 CSS ::before ...</a></li>-->
