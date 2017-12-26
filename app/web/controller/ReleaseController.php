@@ -80,6 +80,12 @@ class ReleaseController extends HomeBaseController
         }
         return ajaxEcho([],'请登录');
     }
+
+
+    /**
+     * 文章---评论---查询
+     * @return \think\response\Json
+     */
     public function viewcomment()
     {
         if(!empty($_POST['id'])){
@@ -87,6 +93,16 @@ class ReleaseController extends HomeBaseController
         }else{
             $data = $this->class->getcomment();
         }
-        var_dump($data);
+        return ajaxEcho([$data],'文章-评论信息');
+    }
+
+    /**
+     * 评论--回复--查询
+     * @return \think\response\Json
+     */
+    public function viewreply()
+    {
+        $data = $this->class->getreply($_POST['id']);
+        return ajaxEcho([$data],'评论-回复信息');
     }
 }

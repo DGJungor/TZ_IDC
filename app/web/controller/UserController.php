@@ -37,7 +37,7 @@ class UserController extends HomeBaseController
     public function index()
     {
         if($this->userID){
-            return ajaxEcho(cmf_get_current_user(),'会员信息',1);
+            return ajaxEcho([cmf_get_current_user()],'会员信息',1);
         }
         return ajaxEcho([],'请登录');
     }
