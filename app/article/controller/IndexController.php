@@ -20,6 +20,7 @@ class IndexController extends HomeBaseController
 	public function index(Request $request)
 	{
 
+<<<<<<< HEAD
 //		abort(404,"文章不存在!");
 //		die;
 
@@ -28,17 +29,32 @@ class IndexController extends HomeBaseController
 //        dump($test);
 
 		//===================================================================================
+=======
+
+//		http://www.idckxj.com/article/index?id=13&type=post
+
+//		$this->error("文章不存在");
+//		die();
+		//实例化模型
+		$portalPostModel         = new PortalPostModel();
+		$adModel                 = new AdModel();
+		$referralsModel          = new ReferralsModel();
+		$portalCategoryPostModel = new PortalCategoryPostModel();
+>>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
 
 		//获取文章id
 		$postId = $request->param('id');
+
+		//测试数据
+//		$postId = 13;
 
 		//实例化文章模型
 		$portalPostModel = new PortalPostModel();
 
 		//根据文章id取出文章数据
-		$postData = $portalPostModel->get(13);
+		$postData = $portalPostModel->get($postId);
 		if (!$postData) {
-//			abort(404,"文章不存在!");
+			$this->error("文章不存在","/");
 		}
 
 		//将字符串与图片地址 转化成html代码和  绝对路径的图片地址
@@ -60,6 +76,7 @@ class IndexController extends HomeBaseController
 			$hotPost[$key]->rank = $key + 1;
 		}
 
+<<<<<<< HEAD
 
 		//调试数据
 		dump($postData);
@@ -67,6 +84,33 @@ class IndexController extends HomeBaseController
 
 		//赋值变量  并渲染模板
 		$this->assign('article', $postData);
+=======
+		//获取推荐文章
+		$recommendedData = $portalPostModel->getRecommendPost($postId);
+
+		//获取3号广告位的广告数据
+		$adData = $adModel->getAd(3);
+
+		//获取产品推荐数据
+		$referralsData = $referralsModel->getReferrals();
+
+		//根据文章id获取文章下方相关推荐文章
+		$specialId = $portalCategoryPostModel->getSpecialId(5);
+		foreach ($specialId as $item => $value) {
+			$where[] = $value['category_id'];
+		}
+		$relatePost = $portalPostModel->getRelatePost(6, $where);
+
+		//调试数据
+//		dump($recommendedData);
+
+		//赋值变量  并渲染模板
+		$this->assign('article', $postData);
+		$this->assign('relatePost', $relatePost);
+		$this->assign('recommended', $recommendedData);
+		$this->assign('referrals', $referralsData);
+		$this->assign('ad', $adData);
+>>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
 		$this->assign('hotPost', $hotPost);
 		$this->assign('keywords', $keywords);
 		return $this->fetch();

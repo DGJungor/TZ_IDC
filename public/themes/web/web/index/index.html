@@ -189,7 +189,7 @@
                     <ul>
                         <foreach name="hotInfo" item="vo">
                             <li>
-                                <a href="#">{$vo.post_title}</a>
+                                <a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a>
                             </li>
                         </foreach>
                         <!--<li>-->
@@ -331,7 +331,7 @@
                 </header>
                 <section class="industry-policy-content">
                     <div class="top">
-                        <a href="#">
+                        <a href="/article/index?id={$special.0.0.id}&type=post">
                             <img src="{:cmf_get_image_preview_url($special.0.0.more.thumbnail)}" alt="">
                             <p>{$special.0.0.post_title}</p>
                             <div class="mask"></div>
@@ -342,7 +342,7 @@
                         <!--循环遍历专题标题-->
                         <volist name="special.0" id="vo" offset="1" length="5">
                             <li>
-                                <a href="#">{$vo.post_title}</a>
+                                <a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a>
                             </li>
                         </volist>
                         <!--<li>-->
@@ -367,7 +367,7 @@
                 </header>
                 <section class="industry-policy-content">
                     <div class="top">
-                        <a href="#">
+                        <a href="/article/index?id={$special.1.0.id}&type=post">
                             <img src="{:cmf_get_image_preview_url($special.1.0.more.thumbnail)}" alt="">
                             <p>{$special.1.0.post_title}</p>
                             <div class="mask"></div>
@@ -378,7 +378,7 @@
                         <!--循环遍历专题标题-->
                         <volist name="special.1" id="vo" offset="1" length="5">
                             <li>
-                                <a href="#">{$vo.post_title}</a>
+                                <a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a>
                             </li>
                         </volist>
                         <!--<li>-->
@@ -404,7 +404,7 @@
                 </header>
                 <section class="industry-policy-content">
                     <div class="top">
-                        <a href="#">
+                        <a href="/article/index?id={$special.2.0.id}&type=post">
                             <img src="{:cmf_get_image_preview_url($special.2.0.more.thumbnail)}" alt="">
                             <p>{$special.2.0.post_title}</p>
                             <div class="mask"></div>
@@ -415,7 +415,7 @@
                         <!--循环遍历专题标题-->
                         <volist name="special.2" id="vo" offset="1" length="5">
                             <li>
-                                <a href="#">{$vo.post_title}</a>
+                                <a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a>
                             </li>
                         </volist>
                         <!--<li>-->
@@ -448,21 +448,21 @@
                         <a href="http://{$vo.url}">{$vo.name}</a>
                     </li>
                 </foreach>
-                <li>
-                    <a href="#">绿色软件下载</a>
-                </li>
-                <li>
-                    <a href="#">免备案空间</a>
-                </li>
-                <li>
-                    <a href="#">今日新闻</a>
-                </li>
-                <li>
-                    <a href="#">SSL证书</a>
-                </li>
-                <li>
-                    <a href="#">m6j电脑网</a>
-                </li>
+                <!--<li>-->
+                <!--<a href="#">绿色软件下载</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">免备案空间</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">今日新闻</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">SSL证书</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">m6j电脑网</a>-->
+                <!--</li>-->
             </ul>
         </div>
     </div>

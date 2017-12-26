@@ -8,8 +8,13 @@
     function byTokenGetUser($token) {
         $servername = "localhost";
         $username = "root";
+<<<<<<< HEAD
         $password = "";
         $dbname = "new_idckx";
+=======
+        $password = "root";
+        $dbname = "idckx";
+>>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
         $conn = new mysqli($servername, $username, $password,$dbname);
         if ($conn->connect_error) {
             // die("连接失败: " . $conn->connect_error);

@@ -29,11 +29,67 @@ class PortalPostModel extends Model
 	// 开启自动写入时间戳字段
 	protected $autoWriteTimestamp = true;
 
+<<<<<<< HEAD
 
 	public function getPost($postId)
 	{
 
 
+=======
+	/**
+	 *
+	 * 获取文章页右侧他推荐内容标题
+	 *
+	 * @author 张俊
+	 * @param int $num
+	 * @return false|\PDOStatement|string|\think\Collection
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
+	public function getRecommendPost($num = 5)
+	{
+
+		$getRecommendPost = $this
+			->field('post_title,id')
+			->where('post_status', 1)
+			->where('recommended', 1)
+			->order('post_hits desc')
+			->limit($num)
+			->select();
+
+		return $getRecommendPost;
+	}
+
+
+	/**
+	 *
+	 * 根据根据多个分类id 从数据库中获取  有关类型的文章  按照发布时间排序
+	 *
+	 * @author 张俊
+	 * @param int $limit  '获取文章的数量'
+	 * @param     $where '又关文章的所有的 类型id'
+	 * @return false|\PDOStatement|string|\think\Collection
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
+	public function getRelatePost($limit=6,$where)
+	{
+
+		//根据专题ID查询相关的文章信息
+		$postData = $this->alias('pp')
+			->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
+			->field('pp.id,pp.post_title,pp.more')
+			->where('post_status', '1')
+			->where('pcp.category_id', 'in',$where)
+			->limit($limit)
+			->order('published_time desc')
+			->select();
+
+
+		return $postData;
+>>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
 	}
 
 	/**
