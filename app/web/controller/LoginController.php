@@ -49,7 +49,6 @@ class LoginController extends HomeBaseController
                 $loginModel->information($data['id']); //  用户登录记录
                 if($_POST['Autologon']=="1")
                 {
-                    Session::set('user',$data);   //设置用户信息
                     Session::set('email',$data['user_email']);  //设置用户邮箱
                     Session::set('nickname',$data['user_nickname']);  //设置用户名称
                     Session::set('password',$_POST['password']); //设置用户密码
@@ -57,9 +56,8 @@ class LoginController extends HomeBaseController
                 }else{
                     Session::delete('email');
                     Session::delete('password');
-                    cookie('user',$data); //设置用户信息
-                    cookie('user_id',$data['id']); //设置用户id
                 }
+                Session::set('user',$data);   //设置用户信息
                 $tokenData = [
                     "user_id"=>$data['id'],
                     "expire_time"=>time()+(60*60),
@@ -127,6 +125,7 @@ class LoginController extends HomeBaseController
     {
         $result = db("user_token")->where('user_id',byTokenGetUser(Request::instance()->header()["token"])["userId"])->delete();
         if($result) {
+            Session::delete('user');
             $this->success("退出成功");
         }else {
             $this->error("退出失败");

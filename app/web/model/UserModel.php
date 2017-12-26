@@ -11,7 +11,7 @@ namespace app\web\model;
 use think\Model;
 use think\Db;
 
-class UuserModel  extends Model
+class UserModel  extends Model
 {
     /*
      * 查询单条用户信息
