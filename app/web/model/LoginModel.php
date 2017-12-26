@@ -37,12 +37,12 @@ class LoginModel extends Model
     public function setreg($data)
     {
         $array = [
-            'user_login' => $data['user'],
-            'user_pass' => cmf_password($data['password']),
-            'user_email' => $data['email'],
-            'mobile' => $data['mobile'],
-            'create_time' => time(),
-            'user_type'   => 1,
+            'user_login'   => $data['user'],
+            'user_pass'    => cmf_password($data['password']),
+            'user_email'   => $data['email'],
+            'mobile'        => $data['mobile'],
+            'create_time'  => time(),
+            'user_type'     => 1,
         ];
         $result = Db::name('user_vip')->insertGetId($array);
         if($result)

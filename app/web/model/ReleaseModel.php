@@ -35,13 +35,14 @@ class ReleaseModel extends  Model
     }
 
     /*
-     * 评论的总条数
-     * @return int|string
+     * 一篇文章评论条数添加
+     * @param $id  文章ID
+     * @param $number 文章总评论数
+     * @throws \think\Exception
      */
-    public function numbercomment()
+    public function numbercomment($id,$number)
     {
-        $number = Db::name('user_comment')->count('c_id');
-        return $number;
+        Db::name('portal_post')->where('id',$id)->update(['comment_count'=>$number+1]);
     }
 
     /*
@@ -66,22 +67,38 @@ class ReleaseModel extends  Model
     }
 
     /**
-     * 点击一篇文章查看
-     * @param bool|false $id
+     * 篇文章查看
+     * @param bool|false $id    文章ID
      * @return bool|false|\PDOStatement|string|\think\Collection
      */
     public function getcomment($id = false)
     {
+        $where = ['p.post_status'=>1];      //全部文章查看
         if($id){
-            $data = Db::table('idckx_portal_post')
-                ->alias('p')
-                ->join('idckx_user_comment c','c.issue_id = p.id','LEFT ')
-                ->join('idckx_user_reply r','c.c_id = r.comment_id','LEFT ')
-                ->field('p.id,user_id,published_time,post_title,post_content,post_content_filtered,create_time,C_user_id,c_id,comment_msg,C_create_date,r_id,to_user_id,reply_msg,R_create_date')
-                ->where('p.id',$id)
-                ->select();
-            return $data;
+            $where = ['p,id'=>$id,'post_status'=>1];    //点击一篇文章查看
         }
-        return false;
+        $data = Db::table('idckx_portal_post')
+            ->alias('p')
+            ->join('idckx_user_comment c','c.issue_id = p.id','LEFT ')
+            ->field('p.id,user_id,published_time,post_title,post_content,post_content_filtered,create_time,C_user_id,c_id,comment_msg,C_create_date')
+            ->where($where)
+            ->order('p.published_time','DESC')
+            ->paginate(10);
+        return $data;
+    }
+
+    /**
+     * 点击评论查看回复信息
+     * @param bool|false $id   评论ID
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getreply($id =false)
+    {
+        $data = Db::table('idckx_user_comment')
+            ->alias('c')
+            ->join('idckx_user_reply r','c.id = r.comment_id')
+            ->where('id',$id)
+            ->select();
+        return $data;
     }
 }

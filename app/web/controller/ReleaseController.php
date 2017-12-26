@@ -82,7 +82,11 @@ class ReleaseController extends HomeBaseController
     }
     public function viewcomment()
     {
-        $data = $this->class->getcomment($_POST['id']);
+        if(!empty($_POST['id'])){
+            $data = $this->class->getcomment($_POST['id']);
+        }else{
+            $data = $this->class->getcomment();
+        }
         var_dump($data);
     }
 }

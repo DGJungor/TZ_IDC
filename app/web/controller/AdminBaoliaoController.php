@@ -265,7 +265,7 @@ class AdminBaoliaoController extends AdminBaseController
                     $data = [
                         'object_id'   => $value['id'],
                         'create_time' => time(),
-                        'table_name'  => 'portal_post',
+                        'table_name'  => 'baoliao_post',
                         'name'        => $value['post_title']
                     ];
                     Db::name('recycleBin')->insert($data);
@@ -398,7 +398,7 @@ class AdminBaoliaoController extends AdminBaseController
      */
     public function listOrder()
     {
-        parent::listOrders(Db::name('portal_category_post'));
+        parent::listOrders(Db::name('baoliao_category_post'));
         $this->success("排序更新成功！", '');
     }
 
