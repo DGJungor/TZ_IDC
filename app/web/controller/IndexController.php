@@ -61,7 +61,7 @@ class IndexController extends HomeBaseController
 		$industryDriven =  $portalPostModel->getSpecial('行业风向标',4);
 
 		// 数据调试
-        dump($industryDriven);
+//        dump($industryDriven);
 
 		//模板赋值
 //        $this->assign('data', $data);

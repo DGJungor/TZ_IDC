@@ -19,16 +19,16 @@ use think\Session;
 class LoginController extends HomeBaseController
 {
 
-    /*
-     * AJAX以POST提交值
-     * NAME: user_email ---> 邮箱地址
-     *       user_login  --->用户名
-     *       mobile ----> 用户手机
-     *       password ----> 密码
-     *       Autologon ----> 自动登陆值
-     * ---------登录
-     * @return mixed
-     */
+	/*
+	 * AJAX以POST提交值
+	 * NAME: user_email ---> 邮箱地址
+	 *       user_login  --->用户名
+	 *       mobile ----> 用户手机
+	 *       password ----> 密码
+	 *       Autologon ----> 自动登陆值
+	 * ---------登录
+	 * @return mixed
+	 */
     public function login()
     {
         include_once(dirname(dirname(dirname(__FILE__))).'\\header.php');

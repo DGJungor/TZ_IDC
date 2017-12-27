@@ -29,13 +29,7 @@ class PortalPostModel extends Model
 	// 开启自动写入时间戳字段
 	protected $autoWriteTimestamp = true;
 
-<<<<<<< HEAD
 
-	public function getPost($postId)
-	{
-
-
-=======
 	/**
 	 *
 	 * 获取文章页右侧他推荐内容标题
@@ -67,14 +61,14 @@ class PortalPostModel extends Model
 	 * 根据根据多个分类id 从数据库中获取  有关类型的文章  按照发布时间排序
 	 *
 	 * @author 张俊
-	 * @param int $limit  '获取文章的数量'
+	 * @param int $limit '获取文章的数量'
 	 * @param     $where '又关文章的所有的 类型id'
 	 * @return false|\PDOStatement|string|\think\Collection
 	 * @throws \think\db\exception\DataNotFoundException
 	 * @throws \think\db\exception\ModelNotFoundException
 	 * @throws \think\exception\DbException
 	 */
-	public function getRelatePost($limit=6,$where)
+	public function getRelatePost($limit = 6, $where)
 	{
 
 		//根据专题ID查询相关的文章信息
@@ -82,14 +76,13 @@ class PortalPostModel extends Model
 			->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
 			->field('pp.id,pp.post_title,pp.more')
 			->where('post_status', '1')
-			->where('pcp.category_id', 'in',$where)
+			->where('pcp.category_id', 'in', $where)
 			->limit($limit)
 			->order('published_time desc')
 			->select();
 
 
 		return $postData;
->>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
 	}
 
 	/**
@@ -119,7 +112,7 @@ class PortalPostModel extends Model
 		$getPost = $this->alias('pp')
 			->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
 			->field('pp.id,pp.post_title,pp.more')
-			->where('post_status','1')
+			->where('post_status', '1')
 			->where('pcp.category_id', $specialId['id'])
 			->limit($limit)
 			->order('published_time desc')
@@ -155,7 +148,7 @@ class PortalPostModel extends Model
 		$postData = $this
 			->field('id,post_title,more')
 			->where('published_time', '>', $beforeTime)
-			->where('post_status','1')
+			->where('post_status', '1')
 			->order('post_hits desc')
 			->limit($limit)
 			->select();
