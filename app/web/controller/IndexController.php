@@ -57,7 +57,11 @@ class IndexController extends HomeBaseController
 		$specialInfo[1] = $portalPostModel->getSpecial('行业解读');
 		$specialInfo[2] = $portalPostModel->getSpecial('政策解读');
 
-//        dump($specialInfo);
+		//获取行业风向标信息
+		$industryDriven =  $portalPostModel->getSpecial('行业风向标',4);
+
+		// 数据调试
+        dump($industryDriven);
 
 		//模板赋值
 //        $this->assign('data', $data);
@@ -67,6 +71,8 @@ class IndexController extends HomeBaseController
 		$this->assign('hotInfo', $hotInfo);
 		$this->assign('referralsInfo', $referralsInfo);
 		$this->assign('friendLink', $friendLink);
+		$this->assign('industryDriven', $industryDriven);
+
 		return $this->fetch();
 
 

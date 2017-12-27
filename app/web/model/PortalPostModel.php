@@ -50,14 +50,18 @@ class PortalPostModel extends Model
             ->find();
 
         //根据专题ID查询相关的文章信息
-        $getPost = $this->alias('pp')
-            ->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
-            ->field('pp.id,pp.post_title,pp.more')
-            ->where('pcp.category_id', $specialId['id'])
-			->where('post_status','1')
-            ->limit($limit)
-            ->order('published_time desc')
-            ->select();
+		if ($specialId) {
+			$getPost = $this->alias('pp')
+				->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
+				->field('pp.id,pp.post_title,pp.more')
+				->where('pcp.category_id', $specialId['id'])
+				->where('post_status','1')
+				->limit($limit)
+				->order('published_time desc')
+				->select();
+		} else {
+			$getPost = null;
+		}
 
         return $getPost;
 
