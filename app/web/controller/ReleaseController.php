@@ -10,10 +10,8 @@ namespace app\web\controller;
 
 include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
 include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
-use app\portal\taglib\Portal;
 use cmf\controller\HomeBaseController;
 use app\web\model\ReleaseModel;
-use think\Session;
 use think\Db;
 use think\Request;
 
@@ -31,27 +29,26 @@ class ReleaseController extends HomeBaseController
     * */
     public function  comment()
     {
-        if(cmf_is_user_login())
-        {
-            if(!empty($_POST['text'])){
-                $judge = $this->class->judge($_POST['b_id']);
-                if($judge) {
-                    $data = [
-                        'issue_id' => $_POST['b_id'],                //文章ID
-                        'C_user_id' => cmf_get_current_user_id(),  //用户ID
-                        'comment_msg' => $_POST['text'],          //评论内容
-                        'C_create_date' => time(),                 //评论时间
-                    ];
-                    $result = $this->class->setcomment($data);
-                    if ($result) {
-                        return ajaxEcho([],"发布成功",1);
-                    }
-                    return ajaxEcho([],'发布失败');
-                }
-                return ajaxEcho([], '不允许评论');
-            }
+        if(byTokenGetUser(Request::instance()->header()["token"])["userId"]==-1) {
+            return ajaxEcho([],byTokenGetUser(Request::instance()->header()["token"])["msg"],5000);
         }
-        return ajaxEcho([],'请登录');
+        if(!empty($_POST['text'])){
+            $judge = $this->class->judge($_POST['b_id']);
+            if($judge) {
+                $data = [
+                    'issue_id' => $_POST['b_id'],                //文章ID
+                    'C_user_id' => cmf_get_current_user_id(),  //用户ID
+                    'comment_msg' => $_POST['text'],          //评论内容
+                    'C_create_date' => time(),                 //评论时间
+                ];
+                $result = $this->class->setcomment($data);
+                if ($result) {
+                    return ajaxEcho([],"发布成功",1);
+                }
+                return ajaxEcho([],'发布失败');
+            }
+            return ajaxEcho([], '不允许评论');
+        }
     }
 
     /*

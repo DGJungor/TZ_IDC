@@ -36,10 +36,11 @@ class UserController extends HomeBaseController
      */
     public function index()
     {
-        if($this->userID){
-            return ajaxEcho([cmf_get_current_user()],'会员信息',1);
+        if(byTokenGetUser(Request::instance()->header()["token"])["userId"]==-1) {
+            return ajaxEcho([],byTokenGetUser(Request::instance()->header()["token"])["msg"],5000);
         }
-        return ajaxEcho([],'请登录');
+        $result = $this->class->userfind(['id'=>byTokenGetUser(Request::instance()->header()["token"])["userId"]]);
+        return ajaxEcho(["id"=>byTokenGetUser(Request::instance()->header()["token"])["userId"],"img"=>$result["avatar"]]);
     }
 
     /**
