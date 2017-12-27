@@ -334,11 +334,7 @@
                         <p data-index="1"><a href="/article/index?id={$hotPost.0.id}&type=post">{$hotPost.0.post_title}</a></p>
                     </li>
                     <volist name="hotPost" id="vo" offset="1" length="6">
-<<<<<<< HEAD
-                        <li data-index="{$vo.rank}"><a href="#">$vo.post_title</a></li>
-=======
                         <li data-index="{$vo.rank}"><a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a></li>
->>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
                     </volist>
 
                     <!--<li data-index="2"><a href="#">最近发布的一份报告显示，世界...</a></li>-->
@@ -356,12 +352,6 @@
             </h3>
             <section class="recommended-content-list">
                 <ul>
-<<<<<<< HEAD
-                    <li><a href="#">你所不知的 CSS ::before ...</a></li>
-                    <li><a href="#">你所不知的 CSS ::before ...</a></li>
-                    <li><a href="#">你所不知的 CSS ::before ...</a></li>
-                    <li><a href="#">你所不知的 CSS ::before ...</a></li>
-=======
                     <volist name="recommended" id="vo">
                         <li><a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a></li>
                     </volist>
@@ -369,20 +359,45 @@
                     <!--<li><a href="#">你所不知的 CSS ::before ...</a></li>-->
                     <!--<li><a href="#">你所不知的 CSS ::before ...</a></li>-->
                     <!--<li><a href="#">你所不知的 CSS ::before ...</a></li>-->
->>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
 
                 </ul>
             </section>
         </div>
         <div class="ab">
-            <img src="http://pic35.photophoto.cn/20150528/0005018358146030_b.jpg" alt="">
+            <img src="__WEB_ROOT__/upload/ad/{$ad.ad_pic_address}" alt="">
         </div>
+
+        <!--产品推介-->
         <div class="products-recommended module-style">
             <h3>
-                IDC列表
+                产品推荐
             </h3>
             <section class="products-recommended-content">
                 <ul>
+
+                    <volist name="referrals" id="vo">
+                        <li>
+                            <div class="product-logo">
+                                <img src="__WEB_ROOT__/upload/referrals/{$vo.pic_address}"
+                                     alt="">
+                            </div>
+                            <div class="product-descriptions">
+                                {$vo.intro}
+                            </div>
+                            <div class="price-score-group">
+                                <p class="product-price">{$vo.price}</p>
+                                <p class="product-score">
+                                    用户评价
+                                    <for start="0" end="$vo.rate">
+                                        <span class="glyphicon glyphicon-star"></span>
+                                    </for>
+                                </p>
+                            </div>
+                        </li>
+                    </volist>
+
+
+
                     <li>
                         <div class="product-logo">
                             <img src="https://img.yzcdn.cn/public_files/2016/11/29/8fc4cd6f771897cbf9663166a63a5302.png"
@@ -403,6 +418,27 @@
                             </p>
                         </div>
                     </li>
+
+                    <!--<li>-->
+                    <!--<div class="product-logo">-->
+                    <!--<img src="https://img.yzcdn.cn/public_files/2016/11/29/8fc4cd6f771897cbf9663166a63a5302.png"-->
+                    <!--alt="">-->
+                    <!--</div>-->
+                    <!--<div class="product-descriptions">-->
+                    <!--全球领先、安全、稳定的云计算产品计算、存储、网络、安全、大数据、人工智能，普惠科技助您飞跃发展-->
+                    <!--</div>-->
+                    <!--<div class="price-score-group">-->
+                    <!--<p class="product-price">199/月起</p>-->
+                    <!--<p class="product-score">-->
+                    <!--用户评价-->
+                    <!--<span class="glyphicon glyphicon-star"></span>-->
+                    <!--<span class="glyphicon glyphicon-star"></span>-->
+                    <!--<span class="glyphicon glyphicon-star"></span>-->
+                    <!--<span class="glyphicon glyphicon-star"></span>-->
+                    <!--<span class="glyphicon glyphicon-star"></span>-->
+                    <!--</p>-->
+                    <!--</div>-->
+                    <!--</li>-->
                 </ul>
             </section>
         </div>

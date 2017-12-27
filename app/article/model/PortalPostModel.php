@@ -5,7 +5,6 @@ namespace app\article\model;
 use think\Model;
 use think\Db;
 
-
 /**
  * Class AdModel
  *
@@ -28,7 +27,6 @@ class PortalPostModel extends Model
 
 	// 开启自动写入时间戳字段
 	protected $autoWriteTimestamp = true;
-
 
 	/**
 	 *
@@ -61,14 +59,14 @@ class PortalPostModel extends Model
 	 * 根据根据多个分类id 从数据库中获取  有关类型的文章  按照发布时间排序
 	 *
 	 * @author 张俊
-	 * @param int $limit '获取文章的数量'
+	 * @param int $limit  '获取文章的数量'
 	 * @param     $where '又关文章的所有的 类型id'
 	 * @return false|\PDOStatement|string|\think\Collection
 	 * @throws \think\db\exception\DataNotFoundException
 	 * @throws \think\db\exception\ModelNotFoundException
 	 * @throws \think\exception\DbException
 	 */
-	public function getRelatePost($limit = 6, $where)
+	public function getRelatePost($limit=6,$where)
 	{
 
 		//根据专题ID查询相关的文章信息
@@ -76,7 +74,7 @@ class PortalPostModel extends Model
 			->join('idckx_portal_category_post pcp', 'pp.id=pcp.post_id')
 			->field('pp.id,pp.post_title,pp.more')
 			->where('post_status', '1')
-			->where('pcp.category_id', 'in', $where)
+			->where('pcp.category_id', 'in',$where)
 			->limit($limit)
 			->order('published_time desc')
 			->select();
@@ -156,6 +154,8 @@ class PortalPostModel extends Model
 		return $postData;
 
 	}
+
+
 
 
 	/**
