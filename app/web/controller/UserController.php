@@ -11,10 +11,7 @@ namespace app\web\controller;
 
 include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
 include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
-use FontLib\Table\Type\glyf;
-use app\web\model\UuserModel;
-use FontLib\Table\Type\name;
-use think\Session;
+use app\web\model\UserModel;
 use cmf\controller\HomeBaseController;
 use think\Db;
 use think\Request;
@@ -30,7 +27,7 @@ class UserController extends HomeBaseController
     public function __construct()
     {
         $this->userID = cmf_get_current_user_id();
-        $this->class = new UuserModel();  //实例化用户类
+        $this->class = new UserModel();  //实例化用户类
     }
     /*
      * sesion : user   用户信息
@@ -39,10 +36,11 @@ class UserController extends HomeBaseController
      */
     public function index()
     {
-        if(session('?user')){
-            $this->assign('user',session('user'));
+        if(byTokenGetUser(Request::instance()->header()["token"])["userId"]==-1) {
+            return ajaxEcho([],byTokenGetUser(Request::instance()->header()["token"])["msg"],5000);
         }
-        return $this->fetch();
+        $result = $this->class->userfind(['id'=>byTokenGetUser(Request::instance()->header()["token"])["userId"]]);
+        return ajaxEcho(["id"=>byTokenGetUser(Request::instance()->header()["token"])["userId"],"img"=>$result["avatar"]]);
     }
 
     /**

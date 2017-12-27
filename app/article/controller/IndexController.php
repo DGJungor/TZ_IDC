@@ -19,8 +19,6 @@ class IndexController extends HomeBaseController
 {
 	public function index(Request $request)
 	{
-
-<<<<<<< HEAD
 //		abort(404,"文章不存在!");
 //		die;
 
@@ -28,20 +26,15 @@ class IndexController extends HomeBaseController
 //        $test = $request->param('id');
 //        dump($test);
 
-		//===================================================================================
-=======
-
 //		http://www.idckxj.com/article/index?id=13&type=post
 
 //		$this->error("文章不存在");
 //		die();
 		//实例化模型
-		$portalPostModel         = new PortalPostModel();
-		$adModel                 = new AdModel();
-		$referralsModel          = new ReferralsModel();
+		$portalPostModel = new PortalPostModel();
+		$adModel = new AdModel();
+		$referralsModel = new ReferralsModel();
 		$portalCategoryPostModel = new PortalCategoryPostModel();
->>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
-
 		//获取文章id
 		$postId = $request->param('id');
 
@@ -54,15 +47,15 @@ class IndexController extends HomeBaseController
 		//根据文章id取出文章数据
 		$postData = $portalPostModel->get($postId);
 		if (!$postData) {
-			$this->error("文章不存在","/");
+			$this->error("文章不存在", "/");
 		}
 
 		//将字符串与图片地址 转化成html代码和  绝对路径的图片地址
-		$postHtmlData                  = $portalPostModel->getPostContentAttr($postData['post_content']);
+		$postHtmlData = $portalPostModel->getPostContentAttr($postData['post_content']);
 		$postData->post_content_toHtml = $postHtmlData;
 
 		//将时间戳转化成中文时间
-		$timeToStr                           = date("Y年m月d日 H:i:s", $postData['published_time']);
+		$timeToStr = date("Y年m月d日 H:i:s", $postData['published_time']);
 		$postData->post_published_time_toStr = $timeToStr;
 
 		//获取关键词(标签),并将关键词以英文逗号切割成数组
@@ -76,15 +69,12 @@ class IndexController extends HomeBaseController
 			$hotPost[$key]->rank = $key + 1;
 		}
 
-<<<<<<< HEAD
-
 		//调试数据
 		dump($postData);
 //		dump($hotPost);
 
 		//赋值变量  并渲染模板
 		$this->assign('article', $postData);
-=======
 		//获取推荐文章
 		$recommendedData = $portalPostModel->getRecommendPost($postId);
 
@@ -110,10 +100,8 @@ class IndexController extends HomeBaseController
 		$this->assign('recommended', $recommendedData);
 		$this->assign('referrals', $referralsData);
 		$this->assign('ad', $adData);
->>>>>>> 4454397633a7d0b85a8f2a698a7c3e1a29d8ca70
 		$this->assign('hotPost', $hotPost);
 		$this->assign('keywords', $keywords);
 		return $this->fetch();
-//        return $this->fetch(':index');
 	}
 }

@@ -75,7 +75,7 @@ class ReleaseModel extends  Model
     {
         $where = ['p.post_status'=>1];      //全部文章查看
         if($id){
-            $where = ['p,id'=>$id,'post_status'=>1];    //点击一篇文章查看
+            $where = ['p,id'=>$id,'p.post_status'=>1,'c.C_status'=>1];    //点击一篇文章查看
         }
         $data = Db::table('idckx_portal_post')
             ->alias('p')
@@ -94,10 +94,11 @@ class ReleaseModel extends  Model
      */
     public function getreply($id =false)
     {
+        $where = ['c.id'=>$id,'r.R_state'=>1];
         $data = Db::table('idckx_user_comment')
             ->alias('c')
             ->join('idckx_user_reply r','c.id = r.comment_id')
-            ->where('id',$id)
+            ->where($where)
             ->select();
         return $data;
     }
