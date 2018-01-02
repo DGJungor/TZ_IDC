@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>[title]</title>
+    <meta name="keywords" content="[keywords]" />
+    <meta name="description" content="[description]">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <taglib name="app\portal\taglib\Portal" />
+    <link href="__TMPL__/public/assets/css/vendors.css?e5ec32f121d6e09452ef" rel="stylesheet">
+    <link href="__TMPL__/public/assets/css/[page].css?e5ec32f121d6e09452ef" rel="stylesheet">
+    <hook name="before_head_end" />
+</head>
+
+<body>
+    <header id="main_header">
+        <nav class="navbar navbar-default tzidc-nav">
+            <div class="container tzidc-nav">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header tzidc-nav">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                        aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" id="tzidc_logo" href="#"></a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <include file="public@nav"/>
+                    <ul class="nav navbar-nav navbar-right tzidc-nav">
+                        <li>
+                            <!-- search_modal搜索组件 -->
+                            <a href="javascript:;" data-toggle="modal" data-target="#search_modal" class="tzidc-head-search"></a>
+                        </li>
+                        <li class="tzidc-alert">
+                            <a href="#" class="tzidc-head-weixi"></a>
+                            <div class="tzidc-wx-saoma">
+                                <div class="erweima pull-left">
+
+                                </div>
+                                <div class="erweima-info pull-left">
+                                    <p>微信扫一扫</p>
+                                    <p>关注快讯</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="avatar">
+                            <a href="#">
+                                <img src="http://k1.jsqq.net/uploads/allimg/160329/5-16032Z94Z20-L.jpg" alt="">
+                            </a>
+                            <div class="personal-dropdown">
+                                <ul>
+                                    <li>
+                                        <a href="#">发表文章</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">个人中心</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">退出</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <!-- login_in登录框组件 -->
+                            <a href="javascript:;" data-toggle="modal" data-target="#login_in">登录</a>
+                        </li>
+                        <li>
+                            <!-- registered注册框组件 -->
+                            <a href="javascript:;" data-toggle="modal" data-target="#registered">注册</a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#send_broke_news" class="btn btn-primary">爆料</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>

@@ -63,7 +63,8 @@ class ArticleController extends HomeBaseController
 
 
         hook('portal_before_assign_article', $article);
-
+        $tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($category->toArray()["id"]));
+        $this->assign("tagall",$tagResult);
         $this->assign('article', $article);
         $this->assign('prev_article', $prevArticle);
         $this->assign('next_article', $nextArticle);

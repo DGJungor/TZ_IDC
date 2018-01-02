@@ -1,0 +1,111 @@
+<include file="public@head" page="search" title="搜索 {$keyword|default=''}-{$site_info.site_name|default=''}" keywords="{$site_info.site_seo_keywords|default=''}" description="{$site_info.site_seo_keywords|default=''}"/>
+              <!-- 内容部分start -->
+              <div class="container main myCenter">
+                <div class="main-search">
+                        <form  method="post" action="{:cmf_url('portal/Search/index')}">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" value="{$keyword}" placeholder="请输入你要搜索的内容" aria-describedby="basic-addon2">
+                        <span class="input-group-addon" id="search_in"><span class="glyphicon glyphicon-search"></span> 搜索</span>
+                    </div>
+                </form>
+                </div>
+                <div class="main-search-list">
+                        <php>
+                            $where=[
+                            'post.create_time'=>['egt',0],
+                            'post.post_content|post.post_title|post.post_keywords'=>['like',"%$keyword%"]
+                            ];
+                        </php>
+                        <portal:articles returnVarName="articles_data" where="$where" order="post.create_time DESC" page="5">
+
+                        </portal:articles>
+                        
+                        <div class="main-search-result clearfix">
+                            <span class="pull-left">
+                                全部
+                            </span>
+                            <span class="pull-right">
+                                共找到{$articles_data.total}相关内容
+                            </span>
+                        </div>
+                        <if condition="$articles_data.total == 0">
+                                <div class="main-search-error-result">
+                                        <div class="tip">
+                                            <p>很抱歉，没有找到 <span class="key">“{$keyword}”</span>相关结果</p>
+                                            <p>请修改或尝试其他搜索词</p>
+                                        </div>
+                                        <div class="keyworld-recommend">
+                                           <h4>相关词</h4> 
+                                            <section class="keywords-content pull-left">
+                                                <php>
+                                                    $where = [
+                                                        'post.search_keyword'=>['like',"%$keyword%"] 
+                                                    ];
+                                                </php>
+                                                <p>
+                                                        <portal:getsearchtag where="$where">
+                                                                <span><a href="{:cmf_url('portal/Search/index')}?keyword={$vo.search_keyword}">{$vo.search_keyword}</a></span>
+                                                        </portal:getsearchtag>
+                                                </p>
+                                            </section>
+                                        </div>  
+                                    </div>
+                                    <else />
+                                    <ul>
+                                            <volist name="articles_data.articles" id="vo">
+                                                    <li>
+                                                            <div class="media">
+                                                              <div class="media-left">
+                                                                
+                                                              </div>
+                                                              <div class="media-body">
+                                                                <h4 class="media-heading">
+                                                                  <a href="{:cmf_url('portal/Article/index',array('id'=>$vo.id,'cid'=>$vo.category_id))}?id={$vo.id}&type=post">
+                                                                    {$vo.post_title}
+                                                                  </a>
+                                                                </h4>
+                                                                <p class="margin-none">
+                                                                        {$vo.post_excerpt}
+                                                                </p>
+                                                                <div class="media-body-footer">
+                                                                  <time class="pull-left">{:date('Y年m月d日',$vo.published_time)}</time>
+                                                                  
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </li>
+                                            </volist>
+                                            
+                                    </ul>
+                                    <div class="page-container clearfix">
+                                            <page />
+                                    </div>
+                        </if>
+                        <!-- <div class="main-search-error-result">
+                            <div class="tip">
+                                <p>很抱歉，没有找到 <span class="key">“人民”</span>相关结果</p>
+                                <p>请修改或尝试其他搜索词</p>
+                            </div>
+                            <div class="keyworld-recommend">
+                               <h4>相关词</h4> 
+                                <section class="keywords-content pull-left">
+                                    <p>
+                                        <span><a href="#">京东</a></span>
+                                        <span><a href="#">京东</a></span>
+                                        <span><a href="#">京东</a></span>
+                                        <span><a href="#">京东</a></span>
+                                        <span><a href="#">京东</a></span>
+                                    </p>
+                                </section>
+                            </div>  
+                        </div> -->
+                        
+                </div>
+              </div>
+              <!-- 内容部分end -->
+              <footer>
+                    
+                        
+					<include file="public@footer" page="search"/>
+			</body>
+</html>

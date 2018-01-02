@@ -1,0 +1,86 @@
+{
+    "name": "文章页",
+    "action": "portal/Article/index",
+    "description": "文章页模板文件",
+    "order": 10.0,
+    "more": {
+        "vars": {
+            "hot_articles_category_id": {
+                "title": "Hot Articles分类ID",
+                "name": "hot_articles_category_id",
+                "value": "1",
+                "type": "text",
+                "tip": "",
+                "rule": []
+            }
+        },
+        "widgets": {
+            "advertising": {
+                "title": "广告",
+                "display": "1",
+                "vars": {
+                    "list_ad_small": {
+                        "title": "列表广告（小）",
+                        "value": "",
+                        "type": "text",
+                        "dataSource": {
+                            "api": "admin/Slide/index",
+                            "multi": false
+                        },
+                        "rule": { 
+                            "require": true
+                        },
+                        "message":{
+                            "require":"不能为空"
+                        }
+                    }
+                }
+            },
+            "features": {
+                "title": "推荐内容",
+                "display": "1",
+                "vars": {
+                    "features": {
+                        "title": "产品推荐",
+                        "value": [
+                            {
+                                "price": "119",
+                                "icon": "https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=140ee4cb92dda144ce0464e0d3debbc7/fcfaaf51f3deb48f948de106f51f3a292cf57805.jpg",
+                                "content": "LOGO是徽标或者商标的英文说法，起到对徽标拥有公司的识别和推广的作用，通过形象的logo可以让消费者记住公司主体和品牌文化。网络中的logo徽标主要是各个网站用来与其它网站链接的图形标志，代表一个网站或网站的一个板块。"
+                            }
+                        ],
+                        "type": "array",
+                        "item": {
+                            "price": {
+                                "title": "价格",
+                                "value": "",
+                                "type": "text",
+                                "rule": {
+                                    "require": true
+                                }
+                            },
+                            "icon": {
+                                "title": "图标",
+                                "value": "",
+                                "type": "text",
+                                "rule": {
+                                    "require": true
+                                }
+                            },
+                            "content": {
+                                "title": "描述",
+                                "value": "",
+                                "type": "textarea",
+                                "rule": {
+                                    "require": true
+                                }
+                            }
+                        },
+                        "tip": ""
+
+                    }
+                }
+            }
+        }
+    }
+}

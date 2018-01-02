@@ -24,8 +24,35 @@ class Portal extends TagLib
         'categories'       => ['attr' => 'where,order', 'close' => 1],//非必须属性item
         'subcategories'    => ['attr' => 'categoryId', 'close' => 1],//非必须属性item
         'allsubcategories' => ['attr' => 'categoryId', 'close' => 1],//非必须属性item
+        'getsearchtag'     => ['attr' => 'length,offset,order,where,returnVarName', 'close' => 1]
     ];
-
+     /**
+     * 热搜词获取
+     * */ 
+    public function tagGetsearchtag($tag, $content) {
+        $returnVarName = empty($tag['returnVarName']) ? 'tag_data' : $tag['returnVarName'];
+        $order = empty($tag['order']) ? 'post.search_count DESC' : $tag['order'];
+        $offset = empty($tag['offset']) ? '0' : $tag['offset'];
+        $length = empty($tag['length']) ? 'null' : $tag['length'];
+        $where = '""';
+        if (!empty($tag['where']) && strpos($tag['where'], '$') === 0) {
+            $where = $tag['where'];
+        }
+        $parse = <<<parse
+        <?php
+        \${$returnVarName} = \app\portal\model\SearchModel::getAllSearchKeyword([
+            'where'   => {$where},
+            'order'   => '{$order}'
+        ]);
+        
+        
+         ?>
+<volist name="{$returnVarName}" offset="{$offset}" length="{$length}" id="vo">
+    {$content}
+</volist>
+parse;
+        return $parse;
+    }
     /**
      * 文章列表标签
      */
@@ -94,7 +121,6 @@ class Portal extends TagLib
 parse;
         return $parse;
     }
-
     /**
      * 面包屑标签
      */

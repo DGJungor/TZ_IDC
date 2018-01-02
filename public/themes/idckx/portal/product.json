@@ -1,0 +1,8 @@
+{
+    "name": "公司推荐页",
+    "action": "portal/product/index",
+    "description": "公司推荐页模板文件",
+    "order": 10.0,
+    "more": {
+    }
+  }

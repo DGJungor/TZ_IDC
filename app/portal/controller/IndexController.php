@@ -11,11 +11,14 @@
 namespace app\portal\controller;
 
 use cmf\controller\HomeBaseController;
-
+use app\portal\model\InfoPostModel;
 class IndexController extends HomeBaseController
 {
     public function index()
     {
+        $infoPostModel = new InfoPostModel();
+        $post = $infoPostModel->getProductData();
+        $this->assign("post",$post);
         return $this->fetch(':index');
     }
 }

@@ -1,0 +1,78 @@
+<include file="public@head" page="list" title="{$category.name|default=''} {$category.seo_title|default=''}-{$site_info.site_name|default=''}" keywords="{$site_info.site_seo_keywords|default=''}" description="{$site_info.site_seo_keywords|default=''}"/>
+            <!-- 
+                <php>
+                    print_r($category->toArray());
+                </php>
+             -->
+              <!-- 内容部分start -->
+                <div class="container main myCenter">
+                  <div class="list-nav-tip">
+                    <blockquote>
+                      <p>{$category.name}</p>
+                    </blockquote>
+                  </div>
+                  <div class="list-content">
+                    <ul>
+                            <portal:articles page="5" order="post.published_time DESC"
+                            categoryIds="$category.id">
+                            <li>
+                                    <div class="media">
+                                      <div class="media-left">
+                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo.id,'cid'=>$vo.category_id))}?id={$vo.id}&type=post">
+                                          <img class="media-object" src="{:cmf_get_image_url($vo.more.thumbnail)}" alt="{$vo.post_title}">
+                                        </a>
+                                      </div>
+                                      <div class="media-body">
+                                        <h4 class="media-heading">
+                                          <a href="{:cmf_url('portal/Article/index',array('id'=>$vo.id,'cid'=>$vo.category_id))}?id={$vo.id}&type=post">
+                                            {$vo.post_title}
+                                          </a>
+                                        </h4>
+                                        <p class="margin-none">
+                                                {$vo.post_excerpt}
+                                        </p>
+                                        <div class="media-body-footer">
+                                          <time class="pull-left">2小时前</time>
+                                          <p class="tzidc-info-count pull-right">
+                                            <span class="tzidc-read-count">
+                                                {$vo.post_hits}
+                                            </span>
+                                            <span class="tzidc-info-count">
+                                                {$vo.comment_count}
+                                            </span>
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                           
+                        </portal:articles>
+                      
+                      
+                    </ul>
+                         
+                    <div class="page-container clearfix">
+                      <!-- <a class="btn btn-default pull-left" href="javascript:;" role="button">上一页</a>
+                      <div class="dropup pull-left">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          第&nbsp;1&nbsp;页
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                          <li><a href="#">第&nbsp;1&nbsp;页</a></li>
+                          <li><a href="#">第&nbsp;2&nbsp;页</a></li>
+                          <li><a href="#">第&nbsp;3&nbsp;页</a></li>
+                          <li><a href="#">第&nbsp;4&nbsp;页</a></li>
+                        </ul>
+                      </div>
+                      <a class="btn btn-default pull-left" href="javascript:;" role="button">下一页</a> -->
+                      <page />
+                    </div>
+                  </div>
+                </div>
+              <!-- 内容部分end -->
+              <footer>
+                <include file="public@footer" page="list"/>  
+                        
+                </body>
+</html>

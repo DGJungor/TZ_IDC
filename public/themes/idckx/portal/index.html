@@ -1,0 +1,514 @@
+<include file="public@head" page="index" title="{$site_info.site_seo_title|default=''}-{$site_info.site_name|default=''}" keywords="{$site_info.site_seo_keywords|default=''}" description="{$site_info.site_seo_keywords|default=''}"/>
+    <div class="container main clearfix">
+        <div class="pull-left">
+            <section class="tzidc-popularInformation">
+                <div class="tzidc-carousel pull-left">
+                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                            <php>
+                                $top_slide_id=empty($theme_vars['top_slide'])?1:$theme_vars['top_slide'];
+                                $top_slide_key=0;
+                            </php>
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                                <slides id="$top_slide_id" item="slidesItem">
+                                        <li data-target="#carousel-example-generic" data-slide-to="{$top_slide_key}" class="{$top_slide_key==0?'active':''}"></li>
+                                        <php>
+                                                $top_slide_key++;
+                                        </php>
+                                </slides>
+                        </ol>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+                            
+                            <slides id="$top_slide_id" item="slidesItem">
+                                <div class="item {$slidesItem.list_order==1?'active':''}">
+                                    <a href="{$slidesItem.url}">
+                                        <img src="{$slidesItem.image|default='/img404.jpg'}" alt="{$slidesItem.description}">
+                                    </a>
+                                    <div class="carousel-caption">
+                                        {$slidesItem.title|default=''|mb_substr=0,22,"utf8"}
+                                    </div>
+                                </div>
+                            </slides>
+                            <noslides id="$top_slide_id">
+                                <div class="item">
+                                    <img src="#" alt="默认的">
+                                    <div class="carousel-caption">
+                                        你还没有创建幻灯片
+                                    </div>
+                                </div>
+                            </noslides>
+                        </div>
+
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                        </a>
+                    </div>
+                </div>
+                <div class="tzidc-popularInformation-list pull-left">
+                    <widget name="last_news">
+                            <php>
+                                $widget["vars"]["last_news_category_id"] = empty($widget["vars"]["last_news_category_id"])?1:$widget["vars"]["last_news_category_id"];
+                                $last_news_limit=7;
+                                $where=['id'=>$widget["vars"]["last_news_category_id"]];
+                            </php>
+                        <header class="clearfix">
+                                <portal:categories where="$where" order="list_order DESC" item="vo">
+                                        <h3 class="pull-left">热门资讯</h3>
+                                        <span class="more pull-right">
+                                            <a href="{:url('portal/List/index',['id'=>$vo['id']])}">MORE+</a>
+                                        </span>
+                                </portal:categories>
+                        </header>
+                        <section class="tzidc-popular">
+
+                            
+                            <ul>
+                                <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.last_news_category_id">
+                                    <li>
+                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.last_news_category_id))}?id={$vo.id}&type=post">{$vo.post_title|mb_substr=0,25,"utf8"}</a>
+                                    </li>
+                                </portal:articles>
+                            </ul>
+                        </section>
+                    </widget>
+                </div>
+
+            </section>
+            <widget name="advertising">
+                    <php>
+                        $widget["vars"]["banner_ad_small"] = empty($widget["vars"]["banner_ad_small"])?1:$widget["vars"]["banner_ad_small"];
+                        $ad_id = $widget["vars"]["banner_ad_small"];
+
+                    </php>
+                    <slides id="$ad_id" item="slidesItem">
+                     <div class="ab">
+                            <a href="{$slidesItem.url}">
+                                <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
+                            </a>
+                        </div>
+                    </slides>
+                    
+                    
+            </widget>
+            
+            <section class="tzidc-content-list">
+                <!-- js渲染的 -->
+            </section>
+
+        </div>
+        <aside class="pull-right">
+            <section class="tzidc-industry asideStyle">
+                <widget name="industry">
+                        <php>
+                            $widget["vars"]["last_news_category_id"] = empty($widget["vars"]["last_news_category_id"])?1:$widget["vars"]["last_news_category_id"];
+                            $last_news_limit=5;
+                            $where=['id'=>$widget["vars"]["last_news_category_id"]];
+                        </php>
+                    <header class="aside-header clearfix">
+                            <portal:categories where="$where" order="list_order DESC" item="vo">
+                                    <h3 class="pull-left">行业风向标</h3>
+                                    <span class="pull-right">
+                                        <a href="{:url('portal/List/index',['id'=>$vo['id']])}">全部 ></a>
+                                    </span>
+                            </portal:categories>
+                        
+                    </header>
+                    <section class="tzidc-industry-content">
+                                <php>
+                                    $theme_widgets["advertising"]["vars"]["list_ad_big"] = empty($theme_widgets["advertising"]["vars"]["list_ad_big"])?1:$theme_widgets["advertising"]["vars"]["list_ad_big"];
+                                    $ad_id = $theme_widgets["advertising"]["vars"]["list_ad_big"];
+            
+                                </php>
+                                <slides id="$ad_id" item="slidesItem">
+                                        <div class="top">
+                                            <a href="{$slidesItem.url}">
+                                                    <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
+                                            </a>
+                                            
+                                        </div>
+                                </slides>
+                        
+
+                        <ul>
+
+                            
+                            <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.last_news_category_id">
+                                <li>
+                                    <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.last_news_category_id))}?id={$vo.id}&type=post">{$vo.post_title|mb_substr=0,18,"utf8"}</a>
+                                </li>
+                            </portal:articles>
+
+                            <!-- <li>
+                            <a href="#">小鸟云倒闭</a>
+                        </li>
+                        <li>
+                            <a href="#">谷歌免费推出ChromeOS</a>
+                        </li>
+                        <li>
+                            <a href="#">古董电脑也能使用</a>
+                        </li> -->
+                        </ul>
+                    </section>
+                </widget>
+            </section>
+            <section class="info-release mt20 asideStyle">
+                <header class="aside-header clearfix">
+                    <h3 class="pull-left">信息发布</h3>
+                    <span class="pull-right">
+                        <a href="#">全部 ></a>
+                    </span>
+                </header>
+                <section class="info-release-content">
+                    <!-- 
+                        <php>
+                            print_r($post);
+                        </php>
+                     -->
+                    <ul>
+                        <volist name="post" id="vo">
+                            <notempty name="vo.more.thumbnail">
+                                    <li>
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="{:url('portal/product/index')}?id={$vo['id']}">
+                                                        <img class="media-object" src="{:cmf_get_image_url($vo.more.thumbnail)}" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">
+                                                        <a href="{:url('portal/product/index')}?id={$vo['id']}">{$vo.post_title|mb_substr=0,18,"utf8"}</a>
+                                                    </h4>
+                                                    <p>
+                                                            {$vo.post_excerpt|mb_substr=0,25,"utf8"}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+
+
+                            </notempty>
+                        </volist>
+                        
+                    </ul>
+                </section>
+                <div class="text-center">
+                    <div class="btn btn-tzidc">
+                        发布，获得曝光机会！
+                    </div>
+                </div>
+
+            </section>
+            <widget name="advertising">
+                    <php>
+                            $widget["vars"]["list_ad_small"] = empty($widget["vars"]["list_ad_small"])?1:$widget["vars"]["list_ad_small"];
+                            $ad_id = $widget["vars"]["list_ad_small"];
+                        </php>
+                        <slides id="$ad_id" item="slidesItem">
+                                <div class="ab">
+                                    <a href="{$slidesItem.url}">
+                                            <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
+                                    </a>
+                                    
+                                </div>
+                        </slides>
+                    
+            </widget>
+           
+            <section class="products-recommended asideStyle">
+                <header class="aside-header clearfix">
+                    <h3 class="pull-left">产品推荐</h3>
+                    <span class="pull-right">
+                        <a href="#">全部 ></a>
+                    </span>
+                </header>
+                <section class="products-recommended-content">
+                    <ul>
+                        <widget name="features">
+                            <!--
+                                    <php>
+                                        print_r($widget["vars"]["features"]);
+                                    </php>
+                                -->
+                            <php>
+                                $product = $widget["vars"]["features"];
+                            </php>
+                            <volist name="product" id="item">
+                                <li>
+                                    <div class="product-logo">
+                                        <img src="{$item.icon}" alt="">
+                                    </div>
+                                    <div class="product-descriptions">
+                                        {$item.content}
+                                    </div>
+                                    <div class="price-score-group">
+                                        <p class="product-price">{$item.price}/月起</p>
+                                        <p class="product-score">
+                                            用户评价
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </volist>
+
+                        </widget>
+                    </ul>
+                </section>
+            </section>
+        </aside>
+        <widget name="advertising">
+                <php>
+                    $widget["vars"]["banner_ad_big"] = empty($widget["vars"]["banner_ad_big"])?1:$widget["vars"]["banner_ad_big"];
+                    $ad_id = $widget["vars"]["banner_ad_big"];
+                </php>
+                <slides id="$ad_id" item="slidesItem">
+                        <div class="ab">
+                            <a href="{$slidesItem.url}">
+                                    <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
+                            </a>
+                            
+                        </div>
+                </slides>
+                
+        </widget>
+       
+        <div class="industry-policy clearfix">
+            <widget name="recommend_footer">
+                    <php>
+                        $widget["vars"]["recommend_footer_item1"] = empty($widget["vars"]["recommend_footer_item1"])?1:$widget["vars"]["recommend_footer_item1"];
+                        $last_news_limit=5;
+                        $where=['id'=>$widget["vars"]["recommend_footer_item1"]];
+                    </php>
+                <ul class="clearfix">
+                    <li>
+                        <header class="industry-policy-header clearfix">
+                                <portal:categories where="$where" order="list_order DESC" item="vo">
+                                        <h3 class="pull-left">{$vo.name}</h3>
+                                        <span class="more pull-right"><a href="{:url('portal/List/index',['id'=>$vo['id']])}">MORE+</a></span>
+                                </portal:categories>
+                            
+                        </header>
+                        <section class="industry-policy-content">
+                            
+                            <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.recommend_footer_item1">
+                                <if condition="($vo.recommended == 1) AND ($vo.more.thumbnail != '') ">
+                                    <div class="top">
+                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.recommend_footer_item1))}?id={$vo.id}&type=post">
+                                            <img src="{$vo.more.thumbnail}" alt="">
+                                            <p>{$vo.post_title|mb_substr=0,18,"utf8"}</p>
+                                            <div class="mask"></div>
+                                        </a>
+
+                                    </div>
+                                </if>
+
+                            </portal:articles>
+
+                            <ul>
+                                <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.recommend_footer_item1">
+                                    <!-- 
+                                                <php>
+                                                    print_r($vo->toArray());
+                                                </php>
+                                             -->
+                                    <if condition="($vo.recommended != 1) AND ($vo.more.thumbnail == '') ">
+                                        <li>
+                                            <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.recommend_footer_item1))}?id={$vo.id}&type=post">{$vo.post_title|mb_substr=0,22,"utf8"}</a>
+                                        </li>
+                                    </if>
+
+                                </portal:articles>
+                                <!-- <li>
+                                                <a href="#">电信业务经营许可管理办法</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">中华人民共和国网络安全法</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                                            </li> -->
+                            </ul>
+                        </section>
+                    </li>
+                    <li>
+                            <php>
+                                $widget["vars"]["recommend_footer_item2"] = empty($widget["vars"]["recommend_footer_item2"])?1:$widget["vars"]["recommend_footer_item2"];
+                                $last_news_limit=5;
+                                $where=['id'=>$widget["vars"]["recommend_footer_item2"]];
+                            </php>
+                        <header class="industry-policy-header clearfix">
+                                <portal:categories where="$where" order="list_order DESC" item="vo">
+                                        <h3 class="pull-left">{$vo.name}</h3>
+                                        <span class="more pull-right"><a href="{:url('portal/List/index',['id'=>$vo['id']])}">MORE+</a></span>
+                                </portal:categories>
+                            
+                        </header>
+                        <section class="industry-policy-content">
+                           
+                            <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.recommend_footer_item2">
+                                <if condition="($vo.recommended == 1) AND ($vo.more.thumbnail != '') ">
+                                    <div class="top">
+                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.recommend_footer_item2))}?id={$vo.id}&type=post">
+                                            <img src="{$vo.more.thumbnail}" alt="">
+                                            <p>{$vo.post_title|mb_substr=0,18,"utf8"}</p>
+                                            <div class="mask"></div>
+                                        </a>
+
+                                    </div>
+                                </if>
+
+                            </portal:articles>
+
+                            <ul>
+                                <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.recommend_footer_item2">
+                                    <!-- 
+                                                        <php>
+                                                            print_r($vo->toArray());
+                                                        </php>
+                                                     -->
+                                    <if condition="($vo.recommended != 1) AND ($vo.more.thumbnail == '') ">
+                                        <li>
+                                            <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.recommend_footer_item2))}?id={$vo.id}&type=post">{$vo.post_title|mb_substr=0,22,"utf8"}</a>
+                                        </li>
+                                    </if>
+
+                                </portal:articles>
+                            </ul>
+                            <!-- <div class="top">
+                                <a href="#">
+                                    <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
+                                    <p>互联网新闻信息服务管理规定</p>
+                                    <div class="mask"></div>
+                                </a>
+
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#">网络安全产业白皮书（2017年）</a>
+                                </li>
+                                <li>
+                                    <a href="#">电信业务经营许可管理办法</a>
+                                </li>
+                                <li>
+                                    <a href="#">中华人民共和国网络安全法</a>
+                                </li>
+                                <li>
+                                    <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                                </li>
+                            </ul> -->
+                        </section>
+                    </li>
+
+                    <li>
+                            <php>
+                                $widget["vars"]["recommend_footer_item3"] = empty($widget["vars"]["recommend_footer_item3"])?1:$widget["vars"]["recommend_footer_item3"];
+                                $last_news_limit=5;
+                                $where=['id'=>$widget["vars"]["recommend_footer_item3"]];
+                            </php>
+                        <header class="industry-policy-header clearfix">
+                                <portal:categories where="$where" order="list_order DESC" item="vo">
+                                        <h3 class="pull-left">{$vo.name}</h3>
+                                        <span class="more pull-right"><a href="{:url('portal/List/index',['id'=>$vo['id']])}">MORE+</a></span>
+
+                                </portal:categories>
+                            
+                        </header>
+                        <section class="industry-policy-content">
+                            
+                            <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.recommend_footer_item3">
+                                <if condition="($vo.recommended == 1) AND ($vo.more.thumbnail != '') ">
+                                    <div class="top">
+                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.recommend_footer_item3))}?id={$vo.id}&type=post">
+                                            <img src="{$vo.more.thumbnail}" alt="">
+                                            <p>{$vo.post_title|mb_substr=0,18,"utf8"}</p>
+                                            <div class="mask"></div>
+                                        </a>
+
+                                    </div>
+                                </if>
+
+                            </portal:articles>
+
+                            <ul>
+                                <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.recommend_footer_item3">
+                                    <!-- 
+                                                        <php>
+                                                            print_r($vo->toArray());
+                                                        </php>
+                                                     -->
+                                    <if condition="($vo.recommended != 1) AND ($vo.more.thumbnail == '') ">
+                                        <li>
+                                            <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.recommend_footer_item3))}?id={$vo.id}&type=post">{$vo.post_title|mb_substr=0,22,"utf8"}</a>
+                                        </li>
+                                    </if>
+
+                                </portal:articles>
+                            </ul>
+                            <!-- <div class="top">
+                                <a href="#">
+                                    <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
+                                    <p>互联网新闻信息服务管理规定</p>
+                                    <div class="mask"></div>
+                                </a>
+
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#">网络安全产业白皮书（2017年）</a>
+                                </li>
+                                <li>
+                                    <a href="#">电信业务经营许可管理办法</a>
+                                </li>
+                                <li>
+                                    <a href="#">中华人民共和国网络安全法</a>
+                                </li>
+                                <li>
+                                    <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                                </li>
+                            </ul> -->
+                        </section>
+                    </li>
+                </ul>
+            </widget>
+
+
+        </div>
+    </div>
+    <footer>
+
+        <div class="links clearfix">
+            <div class="container">
+                <h4>友情链接</h4>
+                <ul>
+                    <links>
+                        <li>
+                            <a href="{$vo.url|default=''}" target="{$vo.target|default=''}">{$vo.name|default=''}</a>
+                        </li>
+                    </links>
+
+                    <!-- <li>
+                        <a href="#">免备案空间</a>
+                    </li>
+                    <li>
+                        <a href="#">今日新闻</a>
+                    </li>
+                    <li>
+                        <a href="#">SSL证书</a>
+                    </li>
+                    <li>
+                        <a href="#">m6j电脑网</a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+        <include file="public@footer" page="index"/>
+</body>
+
+</html>

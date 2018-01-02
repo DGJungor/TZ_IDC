@@ -1,0 +1,106 @@
+<include file="public@head" page="information_release" title="{$site_info.site_seo_title|default=''}-{$site_info.site_name|default=''}" keywords="{$site_info.site_seo_keywords|default=''}" description="{$site_info.site_seo_keywords|default=''}"/>
+      <div class="container main clearfix">
+        <!-- 
+          <php>
+            print_r($post);
+          </php>
+         -->
+        <div class="simple-info clearfix">
+            <div class="company-logo pull-left">
+                <img src="http://t.388g.com/uploads/allimg/160711/5-160G10U313.jpg">
+            </div>
+            <div class="company-info pull-left">
+                <h3>{$post.post_title|default='获取失败'}</h3>
+                <ul class="server-list clearfix">
+                    <li>
+                        <a href="#">企业服务</a>
+                    </li>
+                    <li>
+                        <a href="#">媒体资讯</a>
+                    </li>
+
+                </ul>
+                <p class="company-description">
+                    {$post.post_excerpt|default='获取失败'}
+                </p>
+                <div class="release-date">
+                    发布时间：<time datetime="2017-12-28 13:48:00">2017年12月28日13:48:09</time>
+                </div>
+            </div>
+            <div class="company-share pull-right">
+                <span class="share-text">
+                    分享到：
+                </span>
+                <ul class="company-share-list clearfix">
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="company-content clearfix">
+            <div class="company-content-description pull-left">
+                <dl>
+                    <dt> <span>产品简介</span> </dt>
+                    <dd>
+                            {$post.post_company_info|default='获取失败'}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><span>竞争优势</span></dt>
+                    <dd>
+                        {$post.post_advantage|default='获取失败'}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><span>产品成绩</span></dt>
+                    <dd>
+                        {$post.post_performance|default='获取失败'}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><span>团队介绍</span></dt>
+                    <dd>
+                        {$post.post_recommend|default='获取失败'}
+                    </dd>
+                </dl>
+            </div>
+            <div class="company-data pull-right">
+                <h4>
+                    公司基本信息
+                </h4>
+                <ul class="company-data-list">
+                    <li>
+                        创始人：{$post.more.rounder|default='获取失败'}
+                    </li>
+                    <li>
+                        网址：{$post.more.url|default='获取失败'}
+                    </li>
+                    <li>
+                        融资：{$post.more.financing|default='获取失败'}
+                    </li>
+                    <li class="no-key">
+                        汤臣集团|¥2000万
+                    </li>
+                    <li>
+                        地址：{$post.more.address|default='获取失败'}
+                    </li>
+                    <li>
+                        员工：{$post.more.employee|default='获取失败'}
+                    </li>
+                </ul>
+                <div class="company-tip">
+                    <p>
+                        如有“修改项目”，请联系网站工作人员！
+                    </p>
+                </div>
+            </div>
+        </div>
+      </div>
+      <footer>
+        
+            
+          <include file="public@footer" page="information_release"/>
+      </body>
+</html>

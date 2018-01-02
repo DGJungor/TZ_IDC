@@ -13,6 +13,7 @@ namespace app\portal\model;
 use app\admin\model\RouteModel;
 use think\Model;
 use tree\Tree;
+use think\Db;
 
 class PortalCategoryModel extends Model
 {
@@ -20,7 +21,26 @@ class PortalCategoryModel extends Model
     protected $type = [
         'more' => 'array',
     ];
-
+    public function getTag($articleids) {
+        $result = [];
+        for($i = 0;$i < count($articleids);$i++) {
+            $data = Db::name("portal_tag_post")->alias('a')->where("post_id",$articleids[$i])->join("idckx_portal_tag tag","a.tag_id = tag.id")->select()->toArray();
+            if(count($data)) {
+                array_push($result,$data);
+            }
+            
+        }
+        
+        return $result;
+    }
+    public function typeArticle($typeid) {
+        $result = [];
+      $data = Db::name("portal_category_post")->where("category_id",$typeid)->select();
+      foreach($data as $k=>$v) {
+        array_push($result,$v["post_id"]);
+      }
+      return $result;
+    }
     /**
      * 生成分类 select树形结构
      * @param int $selectId 需要选中的分类 id
