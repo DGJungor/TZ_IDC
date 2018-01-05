@@ -4,16 +4,6 @@ namespace app\ad\validate;
 
 use think\Validate;
 
-/**
- * Class AddAdValidate
- *
- * 广告添加 验证
- *
- * @author 张俊
- * @package app\ad\validate
- *
- *
- */
 class AddAdValidate extends  Validate
 {
 

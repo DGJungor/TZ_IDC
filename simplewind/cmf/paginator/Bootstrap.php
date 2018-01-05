@@ -19,7 +19,7 @@ class Bootstrap extends Paginator
      * @param string $text
      * @return string
      */
-    protected function getPreviousButton($text = "&laquo;")
+    protected function getPreviousButton($text = "上一页")
     {
 
         if ($this->currentPage() <= 1) {
@@ -29,8 +29,8 @@ class Bootstrap extends Paginator
         $url = $this->url(
             $this->currentPage() - 1
         );
-
-        return $this->getPageLinkWrapper($url, $text);
+        return '<a class="btn btn-default pull-left" href="'. htmlentities($url) .'" role="button">'.$text.'</a>';
+        // return $this->getPageLinkWrapper($url, $text);
     }
 
     /**
@@ -38,15 +38,15 @@ class Bootstrap extends Paginator
      * @param string $text
      * @return string
      */
-    protected function getNextButton($text = '&raquo;')
+    protected function getNextButton($text = '下一页')
     {
         if (!$this->hasMore) {
             return $this->getDisabledTextWrapper($text);
         }
 
         $url = $this->url($this->currentPage() + 1);
-
-        return $this->getPageLinkWrapper($url, $text);
+        return '<a class="btn btn-default pull-left" href="'. htmlentities($url) .'" role="button">'.$text.'</a>';
+        // return $this->getPageLinkWrapper($url, $text);
     }
 
     /**
@@ -54,18 +54,18 @@ class Bootstrap extends Paginator
      * @param string $text
      * @return string
      */
-    protected function getSimplePreviousButton($text = "&larr;")
+    protected function getSimplePreviousButton($text = "上一页")
     {
 
-        if ($this->currentPage() <= 1) {
-            return '<li class="disabled previous"><span>' . $text . '</span></li>';
-        }
+        // if ($this->currentPage() <= 1) {
+        //     return '<li class="disabled previous"><span>' . $text . '</span></li>';
+        // }
 
         $url = $this->url(
             $this->currentPage() - 1
         );
-
-        return '<li class="previous"><a href="' . htmlentities($url) . '">' . $text . '</a></li>';
+        return '<a class="btn btn-default pull-left" href="'. htmlentities($url) .'" role="button">'.$text.'</a>';
+        // return '<li class="previous"><a href="' . htmlentities($url) . '">' . $text . '</a></li>';
     }
 
     /**
@@ -73,15 +73,15 @@ class Bootstrap extends Paginator
      * @param string $text
      * @return string
      */
-    protected function getSimpleNextButton($text = '&rarr;')
+    protected function getSimpleNextButton($text = '下一页')
     {
-        if (!$this->hasMore) {
-            return '<li class="disabled next"><span>' . $text . '</span></li>';
-        }
+        // if (!$this->hasMore) {
+        //     return '<li class="disabled next"><span>' . $text . '</span></li>';
+        // }
 
         $url = $this->url($this->currentPage() + 1);
-
-        return '<li class="next"><a href="' . htmlentities($url) . '">' . $text . '</a></li>';
+        return '<a class="btn btn-default pull-left" href="'. htmlentities($url) .'" role="button">'.$text.'</a>';
+        // return '<li class="next"><a href="' . htmlentities($url) . '">' . $text . '</a></li>';
     }
 
     /**
@@ -106,14 +106,14 @@ class Bootstrap extends Paginator
             $block['first'] = $this->getUrlRange(1, $this->lastPage);
         } elseif ($this->currentPage <= $window) {
             $block['first'] = $this->getUrlRange(1, $window + 2);
-            $block['last']  = $this->getUrlRange($this->lastPage - 1, $this->lastPage);
+            // $block['last']  = $this->getUrlRange($this->lastPage - 1, $this->lastPage);
         } elseif ($this->currentPage > ($this->lastPage - $window)) {
-            $block['first'] = $this->getUrlRange(1, 2);
+            // $block['first'] = $this->getUrlRange(1, 2);
             $block['last']  = $this->getUrlRange($this->lastPage - ($window + 0), $this->lastPage);
         } else {
-            $block['first']  = $this->getUrlRange(1, 2);
+            // $block['first']  = $this->getUrlRange(1, 2);
             $block['slider'] = $this->getUrlRange($this->currentPage - $side, $this->currentPage + $side);
-            $block['last']   = $this->getUrlRange($this->lastPage - 1, $this->lastPage);
+            // $block['last']   = $this->getUrlRange($this->lastPage - 1, $this->lastPage);
         }
 
         $html = '';
@@ -131,7 +131,7 @@ class Bootstrap extends Paginator
             $html .= $this->getDots();
             $html .= $this->getUrlLinks($block['last']);
         }
-
+        $html .= "";
         return $html;
     }
 
@@ -170,7 +170,7 @@ class Bootstrap extends Paginator
      */
     protected function getAvailablePageWrapper($url, $page)
     {
-        return '<li><a href="' . htmlentities($url) . '">' . $page . '</a></li>';
+        return '<li><a href="' . htmlentities($url) . '">第&nbsp;' . $page . '&nbsp;页</a></li>';
     }
 
     /**
@@ -181,7 +181,13 @@ class Bootstrap extends Paginator
      */
     protected function getDisabledTextWrapper($text)
     {
-        return '<li class="disabled"><span>' . $text . '</span></li>';
+        // $html = '<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+        // $html .= '第&nbsp;1&nbsp;页';
+        // $html .= '<span class="caret"></span>';
+        // $html .= '</button>';
+        $html = '<a class="btn btn-default pull-left" href="javascript:;" role="button">'.$text.'</a>';
+        return $html;
+        // return '<li class="disabled"><span>' . $text . '</span></li>';
     }
 
     /**
@@ -192,7 +198,11 @@ class Bootstrap extends Paginator
      */
     protected function getActivePageWrapper($text)
     {
-        return '<li class="active"><span>' . $text . '</span></li>';
+        $html = '<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+        $html .= '第&nbsp;'.$text.'&nbsp;页';
+        $html .= '<span class="caret"></span>';
+        $html .= '</button>';
+        return $html;
     }
 
     /**
@@ -202,7 +212,8 @@ class Bootstrap extends Paginator
      */
     protected function getDots()
     {
-        return $this->getDisabledTextWrapper('...');
+        // return $this->getDisabledTextWrapper('');
+        return "";
     }
 
     /**
@@ -213,13 +224,19 @@ class Bootstrap extends Paginator
      */
     protected function getUrlLinks(array $urls)
     {
-        $html = '';
-
+        $html = '<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">';
+        $currentHtml = '';
         foreach ($urls as $page => $url) {
-            $html .= $this->getPageLinkWrapper($url, $page);
+            if($page == $this->currentPage()) {
+                $currentHtml.=$this->getActivePageWrapper($page);
+            }else {
+                $html .= $this->getPageLinkWrapper($url, $page);
+            }
         }
+        $html.="</ul>";
+        $containerHtml = '<div class="dropup pull-left">'.$currentHtml.$html.'</div>';
 
-        return $html;
+        return $containerHtml;
     }
 
     /**
@@ -231,11 +248,18 @@ class Bootstrap extends Paginator
      */
     protected function getPageLinkWrapper($url, $page)
     {
-        if ($page == $this->currentPage()) {
-            return $this->getActivePageWrapper($page);
-        }
-
-        return $this->getAvailablePageWrapper($url, $page);
+        $html = $this->getAvailablePageWrapper($url, $page);
+        // $html = '<div class="dropup pull-left">';
+        // if ($page == $this->currentPage()) {
+        //     $html.=$this->getActivePageWrapper($page);
+        // }
+        // if ($page != $this->currentPage()) {
+        //     // $html.='<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">';
+        //     $html.=$this->getAvailablePageWrapper($url, $page);
+        //     // $html.='</ul></div>';
+        // }
+        
+        return $html;
     }
 
 

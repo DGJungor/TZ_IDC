@@ -26,9 +26,6 @@ class AdminAddModel extends Model
     public function addReferrals($data)
     {
 
-        //获取当前时间戳
-        $create_time = time();
-
         //获取控制器中的数据
         $reName     = $data['data']['reName'];
         $rePrice    = $data['data']['rePrice'];
@@ -43,8 +40,7 @@ class AdminAddModel extends Model
             'price'       => $rePrice,
             'rate'        => $reRate,
             'intro'       => $reIntro,
-            'pic_address' => $picAddress,
-            'create_time' => $create_time
+            'pic_address' => $picAddress
         ];
 
         //添加数据库

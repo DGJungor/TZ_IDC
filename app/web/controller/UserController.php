@@ -9,101 +9,86 @@
 namespace app\web\controller;
 
 
-include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
-include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
-use app\web\model\UserModel;
-use cmf\controller\HomeBaseController;
+use FontLib\Table\Type\glyf;
+use app\web\model\UuserModel;
+use FontLib\Table\Type\name;
+use think\Session;
+use think\Validate;
 use think\Db;
 use think\Request;
 
-class UserController extends HomeBaseController
+class UserController extends Validate
 {
-    public $userID = 0;   //用户登录ID
-    public $class = '';
-
-    /**
-     * UserController constructor.
-     */
+    public $userID = '';
     public function __construct()
     {
         $this->userID = cmf_get_current_user_id();
-        $this->class = new UserModel();  //实例化用户类
-    }
-    /*
-     * sesion : user   用户信息
-     * 用户管理页面输出
-     * @return mixed
-     */
-    public function index()
-    {
-        if(byTokenGetUser(Request::instance()->header()["token"])["userId"]==-1) {
-            return ajaxEcho([],byTokenGetUser(Request::instance()->header()["token"])["msg"],5000);
-        }
-        $result = $this->class->userfind(['id'=>byTokenGetUser(Request::instance()->header()["token"])["userId"]]);
-        return ajaxEcho(["id"=>byTokenGetUser(Request::instance()->header()["token"])["userId"],"img"=>$result["avatar"]]);
     }
 
-    /**
-     * 头像替换
-     * @return \think\response\Json
-     */
-    public function Dateavatar()
+    public function index()
     {
-        $avatar = $this->class->Dateavatar($this->userID,$_POST['avatar']);
-        if($avatar)
-        {
-            return ajaxEcho([],'替换成功',1);
+        $UuserModel = new UuserModel();
+        $array = [
+            'id' => $this->userID,
+        ];
+
+        $data = $UuserModel->userfind($array);
+        if($data){
+            $this->assign('user',$data);
         }
-        return ajaxEcho([],'替换失败');
+
+        return $this->fetch();
     }
-        /*
-         * 用户信息修改
-         * @return string
-         */
     public function Dateuser()
     {
         if(Request::instance()->isPost())
         {
-            $data = [
-                'user'         => $_POST['user'],                 //用户名
-                'user_qq'      => $_POST['user_qq'],           //用户QQ
-                'user_Mobile' => $_POST['mobile'],           //用户手机号
-                'email'        => $_POST['email'],           //用户邮箱
+            $rule = [
+                'user'         =>  'require|chsAlpha|max:25',
+                'text'         =>  'require',
+                'user_qq'      =>  'require|number|min:9|max:11',
+                'user_Mobile' =>   'require|number|min:11',
             ];
-            $validate = \think\Loader::validate('User');
-            if($validate->check($data))
-            {
-                $result = cmf_update_current_user($_POST);
+            $msg = [
+                'user.chsAlpha'          => '用户名只能是汉字或者字母',
+                'user.max'                => '用户名最多不能超过25个字符',
+                'user.require'            => '用户名不能为空',
+                'user_Mobile.number'     => '手机号只能是数字',
+                'user_Mobile.min'        => '手机号至少11位',
+                'user_Mobile.require'    => '手机号不能为空',
+                'text.require'            => '内容不能为空',
+                'user_qq.require'         => 'QQ号不能为空',
+                'user_qq.max'             => 'QQ号最多不能超过11个字符',
+                'user_qq.min'             => 'QQ号至少9位',
+                'user_qq.number'          => 'QQ号只能是数字',
+            ];
+            $data = [
+                'user'         => $_POST['user'],
+                'user_qq'      => $_POST['user_qq'],
+                'user_Mobile' => $_POST['mobile'],
+                'text'         => $_POST['text'],
+            ];
+            $validate = new Validate($rule, $msg);
+            $result = $validate->check($data);
+            if($result){
+                $_POST['user_Mobile'] = $_POST['mobile'];
+                $_POST['up_date'] = time();
+                $UuserModel = new UuserModel();
+                $result = $UuserModel->Dateuser($this->userID,$_POST);
                 if($result){
-                    return ajaxEcho([],'修改成功',1);
+                    return json_encode(['name'=>'修改成功','id'=>1]);
                 }
-                return ajaxEcho([],'修改失败');
+                return json_encode(['name'=>'修改失败','id'=>0]);
             }
-            return ajaxEcho([],'验证失败');
+            return json_encode(['name'=>'验证失败','id'=>3]);
         }
     }
-
-
-    /*
-     * 用户密码(password)
-     * 修改
-     * @return \think\response\Json
-     */
     public function Datepass()
     {
-        $password = $_POST['password'];
-        if(!empty($_POST['datepass']) and !empty($_POST['repassword']) and $_POST['datepass'] === $_POST['repassword'])
-        {
-            $passwordInDb = $this->class->getpass($this->userID);
-            if(cmf_compare_password($password, $passwordInDb))    //判断提交密码是否跟MySQL里密码一致
-            {
-                $result = $this->class->Datepass($this->userID,$_POST['datepass']);
-                if($result)
-                {
-                    return ajaxEcho([],'修改成功',1);
-                }
-                return ajaxEcho([],'修改失败');
-            }
-        }
+        $result = Db::name('user_vip')->where('userpass',$_POST['password'])->find();
+//        if()
+//        {
+//
+//        }
     }
 }

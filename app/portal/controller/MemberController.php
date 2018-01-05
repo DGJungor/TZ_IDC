@@ -9,5 +9,4 @@ class MemberController extends HomeBaseController
     {
         return $this->fetch(':index');
     }
-
 }

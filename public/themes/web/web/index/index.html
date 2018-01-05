@@ -109,8 +109,8 @@
                         <div class="personal-dropdown">
                             <ul>
                                 <li><a href="#">发表文章</a></li>
-                                <li><a href="#">个人中心</a></li>
-                                <li><a href="#">退出</a></li>
+                                <li><a href="/web/Member/index">个人中心</a></li>
+                                <li><a id="outlogin" href="/web/login/outlogin">退出</a></li>
                             </ul>
                         </div>
                     </li>
@@ -189,24 +189,24 @@
                     <ul>
                         <foreach name="hotInfo" item="vo">
                             <li>
-                                <a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a>
+                                <a href="#">{$vo.post_title}</a>
                             </li>
                         </foreach>
-                        <!--<li>-->
-                            <!--<a href="#">特朗普“退群”，对中国有什么影响？</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">广大网友需谨慎，阅读此文会有人为你买单</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">中国现金贷突袭东南亚，为了活下去只有干掉同行</a>-->
-                        <!--</li>-->
+                        <li>
+                            <a href="#">特朗普“退群”，对中国有什么影响？</a>
+                        </li>
+                        <li>
+                            <a href="#">广大网友需谨慎，阅读此文会有人为你买单</a>
+                        </li>
+                        <li>
+                            <a href="#">中国现金贷突袭东南亚，为了活下去只有干掉同行</a>
+                        </li>
                     </ul>
                 </section>
             </div>
         </section>
         <div class="ab">
-            <img src="__WEB_ROOT__/upload/ad/{$ad.2.ad_pic_address}" alt="">
+            <img src="http://imgf.gamersky.com/img/sgqx_1060x90_1024.jpg" alt="">
         </div>
         <section class="tzidc-content-list">
             <!-- js渲染的 -->
@@ -223,7 +223,7 @@
             </header>
             <section class="tzidc-industry-content">
                 <div class="top">
-                    <img src="__WEB_ROOT__/upload/ad/{$ad.1.ad_pic_address}"
+                    <img src="https://ss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/tam-ogel/3db7c48b25a9962ac1b77a37d81f8c85_259_194.jpg"
                          alt="">
                 </div>
                 <ul>
@@ -279,7 +279,7 @@
 
         </section>
         <div class="ab">
-            <img src="__WEB_ROOT__/upload/ad/{$ad.3.ad_pic_address}" alt="">
+            <img src="http://imgs.gamersky.com/pic/2017/20171121_zcq_252_01.jpg" alt="">
         </div>
         <section class="products-recommended asideStyle">
             <header class="aside-header clearfix">
@@ -296,21 +296,17 @@
                                  alt="">
                         </div>
                         <div class="product-descriptions">
-                            {$referralsInfo.0.intro}
                             全球领先、安全、稳定的云计算产品计算、存储、网络、安全、大数据、人工智能，普惠科技助您飞跃发展
                         </div>
                         <div class="price-score-group">
-                            <p class="product-price">{$referralsInfo.0.price}</p>
+                            <p class="product-price">199/月起</p>
                             <p class="product-score">
                                 用户评价
-                                <for start="0" end="$referralsInfo.0.rate">
-                                    <span class="glyphicon glyphicon-star"></span>
-                                </for>
-
-                                <!--<span class="glyphicon glyphicon-star"></span>-->
-                                <!--<span class="glyphicon glyphicon-star"></span>-->
-                                <!--<span class="glyphicon glyphicon-star"></span>-->
-                                <!--<span class="glyphicon glyphicon-star"></span>-->
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
                             </p>
                         </div>
                     </li>
@@ -319,8 +315,7 @@
         </section>
     </aside>
     <div class="ab">
-        <img src="__WEB_ROOT__/upload/ad/{$ad.4.ad_pic_address}" alt="">
-
+        <img src="http://imgf.gamersky.com/img/sgqx_1060x90_1024.jpg" alt="">
     </div>
     <div class="industry-policy clearfix">
         <ul class="clearfix">
@@ -331,110 +326,184 @@
                 </header>
                 <section class="industry-policy-content">
                     <div class="top">
-                        <a href="/article/index?id={$special.0.0.id}&type=post">
-                            <img src="{:cmf_get_image_preview_url($special.0.0.more.thumbnail)}" alt="">
-                            <p>{$special.0.0.post_title}</p>
+                        <a href="#">
+                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
+                            <p>互联网新闻信息服务管理规定</p>
                             <div class="mask"></div>
                         </a>
 
                     </div>
                     <ul>
-                        <!--循环遍历专题标题-->
-                        <volist name="special.0" id="vo" offset="1" length="5">
-                            <li>
-                                <a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a>
-                            </li>
-                        </volist>
-                        <!--<li>-->
-                            <!--<a href="#">网络安全产业白皮书（2017年）</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">电信业务经营许可管理办法</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">中华人民共和国网络安全法</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">虚拟运营商正式商用牌照即将发放</a>-->
-                        <!--</li>-->
+                        <li>
+                            <a href="#">网络安全产业白皮书（2017年）</a>
+                        </li>
+                        <li>
+                            <a href="#">电信业务经营许可管理办法</a>
+                        </li>
+                        <li>
+                            <a href="#">中华人民共和国网络安全法</a>
+                        </li>
+                        <li>
+                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                        </li>
                     </ul>
                 </section>
             </li>
             <li>
                 <header class="industry-policy-header clearfix">
-                    <h3 class="pull-left">行业解读</h3>
+                    <h3 class="pull-left">IDC政策</h3>
                     <span class="more pull-right">MORE+</span>
                 </header>
                 <section class="industry-policy-content">
                     <div class="top">
-                        <a href="/article/index?id={$special.1.0.id}&type=post">
-                            <img src="{:cmf_get_image_preview_url($special.1.0.more.thumbnail)}" alt="">
-                            <p>{$special.1.0.post_title}</p>
+                        <a href="#">
+                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
+                            <p>互联网新闻信息服务管理规定</p>
                             <div class="mask"></div>
                         </a>
 
                     </div>
                     <ul>
-                        <!--循环遍历专题标题-->
-                        <volist name="special.1" id="vo" offset="1" length="5">
-                            <li>
-                                <a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a>
-                            </li>
-                        </volist>
-                        <!--<li>-->
-                            <!--<a href="#">网络安全产业白皮书（2017年）</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">电信业务经营许可管理办法</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">中华人民共和国网络安全法</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">虚拟运营商正式商用牌照即将发放</a>-->
-                        <!--</li>-->
+                        <li>
+                            <a href="#">网络安全产业白皮书（2017年）</a>
+                        </li>
+                        <li>
+                            <a href="#">电信业务经营许可管理办法</a>
+                        </li>
+                        <li>
+                            <a href="#">中华人民共和国网络安全法</a>
+                        </li>
+                        <li>
+                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                        </li>
                     </ul>
                 </section>
             </li>
 
             <li>
                 <header class="industry-policy-header clearfix">
-                    <h3 class="pull-left">政策解读</h3>
+                    <h3 class="pull-left">IDC政策</h3>
                     <span class="more pull-right">MORE+</span>
                 </header>
                 <section class="industry-policy-content">
                     <div class="top">
-                        <a href="/article/index?id={$special.2.0.id}&type=post">
-                            <img src="{:cmf_get_image_preview_url($special.2.0.more.thumbnail)}" alt="">
-                            <p>{$special.2.0.post_title}</p>
+                        <a href="#">
+                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
+                            <p>互联网新闻信息服务管理规定</p>
                             <div class="mask"></div>
                         </a>
 
                     </div>
                     <ul>
-                        <!--循环遍历专题标题-->
-                        <volist name="special.2" id="vo" offset="1" length="5">
-                            <li>
-                                <a href="/article/index?id={$vo.id}&type=post">{$vo.post_title}</a>
-                            </li>
-                        </volist>
-                        <!--<li>-->
-                            <!--<a href="#">网络安全产业白皮书（2017年）</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">电信业务经营许可管理办法</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">中华人民共和国网络安全法</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">虚拟运营商正式商用牌照即将发放</a>-->
-                        <!--</li>-->
+                        <li>
+                            <a href="#">网络安全产业白皮书（2017年）</a>
+                        </li>
+                        <li>
+                            <a href="#">电信业务经营许可管理办法</a>
+                        </li>
+                        <li>
+                            <a href="#">中华人民共和国网络安全法</a>
+                        </li>
+                        <li>
+                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                        </li>
                     </ul>
                 </section>
             </li>
         </ul>
+        <ul class="clearfix">
+            <li>
+                <header class="industry-policy-header clearfix">
+                    <h3 class="pull-left">IDC政策</h3>
+                    <span class="more pull-right">MORE+</span>
+                </header>
+                <section class="industry-policy-content">
+                    <div class="top">
+                        <a href="#">
+                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
+                            <p>互联网新闻信息服务管理规定</p>
+                            <div class="mask"></div>
+                        </a>
 
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="#">网络安全产业白皮书（2017年）</a>
+                        </li>
+                        <li>
+                            <a href="#">电信业务经营许可管理办法</a>
+                        </li>
+                        <li>
+                            <a href="#">中华人民共和国网络安全法</a>
+                        </li>
+                        <li>
+                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                        </li>
+                    </ul>
+                </section>
+            </li>
+            <li>
+                <header class="industry-policy-header clearfix">
+                    <h3 class="pull-left">IDC政策</h3>
+                    <span class="more pull-right">MORE+</span>
+                </header>
+                <section class="industry-policy-content">
+                    <div class="top">
+                        <a href="#">
+                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
+                            <p>互联网新闻信息服务管理规定</p>
+                            <div class="mask"></div>
+                        </a>
+
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="#">网络安全产业白皮书（2017年）</a>
+                        </li>
+                        <li>
+                            <a href="#">电信业务经营许可管理办法</a>
+                        </li>
+                        <li>
+                            <a href="#">中华人民共和国网络安全法</a>
+                        </li>
+                        <li>
+                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                        </li>
+                    </ul>
+                </section>
+            </li>
+
+            <li>
+                <header class="industry-policy-header clearfix">
+                    <h3 class="pull-left">IDC政策</h3>
+                    <span class="more pull-right">MORE+</span>
+                </header>
+                <section class="industry-policy-content">
+                    <div class="top">
+                        <a href="#">
+                            <img src="http://img.juimg.com/tuku/yulantu/120926/219049-12092612022378.jpg" alt="">
+                            <p>互联网新闻信息服务管理规定</p>
+                            <div class="mask"></div>
+                        </a>
+
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="#">网络安全产业白皮书（2017年）</a>
+                        </li>
+                        <li>
+                            <a href="#">电信业务经营许可管理办法</a>
+                        </li>
+                        <li>
+                            <a href="#">中华人民共和国网络安全法</a>
+                        </li>
+                        <li>
+                            <a href="#">虚拟运营商正式商用牌照即将发放</a>
+                        </li>
+                    </ul>
+                </section>
+            </li>
+        </ul>
     </div>
 </div>
 <footer>
@@ -448,21 +517,21 @@
                         <a href="http://{$vo.url}">{$vo.name}</a>
                     </li>
                 </foreach>
-                <!--<li>-->
-                <!--<a href="#">绿色软件下载</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                <!--<a href="#">免备案空间</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                <!--<a href="#">今日新闻</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                <!--<a href="#">SSL证书</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                <!--<a href="#">m6j电脑网</a>-->
-                <!--</li>-->
+                <li>
+                    <a href="#">绿色软件下载</a>
+                </li>
+                <li>
+                    <a href="#">免备案空间</a>
+                </li>
+                <li>
+                    <a href="#">今日新闻</a>
+                </li>
+                <li>
+                    <a href="#">SSL证书</a>
+                </li>
+                <li>
+                    <a href="#">m6j电脑网</a>
+                </li>
             </ul>
         </div>
     </div>

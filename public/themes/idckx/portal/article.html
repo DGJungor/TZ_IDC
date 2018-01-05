@@ -1,329 +1,321 @@
-<include file="public@head" page="article" title="{$article.post_title}-{$site_info.site_name|default=''}"
-         keywords="{$site_info.site_seo_keywords|default=''}" description="{$site_info.site_seo_keywords|default=''}"/>
-<!-- 内容部分start -->
-<div class="container main">
-    <div class="shortcut">
-        <p class="share">
-            <span></span>
-            <span></span>
-            <span></span>
-        </p>
-        <p class="collection">
-            <span></span>
-            <span></span>
-        </p>
-    </div>
-    <div class="pull-left main-left">
-        <div class="article-breadcrumb">
-            <ol class="breadcrumb">
-                <li><a href="/">首页</a></li>
-                <portal:breadcrumb cid="category.id" self="true">
-                    <li class="active"><a href="{:url('portal/List/index',['id'=>$vo['id']])}">{$vo.name}</a></li>
-                </portal:breadcrumb>
-
-            </ol>
-        </div>
-        <div class="content-container" id="content_container">
-            <h1 class="content-title">
-                {$article.post_title}
-            </h1>
-            <div class="content-info">
-                <p><span>时间：{:date('Y年m月d日 H:i:s',$article.published_time)}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>来源：{$article.post_source}</span>
-                </p>
-                <p><span>作者：{$article.user.user_nickname}</span></p>
+<include file="public@head" page="article" title="{$article.post_title}-{$site_info.site_name|default=''}" keywords="{$site_info.site_seo_keywords|default=''}" description="{$site_info.site_seo_keywords|default=''}"/>
+      <!-- 内容部分start -->
+        <div class="container main">
+            <div class="shortcut">
+              <p class="share">
+                <span></span>
+                <span></span>
+                <span></span>
+              </p>
+              <p class="collection">
+                <span></span>
+                <span></span>
+              </p>
             </div>
-            <div class="content-descriptions">
-                <blockquote>
-                    <p>{$article.post_excerpt}</p>
-                </blockquote>
-            </div>
-            <div class="article-content">
-                {$article.post_content}
-            </div>
-            <div class="article-footer clearfix">
-                <div class="thumbs text-center">
-                    <button type="button" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-thumbs-up"></span>
-                        赞
-                    </button>
+            <div class="pull-left main-left">
+                <div class="article-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li><a href="/">首页</a></li>
+                        <portal:breadcrumb cid="category.id" self="true">
+                                <if condition="$vo['parent_id']">
+                                        <li class="active"><a href="{:url('portal/List/index',['id'=>$vo['id']])}">{$vo.name}</a></li>
+                                </if>
+                        </portal:breadcrumb>
+                        
+                      </ol>
                 </div>
-                <section class="keywords-content pull-left">
-                    <php>
-                        $tag = explode(",",$article->post_keywords);
-                    </php>
-
-                    <p>
-
-                        <volist name="tag" id="vo">
-                            <notempty name="vo">
-                                <span><a href="javascript:;">{$vo}</a></span>
-                            </notempty>
-                        </volist>
-
-                    </p>
-                </section>
-                <div class="pull-right">
-                    <div class="pull-left article-info">
+                <div class="content-container" id="content_container">
+                    <h1 class="content-title">
+                            {$article.post_title}
+                    </h1>
+                    <div class="content-info">
+                        <p><span>时间：{:date('Y年m月d日 H:i:s',$article.published_time)}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>来源：{$article.post_source}</span></p>
+                        <p><span>作者：{$article.user.user_nickname}</span></p>
+                    </div>
+                    <div class="content-descriptions">
+                        <blockquote>
+                            <p>{$article.post_excerpt}</p>
+                        </blockquote>
+                    </div>
+                    <div class="article-content">
+                            {$article.post_content}
+                    </div>
+                    <div class="article-footer clearfix">
+                        <div class="thumbs text-center">
+                            <button type="button" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                赞
+                            </button>
+                        </div>
+                        <section class="keywords-content pull-left">
+                            <php>
+                                $tag = [];
+                                if(!empty($article->post_keywords)) {
+                                    $tag = explode(",",$article->post_keywords);
+                                }
+                            </php>
+                            
+                            <p>
+                                    
+                                <volist name="tag" id="vo">
+                                    <notempty name="vo">
+                                            <span><a href="javascript:;">{$vo}</a></span>
+                                    </notempty>
+                                </volist>    
+                                
+                            </p>
+                        </section>
+                        <div class="pull-right">
+                            <div class="pull-left article-info">
                                 <span>
                                     <span class="glyphicon glyphicon-heart"></span>
                                     <sub>{$article.post_hits}</sub>
                                 </span>
-                        <span>
+                                <span>
                                     <span class="glyphicon glyphicon-comment"></span>
                                     <sub>{$article.comment_count}</sub>
                                 </span>
-                    </div>
-                    <div class="pull-right article-page-operating">
+                            </div>
+                            <div class="pull-right article-page-operating">
                                 <span id="full_page">
                                     <span class="glyphicon glyphicon-fullscreen"></span>
                                 </span>
-                        <span id="retop">
+                                <span id="retop">
                                     <span class="glyphicon glyphicon-open"></span>
                                 </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="recommend module-style">
+                    <h3>相关推荐</h3>
+                    <section class="recommend-content">
+                            
+                        <div class="row">
+                            <portal:articles limit="6" order="post.published_time DESC" returnVarName="articles_data">
+                                    <if condition="$key<3">
+                                            <if condition="!empty($vo.more.thumbnail)">
+                                                    <div class="col-xs-6 col-md-4">
+                                                        <!-- 
+                                                            <php>
+                                                                print_r($vo["category_id"]);
+                                                            </php>
+                                                         -->
+                                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo.id}&type=post" class="thumbnail">
+                                                            <img src="{:cmf_get_image_url($vo.more.thumbnail)}" alt="{$vo.post_title}">
+                                                        </a>
+                                                        <p>{$vo.post_title}</p>
+                                                    </div>
+                                                    <else />
+                                                    <div class="col-xs-6 col-md-4">
+                                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo.id}&type=post" class="thumbnail">
+                                                            <img src="http://img3.redocn.com/tupian/20151015/ribennvpuzhuangdongmankatongrenwutu_5093392.jpg" alt="{$vo.post_title}">
+                                                        </a>
+                                                        <p>{$vo.post_title}</p>
+                                                    </div>
+                                                </if> 
+                                    
+                                    
+                                    </if>    
+                                
+                            </portal:articles>
+                            </div>
+                           
+                        <div class="row">
+                            <volist name="articles_data.articles" offset="3" key="i" id="item">
+                                        <if condition="!empty($item.more.thumbnail)">
+                                                <div class="col-xs-6 col-md-4">
+                                                    <a href="{:cmf_url('portal/Article/index',array('id'=>$item['id'],'cid'=>$item.category_id))}?id={$item.id}&type=post" class="thumbnail">
+                                                        <img src="{:cmf_get_image_url($item.more.thumbnail)}" alt="{$item.post_title}">
+                                                    </a>
+                                                    <p>{$item.post_title}</p>
+                                                    
+                                                </div>
+                                                <else />
+                                                <div class="col-xs-6 col-md-4">
+                                                    <a href="{:cmf_url('portal/Article/index',array('id'=>$item['id'],'cid'=>$item.category_id))}?id={$item.id}&type=post" class="thumbnail">
+                                                        <img src="http://img3.redocn.com/tupian/20151015/ribennvpuzhuangdongmankatongrenwutu_5093392.jpg" alt="{$vo.post_title}">
+                                                    </a>
+                                                    <p>{$vo.post_title}</p>
+                                                </div>
+                                        </if>
+                                    
+                            </volist>
+                                
+    
+                            </div>
+                    </section>
+                </div>
+                <div class="comment module-style">
+                    <p class="comment-title">
+                        参与讨论
+                    </p>
+                    <textarea class="form-control" placeholder="请登录后参与评论..." rows="4"></textarea>
+                    <p class="comment-login-tip">
+                        <a href="javascript:;" data-toggle="modal" data-target="#login_in">登录</a>后参与讨论
+                    </p>
+                    <div class="comment-send text-right">
+                        <button class="btn btn-default">
+                            提交评论
+                        </button>
+                    </div>
+                    <div class="comment-item">
+                      <ul>
+                        <li>
+                          <div class="media">
+                            <div class="media-left">
+                              <a href="#">
+                                <img class="media-object" src="http://k1.jsqq.net/uploads/allimg/160329/5-16032Z94Z20-L.jpg" alt="...">
+                              </a>
+                            </div>
+                            <div class="media-body">
+                              <h4 class="media-heading"><a href="#">金色蚂螂</a></h4>
+                              <p class="comment-item-content">
+                                苹果怎么说？
+                              </p>
+                              <p class="comment-item-info clearfix">
+                                <time class="pull-left" datetime="2017-11-28">2017年11月28日</time>
+                                <span class="pull-right">
+                                  <a href="#"><span class="glyphicon glyphicon-comment"></span>&nbsp;回复</a>
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="recommend module-style">
-            <h3>相关推荐</h3>
-            <section class="recommend-content">
+            <aside class="pull-right">
+              <div class="related-tags module-style">
+                <h3>
+                  相关标签
+                </h3>
+                <section class="related-tags-body">
+                  <div class="keywords-content pull-left">
+                      <p>
+                          <!-- 
+                              <php>
+                                print_r($tagall);
 
-                <div class="row">
-                    <portal:articles limit="6" order="post.published_time DESC" returnVarName="articles_data"
-                                     categoryIds="$Think.get.cid">
-                        <if condition="$key<3">
-                            <if condition="!empty($vo.more.thumbnail)">
-                                <div class="col-xs-6 col-md-4">
-                                    <a href="{:url('portal/article/index',array('id'=>$vo['id'],'cid'=>$Think.get.cid))}?id={$vo.id}&type=post"
-                                       class="thumbnail">
+                              </php>
+                           -->
+                           <volist name="tagall" length="3" id="vo">
+                                <volist name="vo" length="3" id="item">
+                                        <span><a href="{:cmf_url('portal/Article/index',array('id'=>$item['post_id'],'cid'=>$category.id))}?id={$item['post_id']}&type=post">{$item.name}</a></span>
+                                </volist>
+                           </volist>
+                          
+                      </p>
+                    </div>
+                </section>
+              </div>
+              <div class="hot-content module-style">
+                <h3>
+                  热门内容
+                </h3>
+                <section class="hot-content-list">
+                        
+                  <ol>
+                        <portal:articles limit="6" order="post.post_hits DESC">
+                            <if condition="($key==0) AND (!empty($vo.more.thumbnail))">
+                                <li class="top">
+                                    <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo['id']}&type=post">
                                         <img src="{:cmf_get_image_url($vo.more.thumbnail)}" alt="{$vo.post_title}">
                                     </a>
-                                    <p>{$vo.post_title}</p>
-                                </div>
-                                <else/>
-                                <div class="col-xs-6 col-md-4">
-                                    <a href="{:url('portal/article/index',array('id'=>$vo['id'],'cid'=>$Think.get.cid))}?id={$vo.id}&type=post"
-                                       class="thumbnail">
-                                        <img src="http://img3.redocn.com/tupian/20151015/ribennvpuzhuangdongmankatongrenwutu_5093392.jpg"
-                                             alt="{$vo.post_title}">
-                                    </a>
-                                    <p>{$vo.post_title}</p>
-                                </div>
-                            </if>
-
-
-                        </if>
-
-                    </portal:articles>
-                </div>
-
-                <div class="row">
-                    <volist name="articles_data.articles" offset="3" key="i" id="item">
-                        <if condition="!empty($item.more.thumbnail)">
-                            <div class="col-xs-6 col-md-4">
-                                <a href="{:url('portal/article/index',array('id'=>$item['id'],'cid'=>$Think.get.cid))}?id={$item.id}&type=post"
-                                   class="thumbnail">
-                                    <img src="{:cmf_get_image_url($item.more.thumbnail)}" alt="{$item.post_title}">
-                                </a>
-                                <p>{$item.post_title}</p>
-
-                            </div>
-                            <else/>
-                            <div class="col-xs-6 col-md-4">
-                                <a href="{:url('portal/article/index',array('id'=>$item['id'],'cid'=>$Think.get.cid))}?id={$item.id}&type=post"
-                                   class="thumbnail">
-                                    <img src="http://img3.redocn.com/tupian/20151015/ribennvpuzhuangdongmankatongrenwutu_5093392.jpg"
-                                         alt="{$vo.post_title}">
-                                </a>
-                                <p>{$vo.post_title}</p>
-                            </div>
-                        </if>
-
-                    </volist>
-
-
-                </div>
-            </section>
-        </div>
-        <div class="comment module-style">
-            <p class="comment-title">
-                参与讨论
-            </p>
-            <textarea class="form-control" placeholder="请登录后参与评论..." rows="4"></textarea>
-            <p class="comment-login-tip">
-                <a href="javascript:;" data-toggle="modal" data-target="#login_in">登录</a>后参与讨论
-            </p>
-            <div class="comment-send text-right">
-                <button class="btn btn-default">
-                    提交评论
-                </button>
-            </div>
-            <div class="comment-item">
-                <ul>
-                    <li>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="http://k1.jsqq.net/uploads/allimg/160329/5-16032Z94Z20-L.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><a href="#">金色蚂螂</a></h4>
-                                <p class="comment-item-content">
-                                    苹果怎么说？
-                                </p>
-                                <p class="comment-item-info clearfix">
-                                    <time class="pull-left" datetime="2017-11-28">2017年11月28日</time>
-                                    <span class="pull-right">
-                                  <a href="#"><span class="glyphicon glyphicon-comment"></span>&nbsp;回复</a>
-                                </span>
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <aside class="pull-right">
-        <div class="related-tags module-style">
-            <h3>
-                相关标签
-            </h3>
-            <section class="related-tags-body">
-                <div class="keywords-content pull-left">
-                    <p>
-                        <!--
-                            <php>
-                              print_r($tagall);
-
-                            </php>
-                         -->
-                        <volist name="tagall" length="3" id="vo">
-                            <volist name="vo" length="3" id="item">
-                                <span><a
-                                        href="{:cmf_url('portal/Article/index',array('id'=>$item['post_id'],'cid'=>$category.id))}?id={$item['post_id']}&type=post">{$item.name}</a></span>
-                            </volist>
-                        </volist>
-
-                    </p>
-                </div>
-            </section>
-        </div>
-        <div class="hot-content module-style">
-            <h3>
-                热门内容
-            </h3>
-            <section class="hot-content-list">
-
-                <ol>
-                    <portal:articles limit="6" order="post.post_hits DESC">
-                        <if condition="($key==0) AND (!empty($vo.more.thumbnail))">
-                            <li class="top">
-                                <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo['id']}&type=post">
-                                    <img src="{:cmf_get_image_url($vo.more.thumbnail)}" alt="{$vo.post_title}">
-                                </a>
-                                <p data-index="{$key+1}"><a
-                                        href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo['id']}&type=post">{$vo.post_title|mb_substr=0,18,"utf8"}</a>
-                                </p>
-                            </li>
-                            <else/>
-                            <li data-index="{$key+1}"><a
-                                    href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo['id']}&type=post">{$vo.post_title|mb_substr=0,18,"utf8"}</a>
-                            </li>
-                        </if>
-                    </portal:articles>
-
-                </ol>
-            </section>
-        </div>
-        <div class="recommended-content module-style">
-            <h3>
-                推荐内容
-            </h3>
-            <section class="recommended-content-list">
-                <php>
-                    $where = [
-                    "post.recommended" => 1
-                    ];
-                </php>
-                <ul>
-                    <portal:articles where="$where" limit="6" order="post.published_time DESC">
-                        <li>
-                            <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo['id']}&type=post">{$vo.post_title|mb_substr=0,18,"utf8"}</a>
-                        </li>
-                    </portal:articles>
-
-                </ul>
-            </section>
-        </div>
-        <widget name="advertising">
-            <php>
-                $widget["vars"]["list_ad_small"] =
-                empty($widget["vars"]["list_ad_small"])?1:$widget["vars"]["list_ad_small"];
-                $ad_id = $widget["vars"]["list_ad_small"];
-            </php>
-            <slides id="$ad_id" item="slidesItem">
-                <div class="ab">
-                    <a href="{$slidesItem.url}">
-                        <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
-                    </a>
-                </div>
-            </slides>
-
-        </widget>
-
-        <div class="products-recommended module-style">
-            <h3>
-                IDC列表
-            </h3>
-            <section class="products-recommended-content">
-                <ul>
-                    <widget name="features">
-                        <!--
-                                <php>
-                                    print_r($widget["vars"]["features"]);
-                                </php>
-                            -->
-                        <php>
-                            $product = $widget["vars"]["features"];
+                                    <p data-index="{$key+1}"><a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo['id']}&type=post">{$vo.post_title|mb_substr=0,18,"utf8"}</a></p>
+                                </li>
+                                <else />
+                                <li data-index="{$key+1}"><a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo['id']}&type=post">{$vo.post_title|mb_substr=0,18,"utf8"}</a></li>
+                            </if>        
+                        </portal:articles>
+                    
+                  </ol>
+                </section>
+              </div>
+              <div class="recommended-content module-style">
+                <h3>
+                  推荐内容
+                </h3>
+                <section class="recommended-content-list">
+                    <php>
+                        $where = [
+                            "post.recommended" => 1
+                        ];
+                    </php>
+                  <ul>
+                        <portal:articles where="$where" limit="6" order="post.published_time DESC">
+                                <li><a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo['id']}&type=post">{$vo.post_title|mb_substr=0,18,"utf8"}</a></li>
+                        </portal:articles>
+                    
+                  </ul>
+                </section>
+              </div>
+              <widget name="advertising">
+                    <php>
+                            $widget["vars"]["list_ad_small"] = empty($widget["vars"]["list_ad_small"])?1:$widget["vars"]["list_ad_small"];
+                            $ad_id = $widget["vars"]["list_ad_small"];
                         </php>
-                        <volist name="product" id="item">
-                            <li>
-                                <div class="product-logo">
-                                    <img src="{$item.icon}" alt="">
+                        <slides id="$ad_id" item="slidesItem">
+                                <div class="ab">
+                                    <a href="{$slidesItem.url}">
+                                            <img src="{:cmf_get_image_url($slidesItem.image)}" alt="{$slidesItem.title}">
+                                    </a>
                                 </div>
-                                <div class="product-descriptions">
-                                    {$item.content}
-                                </div>
-                                <div class="price-score-group">
-                                    <p class="product-price">{$item.price}/月起</p>
-                                    <p class="product-score">
-                                        用户评价
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                    </p>
-                                </div>
-                            </li>
-                        </volist>
-
-                    </widget>
-                </ul>
-            </section>
+                        </slides>
+                    
+              </widget>
+              
+              <div class="products-recommended module-style">
+                <h3>
+                  IDC列表
+                </h3>
+                <section class="products-recommended-content">
+                  <ul>
+                        <widget name="features">
+                                <!--
+                                        <php>
+                                            print_r($widget["vars"]["features"]);
+                                        </php>
+                                    -->
+                                <php>
+                                    $product = $widget["vars"]["features"];
+                                </php>
+                                <volist name="product" id="item">
+                                    <li>
+                                        <div class="product-logo">
+                                            <img src="{$item.icon}" alt="">
+                                        </div>
+                                        <div class="product-descriptions">
+                                            {$item.content}
+                                        </div>
+                                        <div class="price-score-group">
+                                            <p class="product-price">{$item.price}/月起</p>
+                                            <p class="product-score">
+                                                用户评价
+                                                <span class="glyphicon glyphicon-star"></span>
+                                                <span class="glyphicon glyphicon-star"></span>
+                                                <span class="glyphicon glyphicon-star"></span>
+                                                <span class="glyphicon glyphicon-star"></span>
+                                                <span class="glyphicon glyphicon-star"></span>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </volist>
+    
+                            </widget>
+                  </ul>
+                </section>
+              </div>
+            </aside>
         </div>
-    </aside>
-</div>
-
-<!-- 内容部分end -->
-
-<footer>
-    <!-- markstart -->
-    <div class="article-mark">
-    </div>
-    <include file="public@footer" page="article"/>
-    </body>
-    </html>
+        
+      <!-- 内容部分end -->
+      
+      <footer>
+        <!-- markstart -->
+        <div class="article-mark">
+            </div>
+            <include file="public@footer" page="article"/>
+        </body>
+</html>

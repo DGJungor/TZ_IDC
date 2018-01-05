@@ -24,7 +24,7 @@
                             <slides id="$top_slide_id" item="slidesItem">
                                 <div class="item {$slidesItem.list_order==1?'active':''}">
                                     <a href="{$slidesItem.url}">
-                                        <img src="{$slidesItem.image|default='/img404.jpg'}" alt="{$slidesItem.description}">
+                                        <img src="{:cmf_get_image_url($slidesItem.image)}" alt="{$slidesItem.description}">
                                     </a>
                                     <div class="carousel-caption">
                                         {$slidesItem.title|default=''|mb_substr=0,22,"utf8"}
@@ -69,7 +69,7 @@
                             <ul>
                                 <portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.last_news_category_id">
                                     <li>
-                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$widget.vars.last_news_category_id))}?id={$vo.id}&type=post">{$vo.post_title|mb_substr=0,25,"utf8"}</a>
+                                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id'],'cid'=>$vo.category_id))}?id={$vo.id}&type=post">{$vo.post_title|mb_substr=0,25,"utf8"}</a>
                                     </li>
                                 </portal:articles>
                             </ul>
@@ -87,7 +87,7 @@
                     <slides id="$ad_id" item="slidesItem">
                      <div class="ab">
                             <a href="{$slidesItem.url}">
-                                <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
+                                <img src="{:cmf_get_image_url($slidesItem.image)}" alt="{$slidesItem.title}">
                             </a>
                         </div>
                     </slides>
@@ -97,6 +97,15 @@
             
             <section class="tzidc-content-list">
                 <!-- js渲染的 -->
+                <header class="tzidc-content-list-head">
+                    <ul>
+                        <li><a href="#">云计算</a></li>
+                        <li><a href="#">大数据</a></li>
+                        <li><a href="#">CDN</a></li>
+                        <li><a href="#">网络安全</a></li>
+                        <li><a href="#">数据中心</a></li>
+                    </ul>
+                </header>
             </section>
 
         </div>
@@ -126,7 +135,7 @@
                                 <slides id="$ad_id" item="slidesItem">
                                         <div class="top">
                                             <a href="{$slidesItem.url}">
-                                                    <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
+                                                    <img src="{:cmf_get_image_url($slidesItem.image)}" alt="{$slidesItem.title}">
                                             </a>
                                             
                                         </div>
@@ -210,7 +219,7 @@
                         <slides id="$ad_id" item="slidesItem">
                                 <div class="ab">
                                     <a href="{$slidesItem.url}">
-                                            <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
+                                            <img src="{:cmf_get_image_url($slidesItem.image)}" alt="{$slidesItem.title}">
                                     </a>
                                     
                                 </div>
@@ -271,7 +280,7 @@
                 <slides id="$ad_id" item="slidesItem">
                         <div class="ab">
                             <a href="{$slidesItem.url}">
-                                    <img src="{$slidesItem.image}" alt="{$slidesItem.title}">
+                                    <img src="{:cmf_get_image_url($slidesItem.image)}" alt="{$slidesItem.title}">
                             </a>
                             
                         </div>

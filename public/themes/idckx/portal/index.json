@@ -215,7 +215,8 @@
                         "value": "",
                         "type": "text",
                         "dataSource": {
-                            "api": "portal/category/index"
+                            "api": "portal/category/index",
+                            "multi": true
                         },
                         "placeholder": "请选择分类",
                         "tip": "",

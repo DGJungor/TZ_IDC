@@ -7,17 +7,29 @@
          -->
         <div class="simple-info clearfix">
             <div class="company-logo pull-left">
-                <img src="http://t.388g.com/uploads/allimg/160711/5-160G10U313.jpg">
+                <empty name="post.more.thumbnail">
+                        <img src="http://t.388g.com/uploads/allimg/160711/5-160G10U313.jpg">
+                </empty>
+                <notempty name="post.more.thumbnail">
+                        <img src="{:cmf_get_image_url($post.more.thumbnail)}">
+                </notempty>
             </div>
             <div class="company-info pull-left">
                 <h3>{$post.post_title|default='获取失败'}</h3>
                 <ul class="server-list clearfix">
-                    <li>
-                        <a href="#">企业服务</a>
-                    </li>
-                    <li>
-                        <a href="#">媒体资讯</a>
-                    </li>
+                    <php>
+                        $serverTag = [];
+                        if($post["more"]["server"]) {
+                            $serverTag = explode(",",$post["more"]["server"]);
+                        }
+                        
+                    </php>
+                    <volist name="serverTag" id="vo">
+                            <li>
+                                <a href="javascript:;">{$vo}</a>
+                            </li>
+                    </volist>
+                   
 
                 </ul>
                 <p class="company-description">
@@ -77,12 +89,27 @@
                     <li>
                         网址：{$post.more.url|default='获取失败'}
                     </li>
+                    <php>
+                        $financing = "";
+                        if($post["more"]["financing"]&&explode("&",$post["more"]["financing"])[0]) {
+                            $financing = explode("&",$post["more"]["financing"])[0];
+                        }
+                    </php>
                     <li>
-                        融资：{$post.more.financing|default='获取失败'}
+                        融资：{$financing|default='获取失败'}
                     </li>
-                    <li class="no-key">
-                        汤臣集团|¥2000万
-                    </li>
+                    <php>
+                        $financingExt = "";
+                        if($post["more"]["financing"]&&explode("&amp;",$post["more"]["financing"])[0]) {
+                            $financingExt = explode("&amp;",$post["more"]["financing"])[1];
+                        }
+                    </php>
+                    <notempty name="financingExt">
+                            <li class="no-key">
+                                {$financingExt}
+                            </li>
+                    </notempty>
+                    
                     <li>
                         地址：{$post.more.address|default='获取失败'}
                     </li>
