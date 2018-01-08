@@ -4,7 +4,7 @@ namespace app\web\model;
 
 use think\Model;
 use think\Db;
-include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\filter.php');
+include_once(dirname(dirname(dirname(__FILE__))).'/tools/filter.php');
 class IndexModel extends Model
 {
 

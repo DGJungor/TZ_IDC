@@ -9,8 +9,8 @@ use think\Db;
 use think\Request;
 use think\Cookie;
 use think\Session;
-include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
-include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
+include_once(dirname(dirname(dirname(__FILE__))).'/tools/ajaxEcho.php');
+include_once(dirname(dirname(dirname(__FILE__))).'/tools/cookie_session.php');
 class IndexController extends HomeBaseController
 {
     /**
