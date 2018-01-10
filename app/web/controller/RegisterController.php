@@ -7,6 +7,7 @@
 namespace app\web\controller;
 
 use cmf\controller\HomeBaseController;
+use think\Loader;
 use think\Validate;
 use app\web\model\UserModel;
 
@@ -18,8 +19,11 @@ class RegisterController extends HomeBaseController
 		//判断是否开放注册
 		$isOpenRegistration = cmf_is_open_registration();
 
+		$validate = Loader::validate('Register');
+
+
 		//测试数据
-		dump($isOpenRegistration);
+
 	}
 
 	public function doRegister()
