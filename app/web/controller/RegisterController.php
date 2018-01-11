@@ -22,7 +22,18 @@ class RegisterController extends HomeBaseController
 		$validate = Loader::validate('Register');
 
 
-		//测试数据
+		$data = [
+//			'' =>
+			'name'  => 'thinkphp',
+			'email' => 'thinkphpqqcom'
+		];
+
+		$info  = $validate->check($data);
+		$info2 = $validate->getError();
+
+			//测试数据
+			dump($info2);
+
 
 	}
 
@@ -37,7 +48,6 @@ class RegisterController extends HomeBaseController
 			//若未开放注册则抛出错误
 			if ($isOpenRegistration) {
 				$data = $this->request->post();
-
 
 
 			} else {
