@@ -1,6 +1,6 @@
 <?php
 
-namespace app\web\validate;
+namespace app\user\validate;
 
 use think\Validate;
 
@@ -16,11 +16,11 @@ class RegisterValidate extends Validate
 {
 
 	protected $rule = [
-//		'username' => 'require|alphaDash|min:4|max:16',
-//		'nickname' => 'require',
+		'username' => 'require|alphaDash|min:4|max:16',
+		'nickname' => 'require',
 		'email'    => 'require|email',
-//		'mobile'   => 'require|length:1,11',
-//		'password' => 'require|min:6|max:16|alphaDash'
+		'mobile'   => 'require|length:1,11',
+		'password' => 'require|min:6|max:16|alphaDash'
 	];
 
 	protected $message = [
