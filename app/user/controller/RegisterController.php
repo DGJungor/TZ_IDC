@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\user\controller;
 
+use app\tools\controller\UserTokenController;
 use cmf\controller\HomeBaseController;
 use think\Loader;
 use think\Validate;
@@ -21,28 +22,10 @@ class RegisterController extends HomeBaseController
 
 	public function test()
 	{
-		//判断是否开放注册
-		$isOpenRegistration = cmf_is_open_registration();
+		$userTokenC =  new UserTokenController();
+		$info = $userTokenC->byTokenGetUser('4ba2b13b9c0a7fbec74060f0de804e405aedb66740c385422c34b7ec7b2172a6');
 
-		$registerValidate = Loader::validate('Register');
-
-		$ajaxTools = new AjaxController();
-
-//		$info3 = $ajaxTools->ajaxEcho('11111');
-
-		$data = [
-			'username' => 'z568171152',
-			'nickname' => 'JUN',
-			'mobile'   => '15812816866',
-			'password' => 'zhangjun',
-
-		];
-
-		$info  = $validate->check($data);
-		$info2 = $validate->getError();
-
-		//测试数据
-		dump($info3);
+		dump($info);
 
 
 	}
@@ -102,6 +85,7 @@ class RegisterController extends HomeBaseController
 						}
 
 					} else {
+						$resultInfo = $registerValidate->getError();
 						$info = $ajaxTools->ajaxEcho(null, $resultInfo, 0);
 						return $info;
 					}
