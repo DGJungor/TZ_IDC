@@ -18,7 +18,7 @@ class RegisterValidate extends Validate
 	protected $rule = [
 		'username' => 'require|alphaDash|min:4|max:16',
 		'nickname' => 'require',
-		'email'    => 'require|email',
+//		'email'    => 'require|email',
 		'mobile'   => 'require|length:1,11',
 		'password' => 'require|min:6|max:16|alphaDash'
 	];

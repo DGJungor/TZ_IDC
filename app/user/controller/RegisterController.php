@@ -11,8 +11,10 @@
 namespace app\user\controller;
 
 use cmf\controller\HomeBaseController;
+use think\Loader;
 use think\Validate;
 use app\user\model\UserModel;
+use app\tools\controller\AjaxController;
 
 class RegisterController extends HomeBaseController
 {
@@ -22,20 +24,25 @@ class RegisterController extends HomeBaseController
 		//判断是否开放注册
 		$isOpenRegistration = cmf_is_open_registration();
 
-		$validate = Loader::validate('Register');
+		$registerValidate = Loader::validate('Register');
 
-		$ajaxEcho = new AjaxController();
+		$ajaxTools = new AjaxController();
+
+//		$info3 = $ajaxTools->ajaxEcho('11111');
 
 		$data = [
-//			'name'  => 'thinkphp',
-'email' => 'thinkphp@qq.com'
+			'username' => 'z568171152',
+			'nickname' => 'JUN',
+			'mobile'   => '15812816866',
+			'password' => 'zhangjun',
+
 		];
 
 		$info  = $validate->check($data);
 		$info2 = $validate->getError();
 
 		//测试数据
-		dump($info2);
+		dump($info3);
 
 
 	}
@@ -53,6 +60,10 @@ class RegisterController extends HomeBaseController
 	 */
 	public function doRegister()
 	{
+
+		//实例化ajax工具
+		$ajaxTools = new AjaxController();
+
 		//判断是否接收到参数
 		if ($this->request->isPost()) {
 
@@ -61,15 +72,39 @@ class RegisterController extends HomeBaseController
 
 			//若未开放注册则抛出错误
 			if ($isOpenRegistration) {
+
+				//获取注册表单的数据(POST)
 				$data = $this->request->post();
 
+				//判断两次输入的密码是否一致
+				if (trim($data['password']) == trim($data['repassword'])) {
+
+					//加载注册验证规则 并执行验证  返回结果
+					$registerValidate = Loader::validate('Register');
+					$result           = $registerValidate->check($data);
+
+					//根据结果  若正确则执行添加数据库操作 错误则返回错误信息
+					if ($result) {
+
+
+					} else {
+						$resultInfo = $registerValidate->getError();
+						$info       = $ajaxTools->ajaxEcho(null, $resultInfo, 0);
+						return $info;
+					}
+
+				} else {
+					$info = $ajaxTools->ajaxEcho(null, '两次输入的密码不一致', 0);
+					return $info;
+				}
 
 			} else {
-				$this->error("网站未开放注册");
+				$info = $ajaxTools->ajaxEcho(null, '网站未开放注册', 0);
+				return $info;
 			}
-
 		} else {
-			$this->error("请求错误");
+			$info = $ajaxTools->ajaxEcho(null, '错误请求', 0);
+			return $info;
 		}
 	}
 
