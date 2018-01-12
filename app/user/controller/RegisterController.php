@@ -85,11 +85,24 @@ class RegisterController extends HomeBaseController
 
 					//根据结果  若正确则执行添加数据库操作 错误则返回错误信息
 					if ($result) {
+						//实例化 用户模型
+						$userModel = new UserModel();
 
+						//判断账户名是否存在
+						if (is_null($userModel->existUserLogin($data['username']))) {
+							$result = $userModel->addUser($data);
+							if ($result) {
+								$info = $ajaxTools->ajaxEcho(null, '注册成功', 1);
+								return $info;
+							}
+
+						} else {
+							$info = $ajaxTools->ajaxEcho(null, '账户名已存在', 0);
+							return $info;
+						}
 
 					} else {
-						$resultInfo = $registerValidate->getError();
-						$info       = $ajaxTools->ajaxEcho(null, $resultInfo, 0);
+						$info = $ajaxTools->ajaxEcho(null, $resultInfo, 0);
 						return $info;
 					}
 
