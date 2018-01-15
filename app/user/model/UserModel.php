@@ -367,4 +367,25 @@ class UserModel extends Model
 
 		return $result;
 	}
+
+
+	/**
+	 * 根据用户的登录
+	 *
+	 * @author 张俊
+	 * @param $username
+	 * @return array|false|\PDOStatement|string|Model
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 *
+	 */
+	public function  queryUser($username)
+	{
+		$result = $this
+			->where('user_login',$username)
+			->find();
+
+		return $result;
+	}
 }
