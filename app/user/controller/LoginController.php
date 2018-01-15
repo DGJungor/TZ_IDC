@@ -16,6 +16,7 @@ use think\Validate;
 use cmf\controller\HomeBaseController;
 use app\user\model\UserModel;
 use app\tools\controller\AjaxController;
+use app\user\model\UserTokenModel;
 
 class LoginController extends HomeBaseController
 {
@@ -52,9 +53,8 @@ class LoginController extends HomeBaseController
 	 */
 	public function doLogin()
 	{
-		//实例化ajax工具
+		//实例化
 		$ajaxTools = new AjaxController();
-
 		$userModel = new UserModel();
 
 		//判断是否接收到参数
@@ -69,8 +69,19 @@ class LoginController extends HomeBaseController
 
 			switch ($log) {
 				case 0:
+					$userTokenModel = new UserTokenModel();
 					cmf_user_action('login');
+
+					//生成token 并保存token值
+					$token = $this->request->token('__token__',Session('user.id'));
+
+					//根据自动登录 修改过期时间
+
+					$res = $userTokenModel->addUserTokenData(Session('user.id'),$token);
+
+
 					dump(Session('user'));
+					dump($res);
 					$info = $ajaxTools->ajaxEcho(null, '登录成功', 0);
 					return $info;
 					break;
