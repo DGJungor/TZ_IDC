@@ -30,4 +30,6 @@ class UserTokenModel extends Model
 
 		return $result;
 	}
+
+
 }
