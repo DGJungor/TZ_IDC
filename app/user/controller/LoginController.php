@@ -21,7 +21,10 @@ use app\user\model\UserTokenModel;
 class LoginController extends HomeBaseController
 {
 
-
+	/**
+	 *
+	 * 测试方法
+	 */
 	public function test()
 	{
 		$data = $this->request->Post();
@@ -33,6 +36,58 @@ class LoginController extends HomeBaseController
 		dump($pa);
 	}
 
+
+	/**
+	 * 判断前台用户是否已登录
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 *
+	 */
+	public function isLogin()
+	{
+		//实例化
+		$ajaxTools = new AjaxController();
+
+
+		//判断session中是否存在用户信息
+		if (Session("user")) {
+			if (Session('user.expire_time') > time()) {
+				//拼装返回数据
+				$data = [
+					'id'  => Session("user.id"),
+					'img' => Session("user.avatar"),
+				];
+				$info = $ajaxTools->ajaxEcho($data, '已登录', 5000);
+				return $info;
+			} else {
+				$info = $ajaxTools->ajaxEcho(null, '登录过期', 5000);
+				return $info;
+			}
+		} else {
+			$info = $ajaxTools->ajaxEcho(null, '未登录', 5000);
+			return $info;
+		}
+	}
+
+
+	/**
+	 * 退出登录
+	 * @author 张俊
+	 * @return \think\response\Redirect
+	 *
+	 */
+	public function outLogin()
+	{
+		//实例化
+		$ajaxTools = new AjaxController();
+
+		//清空session中的信息
+		Session('user', null);
+		$info = $ajaxTools->ajaxEcho(null, '未登录', 5000);
+		return redirect($this->request->root() . "/");
+
+	}
 
 	/**
 	 * @return \think\response\Json
@@ -80,14 +135,12 @@ class LoginController extends HomeBaseController
 					//根据自动登录 修改过期时间 (7天自动登录  604800)
 					if ($this->request->post('Autologon') == 1) {
 						$res = $userTokenModel->addUserTokenData(Session('user.id'), $token, 604800);
+						Session('user.expire_time', time() + 604800);
 					} else {
-						$res = $userTokenModel->addUserTokenData(Session('user.id'), $token);
+						$res = $userTokenModel->addUserTokenData(Session('user.id'), $token, 3600);
+						Session('user.expire_time', time() + 3600);
 					}
-
-//					dump(Session('user'));
-//					dump($res);
-//					dump(Session::get());
-
+					
 					//拼装返回的数据数组
 					$resData = [
 						"id"     => Session('user.id'),
@@ -119,7 +172,7 @@ class LoginController extends HomeBaseController
 			$info = $ajaxTools->ajaxEcho(null, '错误请求', 0);
 			return $info;
 		}
-		
+
 	}
 
 
