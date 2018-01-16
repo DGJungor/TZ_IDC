@@ -11,7 +11,9 @@
 namespace app\user\controller;
 
 use app\tools\controller\UserTokenController;
+use app\user\model\UserExtensionModel;
 use cmf\controller\HomeBaseController;
+use think\Db;
 use think\Loader;
 use think\Validate;
 use app\user\model\UserModel;
@@ -22,8 +24,8 @@ class RegisterController extends HomeBaseController
 
 	public function test()
 	{
-		$userTokenC =  new UserTokenController();
-		$info = $userTokenC->byTokenGetUser('4ba2b13b9c0a7fbec74060f0de804e405aedb66740c385422c34b7ec7b2172a6');
+		$userTokenC = new UserTokenController();
+		$info       = $userTokenC->byTokenGetUser('4ba2b13b9c0a7fbec74060f0de804e405aedb66740c385422c34b7ec7b2172a6');
 
 		dump($info);
 
@@ -69,13 +71,29 @@ class RegisterController extends HomeBaseController
 					//根据结果  若正确则执行添加数据库操作 错误则返回错误信息
 					if ($result) {
 						//实例化 用户模型
-						$userModel = new UserModel();
+						$userModel          = new UserModel();
+						$userExtensionModel = new UserExtensionModel();
 
 						//判断账户名是否存在
 						if (is_null($userModel->existUserLogin($data['username']))) {
-							$result = $userModel->addUser($data);
-							if ($result) {
+
+							//开启事务处理
+							Db::startTrans();
+							//添加用户表 表信息
+							$addUserId = $userModel->addUser($data);
+							//添加用户扩展表信息
+							$addUserExtensionId = $userExtensionModel->addUserExtension($addUserId);
+
+							//判断是否都添加成功
+							if ($addUserId && $addUserExtensionId) {
+								//提交事务
+								Db::commit();
 								$info = $ajaxTools->ajaxEcho(null, '注册成功', 1);
+								return $info;
+							} else {
+								//回滚事务
+								Db::rollback();
+								$info = $ajaxTools->ajaxEcho(null, '注册失败', 0);
 								return $info;
 							}
 
@@ -86,7 +104,7 @@ class RegisterController extends HomeBaseController
 
 					} else {
 						$resultInfo = $registerValidate->getError();
-						$info = $ajaxTools->ajaxEcho(null, $resultInfo, 0);
+						$info       = $ajaxTools->ajaxEcho(null, $resultInfo, 0);
 						return $info;
 					}
 

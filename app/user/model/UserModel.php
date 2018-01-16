@@ -342,7 +342,7 @@ class UserModel extends Model
 			->data($createData)
 			->save();
 
-		return $result;
+		return $this->id;
 
 
 	}

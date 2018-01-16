@@ -22,4 +22,13 @@ use app\user\model\UserTokenModel;
 class MemberController extends UserBaseController
 {
 
+
+
+	public function getMemberData()
+	{
+
+
+	}
+
+
 }
