@@ -65,24 +65,37 @@ class LoginController extends HomeBaseController
 				'user_login' => $this->request->post('username'),
 				'user_pass'  => $this->request->post('password'),
 			];
-			$log = $userModel->doName($user);
+			$log  = $userModel->doName($user);
 
 			switch ($log) {
 				case 0:
 					$userTokenModel = new UserTokenModel();
+
+					//写入登录信息
 					cmf_user_action('login');
 
 					//生成token 并保存token值
-					$token = $this->request->token('__token__',Session('user.id'));
+					$token = $this->request->token('__token__', Session('user.id'));
 
-					//根据自动登录 修改过期时间
+					//根据自动登录 修改过期时间 (7天自动登录  604800)
+					if ($this->request->post('Autologon') == 1) {
+						$res = $userTokenModel->addUserTokenData(Session('user.id'), $token, 604800);
+					} else {
+						$res = $userTokenModel->addUserTokenData(Session('user.id'), $token);
+					}
 
-					$res = $userTokenModel->addUserTokenData(Session('user.id'),$token);
+//					dump(Session('user'));
+//					dump($res);
+//					dump(Session::get());
 
+					//拼装返回的数据数组
+					$resData = [
+						"id"     => Session('user.id'),
+						"avatar" => Session('user.avatar'),
+						"token"  => $token,
+					];
 
-					dump(Session('user'));
-					dump($res);
-					$info = $ajaxTools->ajaxEcho(null, '登录成功', 0);
+					$info = $ajaxTools->ajaxEcho($resData, '登录成功', 0);
 					return $info;
 					break;
 				case 1:
