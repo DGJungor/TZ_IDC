@@ -119,61 +119,7 @@ class LoginController extends HomeBaseController
 			$info = $ajaxTools->ajaxEcho(null, '错误请求', 0);
 			return $info;
 		}
-
-
-//===============================================旧======================================================================
-
-//		//判断是否接收到参数
-//		if ($this->request->isPost()) {
-//
-//			//获取前端传来的参数
-//			$data = $this->request->post();
-//
-//			//加载注册验证规则 并执行验证  返回结果
-//			$loginValidate = Loader::validate('Login');
-//			$result        = $loginValidate->check($data);
-//
-//			//根据验证的结果   进行相关操作或者返回相关信息
-//			if ($result) {
-//				//实例化 用户模型
-//				$userModel = new UserModel();
-//
-//				//根据输入的登录账号  查询账号信息
-//				$userData = $userModel->queryUser($data['username']);
-//
-//				//验证输入的账号是否存在
-//				if (!is_null($userData)) {
-//
-//					//验证密码是否正确
-//					if (cmf_compare_password($data['password'], $userData['user_pass'])) {
-//						dump('正确');
-//						dump();
-//						dump(Session::get());
-//
-//					} else {
-//						$info = $ajaxTools->ajaxEcho(null, '密码错误', 0);
-//						return $info;
-//					}
-//
-//
-//				} else {
-//					$info = $ajaxTools->ajaxEcho(null, '账号不存在', 0);
-//					return $info;
-//				}
-//
-//			} else {
-//				$resultInfo = $loginValidate->getError();
-//				$info       = $ajaxTools->ajaxEcho(null, $resultInfo, 0);
-//				return $info;
-//			}
-//
-//		} else {
-//			$info = $ajaxTools->ajaxEcho(null, '错误请求', 0);
-//			return $info;
-//
-//		}
-
-
+		
 	}
 
 
