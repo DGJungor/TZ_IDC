@@ -34,4 +34,24 @@ class UserExtensionModel extends Model
 		return $this->id;
 	}
 
+	/**
+	 * 根据用户id  查询用户扩展表数据
+	 *
+	 * @param null $userId
+	 * @return array|false|\PDOStatement|string|Model
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 *
+	 */
+	public function getUserExtension($userId = null)
+	{
+
+		$result = $this
+			->where('user_id', $userId)
+			->find();
+
+		return $result;
+	}
+
 }
