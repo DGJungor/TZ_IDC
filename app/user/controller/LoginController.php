@@ -58,7 +58,7 @@ class LoginController extends HomeBaseController
 					'id'  => Session("user.id"),
 					'img' => Session("user.avatar"),
 				];
-				$info = $ajaxTools->ajaxEcho($data, '已登录', 5000);
+				$info = $ajaxTools->ajaxEcho($data, '已登录', 1);
 				return $info;
 			} else {
 				$info = $ajaxTools->ajaxEcho(null, '登录过期', 5000);
@@ -90,10 +90,10 @@ class LoginController extends HomeBaseController
 	}
 
 	/**
+	 * 登录操作
+	 *
+	 * @author 张俊
 	 * @return \think\response\Json
-	 *
-	 *
-	 *
 	 *
 	 * 登录框
 	 * 接口名称：user/login/dologin
@@ -140,7 +140,7 @@ class LoginController extends HomeBaseController
 						$res = $userTokenModel->addUserTokenData(Session('user.id'), $token, 3600);
 						Session('user.expire_time', time() + 3600);
 					}
-					
+
 					//拼装返回的数据数组
 					$resData = [
 						"id"     => Session('user.id'),
@@ -148,7 +148,7 @@ class LoginController extends HomeBaseController
 						"token"  => $token,
 					];
 
-					$info = $ajaxTools->ajaxEcho($resData, '登录成功', 0);
+					$info = $ajaxTools->ajaxEcho($resData, '登录成功', 1);
 					return $info;
 					break;
 				case 1:
