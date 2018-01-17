@@ -11,7 +11,9 @@
 namespace app\user\controller;
 
 use app\user\model\UserExtensionModel;
+use app\user\model\PortalPostModel;
 use cmf\controller\UserBaseController;
+use think\Cache;
 use think\Loader;
 use think\Session;
 use think\Validate;
@@ -91,7 +93,7 @@ class MemberController extends UserBaseController
 
 		//获取用户id
 		$userId = cmf_get_current_user_id();
-		
+
 		//将需要修改的数据拼装成数组
 		$userData          = [
 			'user_email'    => $this->request->post('mailbox'),
@@ -109,15 +111,79 @@ class MemberController extends UserBaseController
 		$userExtensionRes = $userExtensionModel->setUserExtension($userId, $userExtensionData);
 		$userUserRes      = $userModel->setUser($userId, $userData);
 
+		$info = $ajaxTools->ajaxEcho(null, '已修改', 1);
+		return $info;
+
+//		dump($userExtensionRes);
+//		dump($userUserRes);
 		//判断是否修改成功
-		if ($userExtensionRes && $userUserRes) {
-			$info = $ajaxTools->ajaxEcho(null, '成功', 1);
-			return $info;
-		} else {
-			$info = $ajaxTools->ajaxEcho(null, '失败', 0);
-			return $info;
+//		if ($userExtensionRes && $userUserRes) {
+//			$info = $ajaxTools->ajaxEcho(null, '成功', 1);
+//			return $info;
+//		} else {
+//			$info = $ajaxTools->ajaxEcho(null, '失败', 0);
+//			return $info;
+//		}
+
+	}
+
+	/**
+	 * 获取用户发布的文章
+	 *
+	 * 接口地址：user/Member/getArticle
+	 * 参数：无
+	 * 请求类型：GET
+	 * 返回参数：
+	 *         Array类型 [
+	 *              {aid,title,status,comment_count,link}
+	 *              {aid,title,status,comment_count,link}
+	 *          ]
+	 *          aid是文章ID
+	 *          title：是文章标题
+	 *          status：是文章状态
+	 *          comment_count：文章评论数量
+	 *          link：文章链接  (cmf_url('portal/Article/index',['id'=>1]))
+	 *
+	 */
+	public function getArticle()
+	{
+		//实例化ajax工具
+		$ajaxTools = new AjaxController();
+
+
+		//获取用户ID
+		$userId = cmf_get_current_user_id();
+
+		//-----------------------------测试数据
+//		$userId = 1;
+
+		//实例化模型
+		$potalPostModel = new PortalPostModel();
+
+		//根据用户id  获取用户的文章信息
+		$result = $potalPostModel->getUserArticle($userId);
+
+		foreach ($result as $value => $item) {
+//			echo $item;
+			$data[$value]['aid']           = $item['id'];
+			$data[$value]['title']         = $item['post_title'];
+			$data[$value]['status']        = $item['post_status'];
+			$data[$value]['comment_count'] = $item['comment_count'];
+			$data[$value]['link']          = cmf_url('portal/Article/index', ['id' => $item['id']]);
 		}
 
+
+		$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
+		return $info;
+
+//		dump($data);
+
+//		$test = $potalPostModel->
+
+//		return  $test;
+
+
+//		dump(Cache::get('name'));
 	}
 
 }
