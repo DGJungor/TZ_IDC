@@ -380,11 +380,29 @@ class UserModel extends Model
 	 * @throws \think\exception\DbException
 	 *
 	 */
-	public function  queryUser($username)
+	public function queryUser($username)
 	{
 		$result = $this
-			->where('user_login',$username)
+			->where('user_login', $username)
 			->find();
+
+		return $result;
+	}
+
+
+	/**
+	 * 根据用户ID数据  修改个人信息
+	 *
+	 * @param      $userId
+	 * @param null $data
+	 * @return false|int
+	 *
+	 */
+	public function setUser($userId, $data = null)
+	{
+
+		//修改用户信息
+		$result = $this->save($data, ['id' => $userId]);
 
 		return $result;
 	}

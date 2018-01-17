@@ -85,10 +85,39 @@ class MemberController extends UserBaseController
 		//实例化ajax工具
 		$ajaxTools = new AjaxController();
 
-		$info = $ajaxTools->ajaxEcho(null, '成功', 1);
-		return $info;
+		//实例化模型
+		$userModel          = new UserModel();
+		$userExtensionModel = new UserExtensionModel();
+
+		//获取用户id
+		$userId = cmf_get_current_user_id();
+		
+		//将需要修改的数据拼装成数组
+		$userData          = [
+			'user_email'    => $this->request->post('mailbox'),
+			'mobile'        => $this->request->post('phone'),
+			'user_nickname' => $this->request->post('nickname'),
+		];
+		$userExtensionData = [
+			'user_truename' => $this->request->post('name'),
+			'weibo'         => $this->request->post('weibo'),
+			'wechat'        => $this->request->post('mailbox'),
+			'qq'            => $this->request->post('mailbox'),
+		];
+
+		//修改数据库中的数据
+		$userExtensionRes = $userExtensionModel->setUserExtension($userId, $userExtensionData);
+		$userUserRes      = $userModel->setUser($userId, $userData);
+
+		//判断是否修改成功
+		if ($userExtensionRes && $userUserRes) {
+			$info = $ajaxTools->ajaxEcho(null, '成功', 1);
+			return $info;
+		} else {
+			$info = $ajaxTools->ajaxEcho(null, '失败', 0);
+			return $info;
+		}
 
 	}
-
 
 }

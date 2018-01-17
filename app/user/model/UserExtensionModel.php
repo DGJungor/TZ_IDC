@@ -54,4 +54,20 @@ class UserExtensionModel extends Model
 		return $result;
 	}
 
+	/**
+	 * 根据用户ID与数据  修改用户个人信息
+	 *
+	 * @param      $userId
+	 * @param null $data
+	 * @return false|int
+	 */
+	public function setUserExtension($userId, $data = null)
+	{
+
+		//修改用户信息
+		$result = $this->save($data, ['user_id' => $userId]);
+
+		return $result;
+	}
+
 }
