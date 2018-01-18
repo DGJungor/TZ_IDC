@@ -12,6 +12,7 @@ namespace app\user\controller;
 
 use app\user\model\UserExtensionModel;
 use app\user\model\PortalPostModel;
+use app\user\model\UserFavoriteModel;
 use cmf\controller\UserBaseController;
 use think\Cache;
 use think\Loader;
@@ -115,7 +116,7 @@ class MemberController extends UserBaseController
 
 		$info = $ajaxTools->ajaxEcho(null, '已修改', 1);
 		return $info;
-		
+
 	}
 
 	/**
@@ -178,5 +179,39 @@ class MemberController extends UserBaseController
 
 	}
 
+	/**
+	 * 获取用户收藏的文章
+	 *
+	 * 接口地址：user/Member/getCollection
+	 * 参数：无
+	 * 请求类型：GET
+	 * 返回参数：
+	 *          Array类型 [
+	 *              {title,date,link}
+	 *          ]
+	 *          title：是文章标题
+	 *          date:文章收藏时间
+	 *          link：文章链接
+	 */
+	public function getCollection()
+	{
+
+		//实例化ajax工具
+		$ajaxTools = new AjaxController();
+
+		//实例化收藏模型
+		$userFavoriteModel = new UserFavoriteModel();
+
+		//获取用户ID
+		$userId = cmf_get_current_user_id();
+		dump($userId);
+
+		//获取收藏文章信息
+		$postData = $userFavoriteModel->getUserFavorite();
+
+		dump($postData);
+
+
+	}
 
 }
