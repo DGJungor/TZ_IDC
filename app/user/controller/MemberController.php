@@ -69,9 +69,11 @@ class MemberController extends UserBaseController
 		return $info;
 	}
 
-
 	/**
 	 * 编辑用户信息
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
 	 * 接口地址：user/Member/setMemberData
 	 * 参数：
 	 *      nickname用户昵称
@@ -80,7 +82,7 @@ class MemberController extends UserBaseController
 	 *      name用户名称（真实姓名）
 	 *      weChat用户微信
 	 *      phone用户手机号码
-	 *      qq用户QQ
+	 *
 	 */
 	public function setMemberData()
 	{
@@ -113,22 +115,17 @@ class MemberController extends UserBaseController
 
 		$info = $ajaxTools->ajaxEcho(null, '已修改', 1);
 		return $info;
-
-//		dump($userExtensionRes);
-//		dump($userUserRes);
-		//判断是否修改成功
-//		if ($userExtensionRes && $userUserRes) {
-//			$info = $ajaxTools->ajaxEcho(null, '成功', 1);
-//			return $info;
-//		} else {
-//			$info = $ajaxTools->ajaxEcho(null, '失败', 0);
-//			return $info;
-//		}
-
+		
 	}
 
 	/**
 	 * 获取用户发布的文章
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
 	 *
 	 * 接口地址：user/Member/getArticle
 	 * 参数：无
@@ -150,32 +147,27 @@ class MemberController extends UserBaseController
 		//实例化ajax工具
 		$ajaxTools = new AjaxController();
 
-
 		//获取用户ID
 		$userId = cmf_get_current_user_id();
-
-		//-----------------------------测试数据
-//		$userId = 1;
 
 		//实例化模型
 		$potalPostModel = new PortalPostModel();
 
 		//根据用户id  获取用户的文章信息
 		$result = $potalPostModel->getUserArticle($userId);
-//		dump($result);
 
 		//判断用户有文章数据
 		if (!empty($result[0])) {
 
 			//重新拼装成新数组
 			foreach ($result as $value => $item) {
-//			echo $item;
 				$data[$value]['aid']           = $item['id'];
 				$data[$value]['title']         = $item['post_title'];
 				$data[$value]['status']        = $item['post_status'];
 				$data[$value]['comment_count'] = $item['comment_count'];
 				$data[$value]['link']          = cmf_url('portal/Article/index', ['id' => $item['id']]);
 			}
+
 			$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
 			return $info;
 		} else {
@@ -183,7 +175,8 @@ class MemberController extends UserBaseController
 			$info = $ajaxTools->ajaxEcho(null, '无文章信息', 0);
 			return $info;
 		}
-		
+
 	}
+
 
 }
