@@ -162,28 +162,28 @@ class MemberController extends UserBaseController
 
 		//根据用户id  获取用户的文章信息
 		$result = $potalPostModel->getUserArticle($userId);
+//		dump($result);
 
-		foreach ($result as $value => $item) {
+		//判断用户有文章数据
+		if (!empty($result[0])) {
+
+			//重新拼装成新数组
+			foreach ($result as $value => $item) {
 //			echo $item;
-			$data[$value]['aid']           = $item['id'];
-			$data[$value]['title']         = $item['post_title'];
-			$data[$value]['status']        = $item['post_status'];
-			$data[$value]['comment_count'] = $item['comment_count'];
-			$data[$value]['link']          = cmf_url('portal/Article/index', ['id' => $item['id']]);
+				$data[$value]['aid']           = $item['id'];
+				$data[$value]['title']         = $item['post_title'];
+				$data[$value]['status']        = $item['post_status'];
+				$data[$value]['comment_count'] = $item['comment_count'];
+				$data[$value]['link']          = cmf_url('portal/Article/index', ['id' => $item['id']]);
+			}
+			$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
+			return $info;
+		} else {
+
+			$info = $ajaxTools->ajaxEcho(null, '无文章信息', 0);
+			return $info;
 		}
-
-
-		$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
-		return $info;
-
-//		dump($data);
-
-//		$test = $potalPostModel->
-
-//		return  $test;
-
-
-//		dump(Cache::get('name'));
+		
 	}
 
 }
