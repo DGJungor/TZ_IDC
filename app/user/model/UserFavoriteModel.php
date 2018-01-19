@@ -54,6 +54,7 @@ class UserFavoriteModel extends Model
 		//获取文章数据
 		$postData = $this
 			->where('user_id', $userId)
+//			->where('table_name', 'user_favorite')
 			->limit($limit)
 			->select();
 

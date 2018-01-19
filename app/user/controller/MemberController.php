@@ -178,9 +178,15 @@ class MemberController extends UserBaseController
 		}
 
 	}
-
+	
 	/**
-	 * 获取用户收藏的文章
+	 *获取用户收藏的文章
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
 	 *
 	 * 接口地址：user/Member/getCollection
 	 * 参数：无
@@ -202,14 +208,25 @@ class MemberController extends UserBaseController
 		//实例化收藏模型
 		$userFavoriteModel = new UserFavoriteModel();
 
-		//获取用户ID
-		$userId = cmf_get_current_user_id();
-		dump($userId);
-
 		//获取收藏文章信息
 		$postData = $userFavoriteModel->getUserFavorite();
 
-		dump($postData);
+		if (!empty($postData[0])) {
+
+			//重新拼装成新数组
+			foreach ($postData as $value => $item) {
+				$data[$value]['title'] = $item['title'];
+				$data[$value]['date']  = $item['create_time'];
+				$data[$value]['link']  = cmf_url('portal/Article/index', ['id' => $item['object_id']]);
+			}
+
+			$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
+			return $info;
+		} else {
+
+			$info = $ajaxTools->ajaxEcho(null, '无文章信息', 0);
+			return $info;
+		}
 
 
 	}
