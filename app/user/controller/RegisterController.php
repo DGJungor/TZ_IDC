@@ -24,10 +24,10 @@ class RegisterController extends HomeBaseController
 
 	public function test()
 	{
-		$userTokenC = new UserTokenController();
-		$info       = $userTokenC->byTokenGetUser('4ba2b13b9c0a7fbec74060f0de804e405aedb66740c385422c34b7ec7b2172a6');
 
-		dump($info);
+
+		$test =  cmf_get_root();
+		dump($test);
 
 
 	}

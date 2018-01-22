@@ -336,6 +336,7 @@ class UserModel extends Model
 			'mobile'        => $data['mobile'],
 			'user_nickname' => $data['nickname'],
 			'user_status'   => $userStatus,
+			'avatar'        =>'/avatar.jpg',
 		];
 
 		$result = $this

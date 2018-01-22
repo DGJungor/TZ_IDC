@@ -36,6 +36,19 @@ class MemberController extends UserBaseController
 	 * @throws \think\db\exception\ModelNotFoundException
 	 * @throws \think\exception\DbException
 	 *
+	 * 接口地址：user/Member/getMemberData
+	 * 参数：
+	 *     无
+	 * 返回参数
+	 *      id用户ID
+	 *      avatar用户头像
+	 *      user_nickname用户昵称
+	 *      user_name用户账号
+	 *      microblog用户微博
+	 *      user_email用户邮箱
+	 *      user_truename真实姓名
+	 *      mobile用户手机号码
+	 *      qq用户QQ号码
 	 */
 	public function getMemberData()
 	{
@@ -43,23 +56,26 @@ class MemberController extends UserBaseController
 		//实例化ajax工具
 		$ajaxTools = new AjaxController();
 
-		//实例化用户扩展表模型
+		//实例化模型
 		$userExtensionModel = new UserExtensionModel();
+		$userModel          = new UserModel();
 
 		//从session 中获取用户ID
 		$userId = Session('user.id');
 
-		//根据用户ID 查询扩展信息
+		//根据用户ID 查询用户信息
+		$userData          = $userModel->get($userId);
 		$userExtensionData = $userExtensionModel->getUserExtension($userId);
 
 		//拼装数据
 		$data = [
+
 			'id'            => $userId,
-			'avatar'        => Session('user.avatar'),
-			'user_nickname' => Session('user.user_nickname'),
-			'user_name'     => Session('user.user_login'),
-			'user_email'    => Session('user.user_email'),
-			'mobile'        => Session('user.mobile'),
+			'avatar'        => $userData['avatar'],
+			'user_nickname' => $userData['user_nickname'],
+			'user_name'     => $userData['user_login'],
+			'user_email'    => $userData['user_email'],
+			'mobile'        => $userData['mobile'],
 			'microblog'     => $userExtensionData['weibo'],
 			'user_truename' => $userExtensionData['user_truename'],
 			'qq'            => $userExtensionData['qq'],
@@ -108,8 +124,9 @@ class MemberController extends UserBaseController
 			'user_truename' => $this->request->post('name'),
 			'weibo'         => $this->request->post('weibo'),
 			'wechat'        => $this->request->post('weChat'),
-			'qq'            => $this->request->post('mailbox'),
+			'qq'            => $this->request->post('qq'),
 		];
+
 
 		//修改数据库中的数据
 		$userExtensionRes = $userExtensionModel->setUserExtension($userId, $userExtensionData);
@@ -231,6 +248,7 @@ class MemberController extends UserBaseController
 
 	}
 
+
 	/**
 	 * 修改密码
 	 *
@@ -244,6 +262,13 @@ class MemberController extends UserBaseController
 	 */
 	public function changePassword()
 	{
+		//实例化ajax工具
+		$ajaxTools = new AjaxController();
+
+		$userData = cmf_get_current_user();
+
+		//实例化模型
+		$userModel = new UserModel();
 
 
 	}
