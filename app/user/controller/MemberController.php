@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\user\controller;
 
+use app\user\model\PortalCategoryPostModel;
 use app\user\model\UserExtensionModel;
 use app\user\model\PortalPostModel;
 use app\user\model\UserFavoriteModel;
@@ -170,7 +171,8 @@ class MemberController extends UserBaseController
 		$userId = cmf_get_current_user_id();
 
 		//实例化模型
-		$potalPostModel = new PortalPostModel();
+		$potalPostModel         = new PortalPostModel();
+		$potalCategoryPostModel = new PortalCategoryPostModel();
 
 		//根据用户id  获取用户的文章信息
 		$result = $potalPostModel->getUserArticle($userId);
@@ -184,7 +186,10 @@ class MemberController extends UserBaseController
 				$data[$value]['title']         = $item['post_title'];
 				$data[$value]['status']        = $item['post_status'];
 				$data[$value]['comment_count'] = $item['comment_count'];
-				$data[$value]['link']          = cmf_url('portal/Article/index', ['id' => $item['id']]);
+				$data[$value]['link']          = cmf_url('portal/Article/index', [
+					'id'  => $item['id'],
+					'cid' => $potalCategoryPostModel->getCategoryId($item['id']),
+				]);
 			}
 
 			$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
@@ -223,9 +228,10 @@ class MemberController extends UserBaseController
 		//实例化ajax工具
 		$ajaxTools = new AjaxController();
 
-		//实例化收藏模型
-		$userFavoriteModel = new UserFavoriteModel();
-
+		//实例化模型
+		$userFavoriteModel      = new UserFavoriteModel();
+		$potalCategoryPostModel = new PortalCategoryPostModel();
+		
 		//获取收藏文章信息
 		$postData = $userFavoriteModel->getUserFavorite();
 
@@ -235,7 +241,10 @@ class MemberController extends UserBaseController
 			foreach ($postData as $value => $item) {
 				$data[$value]['title'] = $item['title'];
 				$data[$value]['date']  = $item['create_time'];
-				$data[$value]['link']  = cmf_url('portal/Article/index', ['id' => $item['object_id']]);
+				$data[$value]['link']  = cmf_url('portal/Article/index', [
+					'id'  => $item['object_id'],
+					'cid' => $potalCategoryPostModel->getCategoryId($item['object_id']),
+				]);
 			}
 
 			$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
@@ -267,9 +276,14 @@ class MemberController extends UserBaseController
 
 		$userData = cmf_get_current_user();
 
+//		dump($userData);
+
 		//实例化模型
 		$userModel = new UserModel();
 
+		$testModel = new PortalCategoryPostModel();
+
+		dump($testModel->getCategoryId());
 
 	}
 

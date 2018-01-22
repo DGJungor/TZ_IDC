@@ -30,4 +30,6 @@ class PortalPostModel extends Model
 		return $postData;
 	}
 
+
+
 }
