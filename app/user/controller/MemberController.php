@@ -63,6 +63,7 @@ class MemberController extends UserBaseController
 			'microblog'     => $userExtensionData['weibo'],
 			'user_truename' => $userExtensionData['user_truename'],
 			'qq'            => $userExtensionData['qq'],
+			'weChat'        => $userExtensionData['wechat']
 		];
 
 		//返回数据
@@ -106,7 +107,7 @@ class MemberController extends UserBaseController
 		$userExtensionData = [
 			'user_truename' => $this->request->post('name'),
 			'weibo'         => $this->request->post('weibo'),
-			'wechat'        => $this->request->post('mailbox'),
+			'wechat'        => $this->request->post('weChat'),
 			'qq'            => $this->request->post('mailbox'),
 		];
 
@@ -178,7 +179,7 @@ class MemberController extends UserBaseController
 		}
 
 	}
-	
+
 	/**
 	 *获取用户收藏的文章
 	 *
@@ -227,6 +228,22 @@ class MemberController extends UserBaseController
 			$info = $ajaxTools->ajaxEcho(null, '无文章信息', 0);
 			return $info;
 		}
+
+	}
+
+	/**
+	 * 修改密码
+	 *
+	 * 接口地址：user/Member/changePassword
+	 * 参数：
+	 *      id用户ID（这个可以不用）
+	 *      oldPassword用户旧密码
+	 *      password用户新设置的密码
+	 * 返回参数：
+	 *          更改成成功状态即可
+	 */
+	public function changePassword()
+	{
 
 
 	}
