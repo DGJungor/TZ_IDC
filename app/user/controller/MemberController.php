@@ -231,7 +231,7 @@ class MemberController extends UserBaseController
 		//实例化模型
 		$userFavoriteModel      = new UserFavoriteModel();
 		$potalCategoryPostModel = new PortalCategoryPostModel();
-		
+
 		//获取收藏文章信息
 		$postData = $userFavoriteModel->getUserFavorite();
 
@@ -274,16 +274,25 @@ class MemberController extends UserBaseController
 		//实例化ajax工具
 		$ajaxTools = new AjaxController();
 
+		//实例化模型
+		$userModel = new UserModel();
+
 		$userData = cmf_get_current_user();
 
-//		dump($userData);
+
+		$test = hash("sha1","zhangjun");
+		$test2 = hash_algos();
+		dump($test2);
 
 		//实例化模型
 		$userModel = new UserModel();
 
-		$testModel = new PortalCategoryPostModel();
+		$changePasswordValidate = Loader::validate('ChangePassword');
+//		dump($changePasswordValidate);
 
-		dump($testModel->getCategoryId());
+//		$result                 = $registerValidate->check($data);
+
+//		$resultInfo = $registerValidate->getError();
 
 	}
 

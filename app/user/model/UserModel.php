@@ -392,7 +392,7 @@ class UserModel extends Model
 
 
 	/**
-	 * 根据用户ID数据  修改个人信息
+	 * 根据用户ID数据  修改个人数据
 	 *
 	 * @param      $userId
 	 * @param null $data
