@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\portal\controller;
 
+use app\portal\model\UserFavoriteModel;
 use cmf\controller\HomeBaseController;
 use app\portal\model\PortalCategoryModel;
 use app\portal\service\PostService;
@@ -180,7 +181,7 @@ tpl;
 	{
 		$this->checkUserLogin();
 		$articleId = $this->request->param('id', 0, 'intval');
-		$canLike = cmf_check_user_action("posts$articleId", 1);
+		$canLike   = cmf_check_user_action("posts$articleId", 1);
 
 		//获取用户登录ID
 		$userId = cmf_get_current_user_id();
@@ -195,7 +196,41 @@ tpl;
 		}
 	}
 
-	public function testDoLike()
+	/**
+	 * 接口地址：user/Article/collection
+	 * 请求类型：post
+	 * 参数：
+	 *      id  文章ID
+	 *      type 文章类型就是那个（post和user）user代表用户的文章，post代表系统发布的文章
+	 * 返回参数：
+	 *  空数组，状态必须为1
+	 *
+	 */
+	public function collection()
+	{
+
+		//实例化模型
+		$portalPostModel   = new PortalPostModel();
+		$userFavoriteModel = new UserFavoriteModel();
+
+		//接收参数
+		$data = $this->request->param();
+
+		//获取文章数据
+		$postData = $portalPostModel->get($data['id']);
+
+//		dump($postData);
+
+//		$data = $userFavoriteModel->addUserFavorite();
+
+//		$data = $this->request->param();
+
+//		dump($data);
+
+	}
+
+
+	public function test()
 	{
 
 	}
