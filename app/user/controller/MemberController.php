@@ -259,7 +259,13 @@ class MemberController extends UserBaseController
 
 
 	/**
-	 * 修改密码
+	 * 前台用户 修改密码
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
 	 *
 	 * 接口地址：user/Member/changePassword
 	 * 参数：
@@ -277,22 +283,38 @@ class MemberController extends UserBaseController
 		//实例化模型
 		$userModel = new UserModel();
 
-		$userData = cmf_get_current_user();
+		//获取用户信息
+		$userData = $userModel->where('id', cmf_get_current_user_id())->find();
 
+		//获取接收到的数据信息
+		$data = $this->request->param();
 
-		$test = hash("sha1","zhangjun");
-		$test2 = hash_algos();
-		dump($test2);
-
-		//实例化模型
-		$userModel = new UserModel();
-
+		//生成验证器
 		$changePasswordValidate = Loader::validate('ChangePassword');
-//		dump($changePasswordValidate);
 
-//		$result                 = $registerValidate->check($data);
+		//验证新密码规则是否正确
+		if ($changePasswordValidate->check($data)) {
 
-//		$resultInfo = $registerValidate->getError();
+			//判断原密码是否正确
+			if (cmf_compare_password($data['oldPassword'], $userData['user_pass'])) {
+				//修改密码并判断是否成功
+				if ($userModel->changePassword($data['password'])) {
+					$info = $ajaxTools->ajaxEcho(null, '修改成功', 1);
+					return $info;
+				} else {
+					$info = $ajaxTools->ajaxEcho(null, '修改失败', 0);
+					return $info;
+				}
+			} else {
+				$info = $ajaxTools->ajaxEcho(null, '原密码错误', 0);
+				return $info;
+			}
+
+		} else {
+			$validateResultInfo = $changePasswordValidate->getError();
+			$info               = $ajaxTools->ajaxEcho(null, $validateResultInfo, 0);
+			return $info;
+		}
 
 	}
 

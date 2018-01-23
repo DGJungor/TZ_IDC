@@ -336,7 +336,7 @@ class UserModel extends Model
 			'mobile'        => $data['mobile'],
 			'user_nickname' => $data['nickname'],
 			'user_status'   => $userStatus,
-			'avatar'        =>'/avatar.jpg',
+			'avatar'        => '/avatar.jpg',
 		];
 
 		$result = $this
@@ -404,6 +404,26 @@ class UserModel extends Model
 
 		//修改用户信息
 		$result = $this->save($data, ['id' => $userId]);
+
+		return $result;
+	}
+
+
+	/**
+	 * 修改当前用户密码
+	 *
+	 * @param $newPassword
+	 * @return false|int
+	 *
+	 */
+	public function changePassword($newPassword)
+	{
+
+		$userId = cmf_get_current_user_id();
+
+		$result = $this->save([
+			'user_pass' => cmf_password($newPassword)
+		], ['id' => $userId]);
 
 		return $result;
 	}

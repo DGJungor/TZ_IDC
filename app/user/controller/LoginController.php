@@ -179,8 +179,7 @@ class LoginController extends HomeBaseController
 	/**
 	 * 登录
 	 */
-	public
-	function index()
+	public function index()
 	{
 		$redirect = $this->request->post("redirect");
 		if (empty($redirect)) {
@@ -199,8 +198,7 @@ class LoginController extends HomeBaseController
 	/**
 	 * 登录验证提交
 	 */
-	public
-	function doLoginCmf()
+	public function doLoginCmf()
 	{
 		if ($this->request->isPost()) {
 			$validate = new Validate([
@@ -264,8 +262,7 @@ class LoginController extends HomeBaseController
 	/**
 	 * 找回密码
 	 */
-	public
-	function findPassword()
+	public function findPassword()
 	{
 		return $this->fetch('/find_password');
 	}
@@ -273,8 +270,7 @@ class LoginController extends HomeBaseController
 	/**
 	 * 用户密码重置
 	 */
-	public
-	function passwordReset()
+	public function passwordReset()
 	{
 
 		if ($this->request->isPost()) {
