@@ -27,13 +27,13 @@ class LoginController extends HomeBaseController
 	 */
 	public function test()
 	{
-		$data = $this->request->Post();
 
-		$pa = cmf_password($data['password']);
+		$userTokenMode = new UserTokenModel();
+
+		$data = $userTokenMode->clearExpireToken();
 
 		dump($data);
 
-		dump($pa);
 	}
 
 
@@ -76,6 +76,7 @@ class LoginController extends HomeBaseController
 	 * @author 张俊
 	 * @return \think\response\Redirect
 	 *
+	 * 成功退出登录返回 状态码5000
 	 */
 	public function outLogin()
 	{
@@ -84,8 +85,13 @@ class LoginController extends HomeBaseController
 
 		//清空session中的信息
 		Session('user', null);
-		$info = $ajaxTools->ajaxEcho(null, '未登录', 5000);
-		return redirect($this->request->root() . "/");
+		$data = [
+			'url' => '/',
+		];
+
+		//返回信息
+		$info = $ajaxTools->ajaxEcho($data, '已退出登录', 5000);
+		return $info;
 
 	}
 
@@ -147,6 +153,9 @@ class LoginController extends HomeBaseController
 						"avatar" => Session('user.avatar'),
 						"token"  => $token,
 					];
+
+					//清理过期Token
+					$userTokenModel->clearExpireToken();
 
 					$info = $ajaxTools->ajaxEcho($resData, '登录成功', 1);
 					return $info;
