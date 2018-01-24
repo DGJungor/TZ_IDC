@@ -11,6 +11,7 @@
 namespace app\portal\controller;
 
 use app\portal\model\UserFavoriteModel;
+use app\tools\controller\AjaxController;
 use cmf\controller\HomeBaseController;
 use app\portal\model\PortalCategoryModel;
 use app\portal\service\PostService;
@@ -209,6 +210,9 @@ tpl;
 	public function collection()
 	{
 
+		//实例化工具
+		$ajaxTools = new AjaxController();
+
 		//实例化模型
 		$portalPostModel   = new PortalPostModel();
 		$userFavoriteModel = new UserFavoriteModel();
@@ -216,16 +220,47 @@ tpl;
 		//接收参数
 		$data = $this->request->param();
 
+		//获取用户ID
+		$userId = cmf_get_current_user_id();
+
 		//获取文章数据
 		$postData = $portalPostModel->get($data['id']);
 
-//		dump($postData);
+		//查询收藏表收藏中是否已存在
+		$examineFavorite = $userFavoriteModel->queryFavoriteExist($userId, $postData['id']);
 
-//		$data = $userFavoriteModel->addUserFavorite();
+		//根据结果执行下一步
+		if (!$examineFavorite) {
 
-//		$data = $this->request->param();
+			//不存在,执行收藏
+			//重新拼装数组
+			$addData = [
+				'user_id'     => $userId,
+				'title'       => $postData['post_title'],
+				'description' => $postData['post_excerpt'],
+				'table_name'  => 'portal_post',
+				'object_id'   => $postData['id'],
+				'type'        => $data['type'],
+				'create_time' => time(),
+			];
 
-//		dump($data);
+			//向添加收藏模型中发送数据
+			$addResult = $userFavoriteModel->addUserFavorite($addData);
+
+			//判断是否添加成功
+			if ($addResult) {
+				$info = $ajaxTools->ajaxEcho(null, '收藏成功', 1);
+				return $info;
+			} else {
+				$info = $ajaxTools->ajaxEcho(null, '收藏失败', 0);
+				return $info;
+			}
+
+		} else {
+			//文章已经存在
+			$info = $ajaxTools->ajaxEcho(null, '已经收藏过喇', 0);
+			return $info;
+		}
 
 	}
 

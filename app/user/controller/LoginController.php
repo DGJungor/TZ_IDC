@@ -90,7 +90,7 @@ class LoginController extends HomeBaseController
 		];
 
 		//返回信息
-		$info = $ajaxTools->ajaxEcho($data, '已退出登录', 5000);
+		$info = $ajaxTools->ajaxEcho($data, '已退出登录', 1);
 		return $info;
 
 	}
