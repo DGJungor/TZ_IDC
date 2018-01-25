@@ -66,6 +66,7 @@ class ArticleController extends UserBaseController
 			$addData = [
 				'user_id'     => $userId,
 				'title'       => $postData['post_title'],
+				'url'         => "?id=" . $postData['id'] . "&type=" . $data['type'],
 				'description' => $postData['post_excerpt'],
 				'table_name'  => 'portal_post',
 				'object_id'   => $postData['id'],

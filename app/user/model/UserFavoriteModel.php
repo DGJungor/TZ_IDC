@@ -97,4 +97,27 @@ class UserFavoriteModel extends Model
 		return $result;
 	}
 
+
+	/**
+	 *删除用户收藏的文章
+	 *
+	 * @author 张俊
+	 * @param        $objectId
+	 * @param string $tableName
+	 * @return int
+	 *
+	 */
+	public function delUserFavorite($objectId, $tableName = 'portal_post')
+	{
+
+		//执行删除
+		$result = $this
+			->where('user_id', cmf_get_current_user_id())
+//			->where('table_name', $tableName)
+			->where('object_id', $objectId)
+			->delete();
+
+		return $result;
+	}
+
 }

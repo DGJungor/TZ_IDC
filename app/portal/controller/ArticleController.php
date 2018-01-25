@@ -11,6 +11,7 @@
 namespace app\portal\controller;
 
 use app\portal\model\UserFavoriteModel;
+use app\portal\model\UserLikeLogModel;
 use app\tools\controller\AjaxController;
 use cmf\controller\HomeBaseController;
 use app\portal\model\PortalCategoryModel;
@@ -180,6 +181,9 @@ tpl;
 	 */
 	public function doLike()
 	{
+		//实例化
+		$userLikeLogModel = new UserLikeLogModel();
+
 		$this->checkUserLogin();
 		$articleId = $this->request->param('id', 0, 'intval');
 		$canLike   = cmf_check_user_action("posts$articleId", 1);
@@ -187,6 +191,8 @@ tpl;
 		//获取用户登录ID
 		$userId = cmf_get_current_user_id();
 
+		//添加点赞记录
+		$addUserLikeLogResult = $userLikeLogModel->addUserLikeLog($userId, $articleId);
 
 		if ($canLike) {
 			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_like');
@@ -200,6 +206,11 @@ tpl;
 
 	public function test()
 	{
+		$userLikeLogModel = new UserLikeLogModel();
+
+		$testInfo = $userLikeLogModel->addUserLikeLog(11, 2);
+
+		dump($testInfo);
 
 	}
 }

@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\user\controller;
 
+use app\user\model\PortalCategoryModel;
 use app\user\model\PortalCategoryPostModel;
 use app\user\model\UserExtensionModel;
 use app\user\model\PortalPostModel;
@@ -235,10 +236,12 @@ class MemberController extends UserBaseController
 		//获取收藏文章信息
 		$postData = $userFavoriteModel->getUserFavorite();
 
+		//判断用户有无收藏列表
 		if (!empty($postData[0])) {
 
 			//重新拼装成新数组
 			foreach ($postData as $value => $item) {
+				$data[$value]['id']    = $item['object_id'];
 				$data[$value]['title'] = $item['title'];
 				$data[$value]['date']  = $item['create_time'];
 				$data[$value]['link']  = cmf_url('portal/Article/index', [
@@ -257,6 +260,43 @@ class MemberController extends UserBaseController
 
 	}
 
+
+	/**
+	 * 删除用户收藏的文章
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 *
+	 * 接口地址：user/Member/delCollection
+	 * 参数：
+	 *     id
+	 * 返回参数
+	 *       无（状态设为1成功即可）
+	 */
+	public function delCollection()
+	{
+		//实例化ajax工具
+		$ajaxTools = new AjaxController();
+
+		//实例化模型
+		$userFavoriteModel = new UserFavoriteModel();
+
+		//获取需要删除的文章ID
+		$delPostId = $this->request->param('id');
+
+		//执行删操作
+		$delResult = $userFavoriteModel->delUserFavorite($delPostId);
+
+		//判断是否删除成功
+		if ($delResult) {
+			$info = $ajaxTools->ajaxEcho(null, '删除成功', 1);
+		} else {
+			$info = $ajaxTools->ajaxEcho(null, '删除失败', 0);
+		}
+
+		return $info;
+
+	}
 
 	/**
 	 * 前台用户 修改密码
@@ -315,6 +355,84 @@ class MemberController extends UserBaseController
 			$info               = $ajaxTools->ajaxEcho(null, $validateResultInfo, 0);
 			return $info;
 		}
+
+	}
+
+
+	/**
+	 * 获取栏目信息
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 *
+	 * 接口地址：user/Member/getCategory
+	 * 参数：
+	 *      name栏目名称（暂时只会传IDC新闻，后期需要弄成后台能设置可用户发布的栏目）
+	 *      sub是否有下级栏目  1是   0不是
+	 * 返回参数
+	 *      Array类型 [
+	 *          {id,name}
+	 *      ]
+	 *      id栏目ID
+	 *      name栏目名称
+	 */
+	public function getCategory()
+	{
+
+		//实例化Ajax工具
+		$ajaxTools = new AjaxController();
+
+		//实例化模型
+		$portalCategoryModel = new PortalCategoryModel();
+
+		//获取参数
+		$data = $this->request->param();
+
+		//获取主栏目数据 并重新拼装成新数组
+		$categoryData = $portalCategoryModel->getCategoryByName($data['name']);
+
+		//根据是否为下级栏目作出不同的的操作
+		switch ($data['sub']) {
+
+			//1有下级栏目  返回下级栏目
+			case 1:
+
+				//根据父栏目获取 下级栏目信息
+				$categoryData = $portalCategoryModel->getCategoryByParentId($categoryData['id']);
+
+				//根据需要的数据拼装数组
+				foreach ($categoryData as $value => $item) {
+					$result[$value]['id']   = $item['id'];
+					$result[$value]['name'] = $item['name'];
+				}
+
+				$info = $ajaxTools->ajaxEcho($result, '成功', 1);
+				return $info;
+
+				break;
+
+			//0无下级栏目  返回当前栏目信息
+			case 0:
+
+				$result[] = [
+					'id'   => $categoryData['id'],
+					'name' => $categoryData['name'],
+				];
+
+				$info = $ajaxTools->ajaxEcho($result, '成功', 1);
+				return $info;
+
+				break;
+
+			//错误请求请求
+			default:
+				$info = $ajaxTools->ajaxEcho(null, '错误请求', 0);
+				return $info;
+		}
+
 
 	}
 
