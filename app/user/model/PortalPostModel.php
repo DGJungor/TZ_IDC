@@ -7,9 +7,11 @@ use think\Model;
 
 class PortalPostModel extends Model
 {
+	//开始时间戳
+	protected $autoWriteTimestamp = true;
 
 	/**
-	 * 获取用户发布的文章
+	 * 根据用户id获取用户发布的文章
 	 *
 	 * @param $userId
 	 * @return false|\PDOStatement|string|\think\Collection
@@ -30,6 +32,16 @@ class PortalPostModel extends Model
 		return $postData;
 	}
 
+	/**
+	 *   用户发布文章
+	 */
+	public function postArticle($postData)
+	{
+
+		$this->data($postData)->save();
+
+		return $this->id;
+	}
 
 
 }

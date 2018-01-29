@@ -414,7 +414,7 @@ class MemberController extends UserBaseController
 
 				break;
 
-			//0无下级栏目  返回当前栏目信息
+			//0无下级栏目  返回当前栏目信息.
 			case 0:
 
 				$result[] = [
@@ -433,6 +433,48 @@ class MemberController extends UserBaseController
 				return $info;
 		}
 
+	}
+
+
+	/**
+	 * 接口地址：user/Member/postArticle
+	 * 参数：
+	 *      typeid栏目ID
+	 *      title文章标题
+	 *      content文章内容
+	 *      descriptions文章描述
+	 * 返回参数：
+	 *          返回成功状态即可
+	 */
+	public function postArticle()
+	{
+
+		//实例化Ajax工具
+		$ajaxTools = new AjaxController();
+
+		//实例化模型
+		$portalPostModel = new PortalPostModel();
+
+		//获取用户id
+		$userId = cmf_get_current_user_id();
+
+		//获取参数数据
+		$postData = $this->request->param();
+
+		dump($postData);
+
+		//拼装成添加文章表中的数组
+		$createPostData = [
+			'user_id'      => $userId,
+			'post_title'   => $postData['title'],
+			'post_excerpt' => $postData['descriptions'],
+			'post_content' => $postData['content'],
+			'post_status'  => 0,
+		];
+
+		dump($portalPostModel->postArticle($createPostData));
+
+		dump($createPostData);
 
 	}
 
