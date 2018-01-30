@@ -15,6 +15,7 @@ use app\user\model\PortalPostModel;
 use app\user\model\UserFavoriteModel;
 use cmf\controller\UserBaseController;
 use think\Db;
+use think\Session;
 
 class ArticleController extends UserBaseController
 {
@@ -90,6 +91,21 @@ class ArticleController extends UserBaseController
 			//文章已经存在
 			$info = $ajaxTools->ajaxEcho(null, '已经收藏过喇', 0);
 			return $info;
+		}
+
+	}
+
+
+	public function test()
+	{
+
+//		dump(Session::get('user.id'));
+		dump(Session::get('user.expire_time'));
+
+		if (time() < Session::get('user.expire_time')) {
+			echo '1';
+		} else {
+			echo '2';
 		}
 
 	}

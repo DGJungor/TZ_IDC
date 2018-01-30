@@ -25,6 +25,7 @@ class PortalPostModel extends Model
 
 		$postData = $this
 			->where('user_id', $userId)
+			->where('delete_time', 0)
 			->field('id,post_title,post_status,comment_count')
 			->limit($limit)
 			->select();
@@ -33,7 +34,7 @@ class PortalPostModel extends Model
 	}
 
 	/**
-	 *   用户发布文章
+	 *   用户发布文章  返回文章id
 	 */
 	public function postArticle($postData)
 	{

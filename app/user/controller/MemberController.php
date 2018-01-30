@@ -17,10 +17,10 @@ use app\user\model\PortalPostModel;
 use app\user\model\UserFavoriteModel;
 use cmf\controller\UserBaseController;
 use think\Cache;
+use think\Db;
 use think\Loader;
 use think\Session;
 use think\Validate;
-use cmf\controller\HomeBaseController;
 use app\user\model\UserModel;
 use app\tools\controller\AjaxController;
 use app\user\model\UserTokenModel;
@@ -437,6 +437,11 @@ class MemberController extends UserBaseController
 
 
 	/**
+	 * 用户发表文章
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 *
 	 * 接口地址：user/Member/postArticle
 	 * 参数：
 	 *      typeid栏目ID
@@ -445,6 +450,7 @@ class MemberController extends UserBaseController
 	 *      descriptions文章描述
 	 * 返回参数：
 	 *          返回成功状态即可
+	 *
 	 */
 	public function postArticle()
 	{
@@ -454,6 +460,7 @@ class MemberController extends UserBaseController
 
 		//实例化模型
 		$portalPostModel = new PortalPostModel();
+//		$portalCategoryPostModel = new PortalCategoryPostModel();
 
 		//获取用户id
 		$userId = cmf_get_current_user_id();
@@ -461,7 +468,8 @@ class MemberController extends UserBaseController
 		//获取参数数据
 		$postData = $this->request->param();
 
-		dump($postData);
+		//启动事务处理
+		Db::startTrans();
 
 		//拼装成添加文章表中的数组
 		$createPostData = [
@@ -471,11 +479,48 @@ class MemberController extends UserBaseController
 			'post_content' => $postData['content'],
 			'post_status'  => 0,
 		];
+		//添加文章信息 成功则返回一个文章ID
+		$portalId = $portalPostModel->postArticle($createPostData);
 
-		dump($portalPostModel->postArticle($createPostData));
+		//添加文章分类信息
+		$portalCategoryPost = portalCategoryPostModel::create([
+			'post_id'     => $portalId,
+			'category_id' => $postData['typeid'],
+		]);
+		//获取文章分类ID
+		$portalCategoryId = $portalCategoryPost->id;
 
-		dump($createPostData);
+		if ($portalId && $portalCategoryId) {
+			//提交事务
+			Db::commit();
+
+			$info = $ajaxTools->ajaxEcho(null, '添加成功', 1);
+			return $info;
+
+		} else {
+			//事务回滚
+			Db::rollback();
+
+			$info = $ajaxTools->ajaxEcho(null, '添加失败', 0);
+			return $info;
+		}
 
 	}
+
+
+	/**
+	 * 获取系统消息
+	 *
+	 * 接口地址：user/Member/getMessages
+	 * 参数：无
+	 * 请求类型：GET
+	 * 返回参数：
+	 *          Array类型 [
+	 *              {messages_title,date,link}
+	 *          ]
+	 *          messages_title：是信息标题
+	 *          date:  信息生成时间
+	 *          link：信息链接（可以没有链接）
+	 */
 
 }
