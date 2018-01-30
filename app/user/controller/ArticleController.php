@@ -99,14 +99,13 @@ class ArticleController extends UserBaseController
 	public function test()
 	{
 
-//		dump(Session::get('user.id'));
-		dump(Session::get('user.expire_time'));
-
-		if (time() < Session::get('user.expire_time')) {
-			echo '1';
-		} else {
-			echo '2';
-		}
-
+////		dump(Session::get('user.id'));
+//		dump(Session::get('user.expire_time'));
+//
+//		if (time() > session('user.expire_time')) {
+//			echo '已过期';
+//		} else {
+//			echo '2';
+//		}
 	}
 }
