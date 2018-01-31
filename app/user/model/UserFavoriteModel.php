@@ -46,10 +46,8 @@ class UserFavoriteModel extends Model
 	 * @throws \think\exception\DbException
 	 *
 	 */
-	public function getUserFavorite($limit = 150)
+	public function getUserFavorite($userId, $limit = 150)
 	{
-		//获取前台登录的id
-		$userId = cmf_get_current_user_id();
 
 		//获取文章数据
 		$postData = $this

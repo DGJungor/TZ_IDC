@@ -12,7 +12,10 @@
 namespace app\user\controller;
 
 use app\tools\controller\AjaxController;
+use app\user\model\PortalCategoryPostModel;
+use app\user\model\PortalPostModel;
 use app\user\model\UserExtensionModel;
+use app\user\model\UserFavoriteModel;
 use app\user\model\UserModel;
 use cmf\controller\AdminBaseController;
 use think\Db;
@@ -29,7 +32,7 @@ class AdminMemberController extends AdminBaseController
 	 * @throws \think\db\exception\ModelNotFoundException
 	 * @throws \think\exception\DbException
 	 *
-	 * 接口地址：user/AdminMember/getMemberData
+	 * 接口地址：user/Admin_Member/getMemberData
 	 * 参数：
 	 *     user_id
 	 * 返回参数
@@ -144,5 +147,132 @@ class AdminMemberController extends AdminBaseController
 		return $info;
 
 	}
+
+
+	/**
+	 * 后台管理 获取用户发布的文章
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 *
+	 * 接口地址：user/Admin_Member/getArticle
+	 * 参数：无
+	 * 请求类型：GET
+	 * 返回参数：
+	 *         Array类型 [
+	 *              {aid,title,status,comment_count,link}
+	 *              {aid,title,status,comment_count,link}
+	 *          ]
+	 *          aid是文章ID
+	 *          title：是文章标题
+	 *          status：是文章状态
+	 *          comment_count：文章评论数量
+	 *          link：文章链接  (cmf_url('portal/Article/index',['id'=>1]))
+	 *
+	 */
+	public function getArticle()
+	{
+		//实例化ajax工具
+		$ajaxTools = new AjaxController();
+
+		//获取用户ID
+		$userId = $this->request->param('user_id');
+
+		//实例化模型
+		$portalPostModel         = new PortalPostModel();
+		$portalCategoryPostModel = new PortalCategoryPostModel();
+
+		//根据用户id  获取用户的文章信息
+		$result = $portalPostModel->getUserArticle($userId);
+
+		//判断用户有文章数据
+		if (!empty($result[0])) {
+
+			//重新拼装成新数组
+			foreach ($result as $value => $item) {
+				$data[$value]['aid']           = $item['id'];
+				$data[$value]['title']         = $item['post_title'];
+				$data[$value]['status']        = $item['post_status'];
+				$data[$value]['comment_count'] = $item['comment_count'];
+				$data[$value]['link']          = cmf_url('portal/Article/index', [
+					'id'  => $item['id'],
+					'cid' => $portalCategoryPostModel->getCategoryId($item['id']),
+				]);
+			}
+
+			$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
+			return $info;
+		} else {
+
+			$info = $ajaxTools->ajaxEcho(null, '无文章信息', 0);
+			return $info;
+		}
+
+	}
+
+
+	/**
+	 * 后台管理 获取用户收藏的文章
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 *
+	 * 接口地址：user/Admin_Member/getCollection
+	 * 参数：无
+	 * 请求类型：GET
+	 * 返回参数：
+	 *          Array类型 [
+	 *              {title,date,link}
+	 *          ]
+	 *          title：是文章标题
+	 *          date:文章收藏时间
+	 *          link：文章链接
+	 */
+	public function getCollection()
+	{
+
+		//实例化ajax工具
+		$ajaxTools = new AjaxController();
+
+		//实例化模型
+		$userFavoriteModel      = new UserFavoriteModel();
+		$potalCategoryPostModel = new PortalCategoryPostModel();
+
+		//获取前台登录的id
+		$userId = $this->request->param('user_id');
+
+		//获取收藏文章信息
+		$postData = $userFavoriteModel->getUserFavorite($userId);
+
+		//判断用户有无收藏列表
+		if (!empty($postData[0])) {
+
+			//重新拼装成新数组
+			foreach ($postData as $value => $item) {
+				$data[$value]['id']    = $item['object_id'];
+				$data[$value]['title'] = $item['title'];
+				$data[$value]['date']  = $item['create_time'];
+				$data[$value]['link']  = cmf_url('portal/Article/index', [
+					'id'  => $item['object_id'],
+					'cid' => $potalCategoryPostModel->getCategoryId($item['object_id']),
+				]);
+			}
+
+			$info = $ajaxTools->ajaxEcho($data, '获取用户文章信息', 1);
+			return $info;
+		} else {
+
+			$info = $ajaxTools->ajaxEcho(null, '无文章信息', 0);
+			return $info;
+		}
+
+	}
+
 
 }

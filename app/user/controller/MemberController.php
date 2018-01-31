@@ -233,8 +233,11 @@ class MemberController extends UserBaseController
 		$userFavoriteModel      = new UserFavoriteModel();
 		$potalCategoryPostModel = new PortalCategoryPostModel();
 
+		//获取前台登录的id
+		$userId = cmf_get_current_user_id();
+
 		//获取收藏文章信息
-		$postData = $userFavoriteModel->getUserFavorite();
+		$postData = $userFavoriteModel->getUserFavorite($userId);
 
 		//判断用户有无收藏列表
 		if (!empty($postData[0])) {
