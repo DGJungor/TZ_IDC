@@ -287,8 +287,11 @@ class MemberController extends UserBaseController
 		//获取需要删除的文章ID
 		$delPostId = $this->request->param('id');
 
+		//获取用户ID
+		$userId = cmf_get_current_user_id();
+
 		//执行删操作
-		$delResult = $userFavoriteModel->delUserFavorite($delPostId);
+		$delResult = $userFavoriteModel->delUserFavorite($delPostId, $userId);
 
 		//判断是否删除成功
 		if ($delResult) {
@@ -525,6 +528,10 @@ class MemberController extends UserBaseController
 	 *          date:  信息生成时间
 	 *          link：信息链接（可以没有链接）
 	 */
+	public function getMessages()
+	{
 
+
+	}
 
 }

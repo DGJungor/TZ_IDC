@@ -105,12 +105,12 @@ class UserFavoriteModel extends Model
 	 * @return int
 	 *
 	 */
-	public function delUserFavorite($objectId, $tableName = 'portal_post')
+	public function delUserFavorite($objectId, $userId, $tableName = 'portal_post')
 	{
 
 		//执行删除
 		$result = $this
-			->where('user_id', cmf_get_current_user_id())
+			->where('user_id', $userId)
 //			->where('table_name', $tableName)
 			->where('object_id', $objectId)
 			->delete();

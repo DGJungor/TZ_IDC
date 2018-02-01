@@ -127,8 +127,10 @@ class IndexController extends HomeBaseController
 	public function friendLink()
 	{
 
-		$test = ajaxEcho(null, '123123');
-		dump($test);
+//		$test = ajaxEcho(null, '123123');
+
+
+//		dump($test);
 	}
 
 

@@ -276,4 +276,45 @@ class AdminMemberController extends AdminBaseController
 	}
 
 
+	/**
+	 * 删除用户收藏的文章
+	 *
+	 * @author 张俊
+	 * @return \think\response\Json
+	 *
+	 * 接口地址：user/Member/delCollection
+	 * 参数：
+	 *     id
+	 * 返回参数
+	 *       无（状态设为1成功即可）
+	 */
+	public function delCollection()
+	{
+		//实例化ajax工具
+		$ajaxTools = new AjaxController();
+
+		//实例化模型
+		$userFavoriteModel = new UserFavoriteModel();
+
+		//获取需要删除的文章ID
+		$delPostId = $this->request->param('id');
+
+		//获取需要删除的文章的用户ID
+		$userId = $this->request->param('user_id');
+
+		//执行删操作
+		$delResult = $userFavoriteModel->delUserFavorite($delPostId, $userId);
+
+		//判断是否删除成功
+		if ($delResult) {
+			$info = $ajaxTools->ajaxEcho(null, '删除成功', 1);
+		} else {
+			$info = $ajaxTools->ajaxEcho(null, '删除失败', 0);
+		}
+
+		return $info;
+
+	}
+
+
 }
