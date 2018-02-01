@@ -24,7 +24,7 @@ class AdminMemberController extends AdminBaseController
 {
 
 	/**
-	 * 管理员获取用户数据
+	 * 管理员 获取用户数据
 	 *
 	 * @author 张俊
 	 * @return \think\response\Json
@@ -93,12 +93,12 @@ class AdminMemberController extends AdminBaseController
 	 *
 	 * 接口地址：user/Member/setMemberData
 	 * 参数：
-	 *      nickname用户昵称
-	 *      weibo用户微博
-	 *      mailbox用户邮箱
-	 *      name用户名称（真实姓名）
+	 *      user_nickname用户昵称
+	 *      microblog用户微博
+	 *      user_email用户邮箱
+	 *      user_truename用户名称（真实姓名）
 	 *      weChat用户微信
-	 *      phone用户手机号码
+	 *      mobile用户手机号码
 	 *
 	 */
 	public function setMemberData()
@@ -115,13 +115,13 @@ class AdminMemberController extends AdminBaseController
 
 		//将需要修改的数据拼装成数组
 		$userData          = [
-			'user_email'    => $this->request->post('mailbox'),
-			'mobile'        => $this->request->post('phone'),
-			'user_nickname' => $this->request->post('nickname'),
+			'user_email'    => $this->request->post('user_email'),
+			'mobile'        => $this->request->post('mobile'),
+			'user_nickname' => $this->request->post('user_nickname'),
 		];
 		$userExtensionData = [
-			'user_truename' => $this->request->post('name'),
-			'weibo'         => $this->request->post('weibo'),
+			'user_truename' => $this->request->post('user_truename'),
+			'weibo'         => $this->request->post('microblog'),
 			'wechat'        => $this->request->post('weChat'),
 			//						'qq'            => 1231123,
 		];
@@ -197,6 +197,7 @@ class AdminMemberController extends AdminBaseController
 				$data[$value]['title']         = $item['post_title'];
 				$data[$value]['status']        = $item['post_status'];
 				$data[$value]['comment_count'] = $item['comment_count'];
+				$data[$value]['description']   = $item['post_excerpt'];
 				$data[$value]['link']          = cmf_url('portal/Article/index', [
 					'id'  => $item['id'],
 					'cid' => $portalCategoryPostModel->getCategoryId($item['id']),

@@ -26,7 +26,7 @@ class PortalPostModel extends Model
 		$postData = $this
 			->where('user_id', $userId)
 			->where('delete_time', 0)
-			->field('id,post_title,post_status,comment_count')
+			->field('id,post_title,post_status,comment_count,post_excerpt')
 			->limit($limit)
 			->select();
 
