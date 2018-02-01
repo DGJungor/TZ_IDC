@@ -4,7 +4,8 @@
 // +----------------------------------------------------------------------
 // | Author:
 // +----------------------------------------------------------------------
-namespace app\tools\controller;
+namespace app\common\controller;
+
 use cmf\controller\HomeBaseController;
 use think\Loader;
 
@@ -19,7 +20,8 @@ class AjaxController extends HomeBaseController
 	 * $info提示信息，默认是空
 	 * $code错误代码，默认是0
 	 * */
-	function ajaxEcho($data=[],$info="",$code=0) {
-		return json(["state"=>$code,"data"=>$data,"msg"=>$info]);
+	function ajaxEcho($data = [], $info = "", $code = 0)
+	{
+		return json(["state" => $code, "data" => $data, "msg" => $info]);
 	}
 }

@@ -4,7 +4,7 @@
 // +----------------------------------------------------------------------
 // | Author:
 // +----------------------------------------------------------------------
-namespace app\tools\controller;
+namespace app\common\controller;
 
 use cmf\controller\HomeBaseController;
 use think\Loader;

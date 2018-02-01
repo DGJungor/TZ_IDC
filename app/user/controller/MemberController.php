@@ -526,4 +526,5 @@ class MemberController extends UserBaseController
 	 *          link：信息链接（可以没有链接）
 	 */
 
+
 }
