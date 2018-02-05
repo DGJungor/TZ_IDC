@@ -25,11 +25,16 @@ class UserTokenModel extends Model
 	public function getUserId($token)
 	{
 		$result = $this
-			->where('token',$token)
+			->where('token', $token)
 			->find();
 
 		return $result;
 	}
 
+
+	public function test()
+	{
+		return "1";
+	}
 
 }

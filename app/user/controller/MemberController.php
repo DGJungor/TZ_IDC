@@ -479,11 +479,12 @@ class MemberController extends UserBaseController
 
 		//拼装成添加文章表中的数组
 		$createPostData = [
-			'user_id'      => $userId,
-			'post_title'   => $postData['title'],
-			'post_excerpt' => $postData['descriptions'],
-			'post_content' => $postData['content'],
-			'post_status'  => 0,
+			'user_id'        => $userId,
+			'post_title'     => $postData['title'],
+			'post_excerpt'   => $postData['descriptions'],
+			'post_content'   => $postData['content'],
+			'post_status'    => 0,
+			'published_time' => time(),
 		];
 		//添加文章信息 成功则返回一个文章ID
 		$portalId = $portalPostModel->postArticle($createPostData);
@@ -532,6 +533,11 @@ class MemberController extends UserBaseController
 	{
 
 
+		//测试发送系统消息
+		$test = idckx_message_send();
+		dump($test);
+
 	}
+
 
 }
