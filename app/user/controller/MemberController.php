@@ -56,7 +56,7 @@ class MemberController extends UserBaseController
 	{
 
 		//实例化ajax工具
-		$ajaxTools = new AjaxController();
+//		$ajaxTools = new AjaxController();
 
 		//实例化模型
 		$userExtensionModel = new UserExtensionModel();
@@ -85,8 +85,9 @@ class MemberController extends UserBaseController
 		];
 
 		//返回数据
-		$info = $ajaxTools->ajaxEcho($data, '成功获取用户信息', 1);
-		return $info;
+//		$info = $ajaxTools->ajaxEcho($data, '成功获取用户信息', 1);
+//		return $info;
+		return idckx_ajax_echo($data, '成功获取用户信息', 1);
 	}
 
 	/**
@@ -482,10 +483,11 @@ class MemberController extends UserBaseController
 			'user_id'        => $userId,
 			'post_title'     => $postData['title'],
 			'post_excerpt'   => $postData['descriptions'],
-			'post_content'   => $postData['content'],
+			'post_content'   => $portalPostModel->setPostContentAttr($postData['content']),
 			'post_status'    => 0,
 			'published_time' => time(),
 		];
+
 		//添加文章信息 成功则返回一个文章ID
 		$portalId = $portalPostModel->postArticle($createPostData);
 
@@ -516,6 +518,83 @@ class MemberController extends UserBaseController
 
 
 	/**
+	 * 前台用户删除文章
+	 *
+	 * @throws \think\Exception
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 * @throws \think\exception\PDOException
+	 *
+	 * 文章删除
+	 * @adminMenu(
+	 *     'name'   => '文章删除',
+	 *     'parent' => 'index',
+	 *     'display'=> false,
+	 *     'hasView'=> false,
+	 *     'order'  => 10000,
+	 *     'icon'   => '',
+	 *     'remark' => '文章删除',
+	 *     'param'  => ''
+	 * )
+	 * 接口改为：
+	 *        用户删除： user/Member/delete
+	 *        管理员删除：user/Admin_Member/delete
+	 *        统一返回：
+	 *                状态（state）为，1 成功，0 失败
+	 */
+	public function delete()
+	{
+		$param           = $this->request->param();
+		$portalPostModel = new PortalPostModel();
+
+		if (isset($param['id'])) {
+			$id           = $this->request->param('id', 0, 'intval');
+			$result       = $portalPostModel->where(['id' => $id])->find();
+			$data         = [
+				'object_id'   => $result['id'],
+				'create_time' => time(),
+				'table_name'  => 'portal_post',
+				'name'        => $result['post_title']
+			];
+			$resultPortal = $portalPostModel
+				->where(['id' => $id])
+				->update(['delete_time' => time()]);
+			if ($resultPortal) {
+				Db::name('portal_category_post')->where(['post_id' => $id])->update(['status' => 0]);
+				Db::name('portal_tag_post')->where(['post_id' => $id])->update(['status' => 0]);
+
+				Db::name('recycleBin')->insert($data);
+			}
+			$portalPostModel->delSlide($id);
+//			$this->success("删除成功！", '');
+			return idckx_ajax_echo(null, '删除成功', 1);
+		}
+
+		if (isset($param['ids'])) {
+			$ids     = $this->request->param('ids/a');
+			$recycle = $portalPostModel->where(['id' => ['in', $ids]])->select();
+			$result  = $portalPostModel->where(['id' => ['in', $ids]])->update(['delete_time' => time()]);
+			if ($result) {
+				foreach ($recycle as $value) {
+					$data = [
+						'object_id'   => $value['id'],
+						'create_time' => time(),
+						'table_name'  => 'portal_post',
+						'name'        => $value['post_title']
+					];
+					Db::name('recycleBin')->insert($data);
+				}
+				$portalPostModel->delSlide($id);
+//				$this->success("删除成功！", '');
+				return idckx_ajax_echo(null, '删除成功', 1);
+			}
+		}
+		return idckx_ajax_echo(null, '删除失败', 0);
+	}
+
+
+	/**
 	 * 获取系统消息
 	 *
 	 * 接口地址：user/Member/getMessages
@@ -534,8 +613,15 @@ class MemberController extends UserBaseController
 
 
 		//测试发送系统消息
-		$test = idckx_message_send();
-		dump($test);
+//		$test = idckx_message_send();
+//		dump($test);
+
+		Cache::set('name', 123, 3600);
+
+		dump(Cache::get('name'));
+
+//		Cache::store('redis')->set('name',123123);
+
 
 	}
 
