@@ -134,4 +134,17 @@ class IndexController extends HomeBaseController
 	}
 
 
+	/**
+	 * 测试控制器
+	 */
+	public function test()
+	{
+		$urls[] = "http://www.example.com/";
+
+		$res = idckx_api_baidupush($urls);
+
+		dump($res);
+	}
+
+
 }

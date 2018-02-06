@@ -29,21 +29,58 @@ function idckx_ajax_echo($data = [], $info = "", $code = 0)
 	return json(["state" => $code, "data" => $data, "msg" => $info]);
 }
 
+
 /**
- * 添加用于的系统消息
+ * 实时推送到百度  调用的是百度提供个推送api接口
+ *
+ * @author 张俊
+ * @param $urls //数组
+ * //    $urls    = array(
+ * //        'http://www.example.com/1.html',
+ * //        'http://www.example.com/2.html',
+ * //        );
+ * 推送接口
+ *
+ * 接口调用地址： http://data.zz.baidu.com/urls?site=www.idckx.com&token=rEKdIMKiU1WITWD1
+ * 参数名称    是否必选    参数类型    说明
+ * site       是        string    在搜索资源平台验证的站点，比如www.example.com
+ * token      是        string    在搜索资源平台申请的推送用的准入密钥
  */
-function idckx_message_send()
+function idckx_api_baidupush($urls)
 {
-	$test = new \app\common\model\DemoModel();
+//	$urls    = array(
+//		'http://www.example.com/1.html',
+//		'http://www.example.com/2.html',
+//	);
+	$api     = 'http://data.zz.baidu.com/urls?site=www.idckx.com&token=rEKdIMKiU1WITWD1';
+	$ch      = curl_init();
+	$options = array(
+		CURLOPT_URL            => $api,
+		CURLOPT_POST           => true,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_POSTFIELDS     => implode("\n", $urls),
+		CURLOPT_HTTPHEADER     => array('Content-Type: text/plain'),
+	);
+	curl_setopt_array($ch, $options);
+	$result = curl_exec($ch);
+	echo $result;
+}
 
-	$test2 = new \app\common\controller\SystemMessageController();
+/**
+ *
+ * @return \think\response\Json
+ */
+function linkUrl()
+{
 
-//	$resTest1 = $test2->idckx_message_send();
+	$cid = $this->request->param('cid', 0, 'intval');
 
-	$resTest2 = $test->demo();
+	$aid = $this->request->param('aid', 0, 'intval');
 
-	return '1';
+
+	return json(array("state" => "1", "msg" => "生成成功", "data" => cmf_url('portal/Article/index', ['id' => $aid, 'cid' => $cid])));
 
 }
+
 
 

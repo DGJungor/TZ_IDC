@@ -27,7 +27,6 @@ class MessageModel extends Model
 	{
 
 
-
 	}
 
 

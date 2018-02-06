@@ -620,9 +620,9 @@ class MemberController extends UserBaseController
 
 		dump(Cache::get('name'));
 
-//		Cache::store('redis')->set('name',123123);
+		Cache::store('redis')->set('name',123123);
 
-
+		dump(Cache::get('name'));
 	}
 
 
