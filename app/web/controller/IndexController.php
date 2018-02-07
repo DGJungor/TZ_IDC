@@ -137,13 +137,33 @@ class IndexController extends HomeBaseController
 	/**
 	 * 测试控制器
 	 */
+	/**
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
 	public function test()
 	{
-		$urls[] = "http://www.example.com/";
 
-		$res = idckx_api_baidupush($urls);
 
-		dump($res);
+//		$urls[] = "http://www.example.com/";
+
+//		$res = idckx_api_baidupush($urls);
+
+//		dump($res);
+
+
+//		dump(cmf_get_option('site_info'));
+		$pid = 21236;
+//		dump(idckx_get_category_id($pid));
+		$cid = idckx_get_category_id($pid);
+
+		$url  = cmf_url('portal/Article/index', ['id' => $pid, 'cid' => $cid]);
+		$nurl = $this->request->domain() . $url;
+		dump($nurl);
+		dump($this->request->domain());
+
+
 	}
 
 

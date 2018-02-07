@@ -7,6 +7,14 @@
 // | 自定义公共函数库
 // +----------------------------------------------------------------------
 
+use think\Config;
+use think\Db;
+use think\Url;
+use dir\Dir;
+use think\Route;
+use think\Loader;
+use think\Request;
+use cmf\lib\Storage;
 
 /**
  * IDCKC  AJAX 格式工具
@@ -41,18 +49,20 @@ function idckx_ajax_echo($data = [], $info = "", $code = 0)
  * //        );
  * 推送接口
  *
- * 接口调用地址： http://data.zz.baidu.com/urls?site=www.idckx.com&token=rEKdIMKiU1WITWD1
+ * 接口调用地址： http://data.zz.baidu.com/urls?site=www.idckx.com&token=Yy23pqlRJFkyBy0Z
  * 参数名称    是否必选    参数类型    说明
  * site       是        string    在搜索资源平台验证的站点，比如www.example.com
  * token      是        string    在搜索资源平台申请的推送用的准入密钥
  */
-function idckx_api_baidupush($urls)
+function idckx_api_baidupush($urls = array([]))
 {
+
+
 //	$urls    = array(
 //		'http://www.example.com/1.html',
 //		'http://www.example.com/2.html',
 //	);
-	$api     = 'http://data.zz.baidu.com/urls?site=www.idckx.com&token=rEKdIMKiU1WITWD1';
+	$api     = 'http://data.zz.baidu.com/urls?site=www.idckx.com&token=Yy23pqlRJFkyBy0Z';
 	$ch      = curl_init();
 	$options = array(
 		CURLOPT_URL            => $api,
@@ -63,9 +73,32 @@ function idckx_api_baidupush($urls)
 	);
 	curl_setopt_array($ch, $options);
 	$result = curl_exec($ch);
-	echo $result;
+	return $result;
 }
 
+/**
+ * 根据文章id获取文章的分类id
+ *
+ * @author 张俊
+ * @param null $portalId
+ * @return array|false|PDOStatement|string|\think\Model
+ * @throws \think\db\exception\DataNotFoundException
+ * @throws \think\db\exception\ModelNotFoundException
+ * @throws \think\exception\DbException
+ */
+function idckx_get_category_id($portalId = null)
+{
+
+	$categoryData = Db::name('portal_category_post')
+		->field('category_id')
+		->where('post_id', $portalId)
+		->find();
+
+	return $categoryData['category_id'];
+}
+
+
+//======================================================================================================================
 /**
  *
  * @return \think\response\Json
