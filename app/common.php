@@ -103,17 +103,17 @@ function idckx_get_category_id($portalId = null)
  *
  * @return \think\response\Json
  */
-function linkUrl()
-{
-
-	$cid = $this->request->param('cid', 0, 'intval');
-
-	$aid = $this->request->param('aid', 0, 'intval');
-
-
-	return json(array("state" => "1", "msg" => "生成成功", "data" => cmf_url('portal/Article/index', ['id' => $aid, 'cid' => $cid])));
-
-}
+//function linkUrl()
+//{
+//
+//	$cid = $this->request->param('cid', 0, 'intval');
+//
+//	$aid = $this->request->param('aid', 0, 'intval');
+//
+//
+//	return json(array("state" => "1", "msg" => "生成成功", "data" => cmf_url('portal/Article/index', ['id' => $aid, 'cid' => $cid])));
+//
+//}
 
 
 

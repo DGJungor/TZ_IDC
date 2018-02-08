@@ -91,9 +91,8 @@ class SitemapController extends HomeBaseController
 	/**************************************************************************/
 	function Build()
 	{
-		$s = "<?xml version='1.0' encoding='{$this->encoding}'?>\r\n";
-		$s .= "<?xml-stylesheet type='text/xsl' href='sitemap.xsl'?>";
-		$s .= "\t<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\r\n";
+		$s =null;
+		$s .= "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\r\n";
 		// items
 		for ($i = 0; $i < count($this->items); $i++) {
 			$s .= "\t\t<url>\n";
@@ -104,9 +103,27 @@ class SitemapController extends HomeBaseController
 			$s .= "\t\t</url>\n";
 		}
 		// close
-		$s             .= "\t</urlset>";
+		$s             .= "</urlset>";
 		$this->content = $s;
 	}
+//	function Build()
+//	{
+/*		$s = "<?xml version='1.0' encoding='{$this->encoding}'?>\r\n";*/
+/*		$s .= "<?xml-stylesheet type='text/xsl' href='sitemap.xsl'?>";*/
+//		$s .= "\t<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\r\n";
+//		// items
+//		for ($i = 0; $i < count($this->items); $i++) {
+//			$s .= "\t\t<url>\n";
+//			$s .= "\t\t\t<loc>{$this->items[$i]['loc']}</loc>\r\n";
+//			$s .= "\t\t\t<priority>{$this->items[$i]['priority']}</priority>\r\n";
+//			$s .= "\t\t\t<lastmod>{$this->items[$i]['lastmod']}</lastmod>\r\n";
+//			$s .= "\t\t\t<changefreq>{$this->items[$i]['changefreq']}</changefreq>\r\n";
+//			$s .= "\t\t</url>\n";
+//		}
+//		// close
+//		$s             .= "\t</urlset>";
+//		$this->content = $s;
+//	}
 
 	/**************************************************************************/
 	// 函数名: Show

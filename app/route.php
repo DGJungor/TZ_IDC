@@ -20,10 +20,6 @@ use think\Route;
 
 //Route::rule('portal/article/index','portal/article/index','GET|POST');
 
-//站点地图路由
-Route::rule([
-	'/sitemap.xml' => 'web/Index/Index'
-], '', 'GET');
 
 if (file_exists(CMF_ROOT . "data/conf/route.php")) {
 	$runtimeRoutes = include CMF_ROOT . "data/conf/route.php";

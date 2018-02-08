@@ -57,10 +57,7 @@ class BaiduPushController extends BaseController
 
 	}
 
-	/**
-	 * 批量提交
-	 *
-	 */
+
 	/**
 	 * 百度站长批量提交
 	 *    自动提交最新发布的300条文章地址
@@ -75,7 +72,7 @@ class BaiduPushController extends BaseController
 	 * @throws \think\db\exception\ModelNotFoundException
 	 * @throws \think\exception\DbException
 	 */
-	public function pushNewPortal($num = 20000)
+	public function pushNewPortal($num = 2000)
 	{
 		//获取域名
 		$domain = $this->request->domain();
