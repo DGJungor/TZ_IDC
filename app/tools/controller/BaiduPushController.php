@@ -6,6 +6,7 @@
 // +----------------------------------------------------------------------
 namespace app\tools\controller;
 
+use app\tools\model\PluginReptilePostModel;
 use cmf\controller\BaseController;
 use think\Controller;
 use think\Db;
@@ -21,6 +22,22 @@ use think\Request;
  */
 class BaiduPushController extends BaseController
 {
+
+
+	/**
+	 * 站点推送测试方法
+	 */
+	public function test()
+	{
+
+		//实例化模型
+		$pluginReptilePostModel = new PluginReptilePostModel();
+
+//		$test = $pluginReptilePostModel->queryPush(30772);
+		$test = $pluginReptilePostModel->queryPush(30772222);
+		dump($test);
+
+	}
 
 	/**
 	 * 单挑链接推送
@@ -40,6 +57,8 @@ class BaiduPushController extends BaseController
 	 */
 	public function pushOneUrl()
 	{
+		//实例化模型
+		$pluginReptilePostModel = new PluginReptilePostModel();
 
 		//获取文章id
 		$pid = $this->request->param('pid');
@@ -49,6 +68,9 @@ class BaiduPushController extends BaseController
 
 		//生成文章链接
 		$urls[] = $this->request->domain() . cmf_url('portal/Article/index', ['id' => $pid, 'cid' => $cid]);
+
+		//记录 推送
+		$pluginReptilePostModel->editPushState($pid);
 
 		//通过公共函数推送url到百度api
 		$res = idckx_api_baidupush($urls);
@@ -74,6 +96,9 @@ class BaiduPushController extends BaseController
 	 */
 	public function pushNewPortal($num = 2000)
 	{
+		//实例化模型
+		$pluginReptilePostModel = new PluginReptilePostModel();
+
 		//获取域名
 		$domain = $this->request->domain();
 
@@ -81,6 +106,7 @@ class BaiduPushController extends BaseController
 		$portalData = Db::name('portal_post')
 			->field('id,published_time')
 			->where('post_status', 1)
+			->where('delete_time', 0)
 			->order('published_time desc')
 			->limit($num)
 			->select();
@@ -89,6 +115,8 @@ class BaiduPushController extends BaseController
 		foreach ($portalData as $value => $item) {
 			$cid    = idckx_get_category_id($item['id']);
 			$urls[] = $domain . cmf_url('portal/Article/index', ['id' => $item['id'], 'cid' => $cid]);
+			//记录 推送
+			$pluginReptilePostModel->editPushState($item['id']);
 		}
 
 		//提交到百度站长接口
@@ -96,6 +124,7 @@ class BaiduPushController extends BaseController
 
 		return $res;
 	}
+
 
 	/**
 	 * 接口： /tools/Baidu_Push/pushPostPortal
@@ -116,6 +145,9 @@ class BaiduPushController extends BaseController
 	public function pushPostPortal()
 	{
 
+		//实例化模型
+		$pluginReptilePostModel = new PluginReptilePostModel();
+
 		//获取参数
 		$post_array = $this->request->param();
 
@@ -125,6 +157,9 @@ class BaiduPushController extends BaseController
 		//根据接口规则  重新拼装新数组
 		foreach ($post_array['post_array'] as $value => $item) {
 			$urls[] = $domain . cmf_url('portal/Article/index', ['id' => $item['id'], 'cid' => $item['category_id']]);
+
+			//记录 推送
+			$pluginReptilePostModel->editPushState($item['id']);
 		}
 
 		//提交到百度站长接口

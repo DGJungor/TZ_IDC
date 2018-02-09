@@ -6,6 +6,7 @@
 // +----------------------------------------------------------------------
 namespace app\tools\controller;
 
+use app\tools\model\PluginReptilePostModel;
 use cmf\controller\AdminBaseController;
 use think\Controller;
 use think\Db;
@@ -20,18 +21,14 @@ class BaiduSitemapController extends AdminBaseController
 	 */
 	public function test()
 	{
-		//实例化站点地图
-//		$sitemapModel = new SitemapController();
-//
-//		$sitemapModel->AddItem("http://www.baidu.com", 1);
-//		$sitemapModel->SaveToFile('sitemap.xml');
-//		$sitemapModel->getFile('sitemap.xml');
+
+		//实例化模型
+		$pluginReptilePost = new PluginReptilePostModel();
+
+		dump();
 
 	}
 
-	/**
-	 * 创建站点地图
-	 */
 	/**
 	 * 创建站点地图  滴入生成在public 目录下
 	 *
@@ -52,6 +49,7 @@ class BaiduSitemapController extends AdminBaseController
 		$portalData = Db::name('portal_post')
 			->field('id,published_time')
 			->where('post_status', 1)
+			->where('delete_time', 0)
 			->order('published_time desc')
 			->limit($num)
 			->select();
@@ -63,6 +61,8 @@ class BaiduSitemapController extends AdminBaseController
 			$sitemapModel->AddItem($url, 0);
 		}
 		$sitemapModel->SaveToFile('sitemap.xml');
+
+		return idckx_ajax_echo(null, '成功', 1);
 
 	}
 

@@ -9,12 +9,29 @@ class PluginReptilePostModel extends Model
 {
 
 	/**
-	 * 记录
+	 * 记录已提交
 	 */
-	public function editPushState()
+	public function editPushState($postId)
 	{
-//		$res = $this->
+
+		$res = $this
+			->where('post_id', $postId)
+			->failException(false)
+			->update([
+				'is_post' => 1,
+			]);
+
+		return $res;
+	}
+
+
+	/**
+	 * 查询表中有无字段
+	 */
+	public function queryPush($postId)
+	{
 
 	}
+
 
 }
