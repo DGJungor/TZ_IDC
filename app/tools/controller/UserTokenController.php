@@ -47,4 +47,31 @@ class UserTokenController extends HomeBaseController
 		}
 	}
 
+	/**
+	 * 添加Token
+	 *
+	 * 参数：
+	 *        openid
+	 *        access_token
+	 *        type
+	 *
+	 */
+	public function addToken()
+	{
+		//实例化模型
+		$userTokenModel = new UserTokenModel();
+
+		//获取参数
+		$par = $this->request->param();
+
+		$res = idckx_token_add($par['openid'], $par['access_token'], $par['expire_time'], $par['type']);
+
+		if ($res == 1) {
+			return idckx_ajax_echo(null, '添加成功', 1);
+		} else {
+			return idckx_ajax_echo(null, '添加失败', 0);
+		}
+
+	}
+
 }

@@ -98,6 +98,46 @@ function idckx_get_category_id($portalId = null)
 }
 
 
+/**
+ * 添加Token
+ *
+ * @author 张俊
+ * @param        $userId
+ * @param        $token
+ * @param int    $expireTime 默认过期时间  例:一小时:3600
+ * @param string $deviceType 设备类型
+ */
+function idckx_token_add($userId, $token, $expireTime = 3600, $deviceType = "web")
+{
+
+	//实例化
+	$userTokenModel = new \app\common\model\UserTokenModel();
+
+	//数据库操作
+	$res = $userTokenModel->addUserTokenData($userId, $token, $expireTime, $deviceType);
+
+	return $res;
+}
+
+
+function https_request($url, $data = null)
+{
+	$curl = curl_init();
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+	if (!empty($data)) {
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+	}
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	$output = curl_exec($curl);
+	curl_close($curl);
+	return $output;
+}
+
+
+
 //======================================================================================================================
 /**
  *
