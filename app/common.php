@@ -119,6 +119,26 @@ function idckx_token_add($userId, $token, $expireTime = 3600, $deviceType = "web
 	return $res;
 }
 
+/**
+ * 根据token 获取token相关 所有的数据
+ *
+ * @author 张俊
+ * @param $token
+ * @return array|false|PDOStatement|string|\think\Model
+ * @throws \think\db\exception\DataNotFoundException
+ * @throws \think\db\exception\ModelNotFoundException
+ * @throws \think\exception\DbException
+ */
+function idckx_token_get($token)
+{
+	//实例化
+	$userTokenModel = new \app\common\model\UserTokenModel();
+
+	//获取数据
+	$res = $userTokenModel->getTokenData($token);
+
+	return $res;
+}
 
 function https_request($url, $data = null)
 {

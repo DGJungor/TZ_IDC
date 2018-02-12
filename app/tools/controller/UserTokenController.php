@@ -74,4 +74,57 @@ class UserTokenController extends HomeBaseController
 
 	}
 
+	/**
+	 * 获取token数据
+	 *
+	 * @author 张俊
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
+	public function getTokenData()
+	{
+		//实例化模型
+		$userTokenModel = new UserTokenModel();
+
+		//获取参数 token
+		$token = $this->request->param('token');
+
+		$tokenData = idckx_token_get($token);
+
+		//判断token有没有过期  过期则删除
+		if ($tokenData['expire_time'] < time()) {
+
+
+			//已过期
+			dump('已过期');
+		} else {
+
+
+			//未过期
+			dump('未过期');
+		}
+
+		//打印变量
+		dump($tokenData['expire_time']);
+
+		dump(time());
+
+
+	}
+
+	public function test()
+	{
+		//实例化模型
+//		$userTokenModel = new UserTokenModel();
+
+		//获取token数据
+//		$data = idckx_token_get('6_5wxG7xnUx_2S_B5G2CwNHx7gp6cn6BM8tRdpiM7nKq-k9QXpY81xe1TdtGyD72uFkAHlW8_fUQ51DdCci2MD5XgP0s3gflxzd2OYf672Y5KQOiXFjzkJmy44FwmdbFiVeQnbQr0ROVtGjEN6QTZjADABEK');
+//		$data = idckx_token_get('');
+
+
+//		dump($data);
+
+	}
+
 }

@@ -22,7 +22,7 @@ class UserTokenModel extends Model
 	 * @throws \think\exception\DbException
 	 *
 	 */
-	public function getUserId($token)
+	public function getTokenData($token)
 	{
 		$result = $this
 			->where('token', $token)
