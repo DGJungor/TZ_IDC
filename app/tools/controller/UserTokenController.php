@@ -7,6 +7,7 @@
 namespace app\tools\controller;
 
 use cmf\controller\HomeBaseController;
+use think\Db;
 use think\Loader;
 use app\tools\model\UserTokenModel;
 
@@ -75,7 +76,7 @@ class UserTokenController extends HomeBaseController
 	}
 
 	/**
-	 * 获取token数据
+	 * 获取token数据  并判断有无绑定账号
 	 *
 	 * @author 张俊
 	 * @throws \think\db\exception\DataNotFoundException
@@ -88,42 +89,69 @@ class UserTokenController extends HomeBaseController
 		$userTokenModel = new UserTokenModel();
 
 		//获取参数 token
-		$token = $this->request->param('token');
+		$token      = $this->request->param('token');
+		$deviceType = $this->request->param('device_type');
 
+		//获取token数据
 		$tokenData = idckx_token_get($token);
 
 		//判断token有没有过期  过期则删除
 		if ($tokenData['expire_time'] < time()) {
 
+			//删除过期token
+			$res = $userTokenModel->destroy($tokenData['id']);
 
-			//已过期
-			dump('已过期');
+			return idckx_ajax_echo(null, 'token已过期', 0);
+
 		} else {
 
+			//根据设备类型判断有无绑定
+			switch ($deviceType) {
 
-			//未过期
-			dump('未过期');
+				//微信登录
+				case 'wx':
+					$where = 'wechat';
+					break;
+				case 'qq':
+					$where = 'qq';
+					break;
+				case 'weibo':
+					$where = 'weibo';
+					break;
+				default:
+
+					//未知类型
+//					return "未知类型";
+					break;
+			}
+
+			//查询用户有绑定
+			$userInfo = Db::name('user_extension')->where($where, $tokenData['user_id'])->find();
+
+			//判断 是否找到绑定的相关用户
+			if (empty($userInfo)) {
+
+				//空-------即没有相关绑定的账号
+				$tokenData['is_bing'] = 0;
+
+				return idckx_ajax_echo($tokenData, '无绑定', 1);
+
+			} else {
+
+				//不为空-----即有相关绑定的账号
+				$tokenData['is_bing'] = 1;
+
+				return idckx_ajax_echo($tokenData, '成功,并已绑定', 1);
+			}
+
 		}
-
-		//打印变量
-		dump($tokenData['expire_time']);
-
-		dump(time());
 
 
 	}
 
 	public function test()
 	{
-		//实例化模型
-//		$userTokenModel = new UserTokenModel();
 
-		//获取token数据
-//		$data = idckx_token_get('6_5wxG7xnUx_2S_B5G2CwNHx7gp6cn6BM8tRdpiM7nKq-k9QXpY81xe1TdtGyD72uFkAHlW8_fUQ51DdCci2MD5XgP0s3gflxzd2OYf672Y5KQOiXFjzkJmy44FwmdbFiVeQnbQr0ROVtGjEN6QTZjADABEK');
-//		$data = idckx_token_get('');
-
-
-//		dump($data);
 
 	}
 

@@ -22,14 +22,27 @@ class UserTokenModel extends Model
 	 * @throws \think\exception\DbException
 	 *
 	 */
-	public function getUserId($token)
+	public function getUserId($token = '')
 	{
 		$result = $this
-			->where('token',$token)
+			->where('token', '=', $token)
 			->find();
 
 		return $result;
 	}
 
+//	/**
+//	 * 判断有没有绑定
+//	 */
+//	public function queryBind($deviceType = '')
+//	{
+//
+////		$result = $this
+////			->
+//
+//
+//		return 'queryBind';
+//
+//	}
 
 }
