@@ -82,6 +82,10 @@ class UserTokenController extends HomeBaseController
 	 * @throws \think\db\exception\DataNotFoundException
 	 * @throws \think\db\exception\ModelNotFoundException
 	 * @throws \think\exception\DbException
+	 *
+	 * 参数:
+	 *        token            token数值
+	 *        device_type        类型
 	 */
 	public function getTokenData()
 	{

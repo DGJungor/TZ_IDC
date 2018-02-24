@@ -595,6 +595,25 @@ class MemberController extends UserBaseController
 
 
 	/**
+	 *
+	 *
+	 * 绑定第三方登录接口：user/Member/bind_user_id
+	 * 请求类型：post
+	 * 参数：
+	 * userId(要绑定的第三方平台获取到的userID)
+	 * type(要绑定的第三方平台类型，这个参数会对应idckx_user_token这个表的device_type)
+	 * 返回参数：
+	 * 成功state为1,失败state为0即可
+	 *
+	 *
+	 */
+	public function bindUserId()
+	{
+
+	}
+
+
+	/**
 	 * 获取系统消息
 	 *
 	 * 接口地址：user/Member/getMessages
@@ -620,7 +639,7 @@ class MemberController extends UserBaseController
 
 		dump(Cache::get('name'));
 
-		Cache::store('redis')->set('name',123123);
+		Cache::store('redis')->set('name', 123123);
 
 		dump(Cache::get('name'));
 	}

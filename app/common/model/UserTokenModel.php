@@ -50,6 +50,7 @@ class UserTokenModel extends Model
 
 	/**
 	 * token 储存值
+	 *
 	 * @param $data
 	 * @return int|string
 	 */
