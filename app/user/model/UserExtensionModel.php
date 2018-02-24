@@ -70,4 +70,27 @@ class UserExtensionModel extends Model
 		return $result;
 	}
 
+	/**
+	 * 前台会员 绑定第三方账号
+	 *
+	 * @param null $userId
+	 * @param null $deviceType
+	 * @param null $openId
+	 * @return false|int
+	 *
+	 */
+	public function bindUserOpenAccount($userId = null, $deviceType = null, $openId = null)
+	{
+
+//		$userData = $this->get(['user_id' => $userId]);
+
+		$res = $this->save([
+			$deviceType => $openId,
+		], ['user_id' => $userId]);
+
+
+		return $res;
+
+	}
+
 }

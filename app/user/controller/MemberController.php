@@ -597,7 +597,7 @@ class MemberController extends UserBaseController
 	/**
 	 *
 	 *
-	 * 绑定第三方登录接口：user/Member/bind_user_id
+	 * 绑定第三方登录接口：user/Member/binduserid
 	 * 请求类型：post
 	 * 参数：
 	 * userId(要绑定的第三方平台获取到的userID)
@@ -605,10 +605,54 @@ class MemberController extends UserBaseController
 	 * 返回参数：
 	 * 成功state为1,失败state为0即可
 	 *
-	 *
+	 * 类型:
+	 * type :
+	 *            weibo     :微博
+	 *            qq        :qq
+	 *            wx        :微信
 	 */
 	public function bindUserId()
 	{
+
+		//获取 第三方平台的token userId
+		$userOpenId = $this->request->param('userId');
+		//获取 绑定的第三方账号类型
+		$deviceType = $this->request->param('type');
+		//获取 当前用户登录id
+		$user['id'] = cmf_get_current_user_id();
+
+		//实例化用户扩展模型
+		$userExtensionModel = new UserExtensionModel();
+
+		//转化成  和数据库对应的  字段名名
+		switch ($deviceType) {
+			case 'wx':
+				$deviceType = 'wechat';
+				break;
+			case 'qq':
+				$deviceType = 'qq';
+				break;
+			case 'weibo':
+				$deviceType = 'weibo';
+				break;
+			default:
+				//未知类型
+				break;
+		}
+
+		//执行模型中的方法
+		$res = $userExtensionModel->bindUserOpenAccount($user['id'], $deviceType, $userOpenId);
+
+		//判断是否修改成功
+		if ($res) {
+
+			return idckx_ajax_echo(null, '绑定成功', 1);
+
+		} else {
+
+			return idckx_ajax_echo(null, '绑定失败', 0);
+		}
+
 
 	}
 
