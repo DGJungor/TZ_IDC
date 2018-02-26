@@ -119,6 +119,41 @@ function idckx_token_add($userId, $token, $expireTime = 3600, $deviceType = "web
 	return $res;
 }
 
+
+/**
+ *  删除token
+ *
+ * 根据删除条件  删除token
+ *
+ * @author 张俊
+ * @param $type 类型  1:token  2:user_id
+ * @param $par
+ */
+function idckx_token_del($type, $par)
+{
+
+	switch ($type)
+	{
+		//
+		case 1:
+
+			break;
+
+		//
+		case 2:
+
+			break;
+
+
+		//位置位置类型
+		default:
+			break;
+
+	}
+
+}
+
+
 /**
  * 根据token 获取token相关 所有的数据
  *

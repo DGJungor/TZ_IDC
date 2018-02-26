@@ -339,5 +339,16 @@ class LoginController extends HomeBaseController
 		}
 	}
 
+	/**
+	 * 第三方账号登录
+	 */
+	public function doLoginByOpenAccount()
+	{
+
+
+
+
+	}
+
 
 }
