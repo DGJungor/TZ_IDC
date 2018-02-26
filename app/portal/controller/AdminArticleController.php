@@ -45,7 +45,9 @@ class AdminArticleController extends AdminBaseController
 
         $portalCategoryModel = new PortalCategoryModel();
         $categoryTree        = $portalCategoryModel->adminCategoryTree($categoryId);
-
+        if(empty($categoryId)) {
+            $categoryId = -1;
+        }
         $this->assign('start_time', isset($param['start_time']) ? $param['start_time'] : '');
         $this->assign('end_time', isset($param['end_time']) ? $param['end_time'] : '');
         $this->assign('keyword', isset($param['keyword']) ? $param['keyword'] : '');
@@ -56,7 +58,14 @@ class AdminArticleController extends AdminBaseController
 
         return $this->fetch();
     }
-
+    /**
+     * 裁剪图片
+     */ 
+    public function cropped() {
+        $image = $this->request->param("image");
+        $this->assign("image",$image);
+        return $this->fetch();
+    }
     /**
      * 添加文章
      * @adminMenu(
@@ -74,7 +83,10 @@ class AdminArticleController extends AdminBaseController
     {
         $themeModel        = new ThemeModel();
         $articleThemeFiles = $themeModel->getActionThemeFiles('portal/Article/index');
+        $portalPostModel = new PortalPostModel();
+        $slides = $portalPostModel->findSlide();
         $this->assign('article_theme_files', $articleThemeFiles);
+        $this->assign('slides', $slides);
         return $this->fetch();
     }
 
@@ -96,13 +108,19 @@ class AdminArticleController extends AdminBaseController
         if ($this->request->isPost()) {
             $data   = $this->request->param();
             $post   = $data['post'];
+            $slide = $data["slide"];
             $result = $this->validate($post, 'AdminArticle');
             if ($result !== true) {
                 $this->error($result);
             }
 
             $portalPostModel = new PortalPostModel();
-
+            if(isset($slide)) {
+                if($slide) {
+                    $data['post']['more']["slide"] = $slide;
+                    
+                }
+            }
             if (!empty($data['photo_names']) && !empty($data['photo_urls'])) {
                 $data['post']['more']['photos'] = [];
                 foreach ($data['photo_urls'] as $key => $url) {
@@ -120,15 +138,31 @@ class AdminArticleController extends AdminBaseController
             }
 
             $portalPostModel->adminAddArticle($data['post'], $data['post']['categories']);
+            $article            = $portalPostModel->where('id', $portalPostModel->id)->find();
+            $articleCategories  = $article->categories()->alias('a')->column('a.name', 'a.id');
 
             $data['post']['id'] = $portalPostModel->id;
             $hookParam          = [
                 'is_add'  => true,
-                'article' => $data['post']
+                'article' => $data['post'],
+                'form'=> 'addPost'
             ];
             hook('portal_admin_after_save_article', $hookParam);
-
-
+            if(isset($slide)) {
+                if($slide) {
+                    $portalPostModel->setSlide([
+                        "slide_id" => $slide,
+                        "title" => $data['post']["post_title"],
+                        "image" => empty($data['post']["more"]["thumbnail"])?$data['post']['extract_img']:$data['post']["more"]["thumbnail"],
+                        "url" => cmf_url("portal/Article/index",array("id"=>$portalPostModel->id,"cid"=>array_keys($articleCategories)[0]))."?id=".$portalPostModel->id."type=post",
+                        "description"=>$data['post']["post_excerpt"],
+                        "list_order"=>$portalPostModel->id,
+                        "content"=>$data['post']["post_content"],
+                        "more"=>json_encode(array("aid"=>$portalPostModel->id))
+                    ]);
+                }
+            }
+            
             $this->success('添加成功!', url('AdminArticle/edit', ['id' => $portalPostModel->id]));
         }
 
@@ -155,14 +189,14 @@ class AdminArticleController extends AdminBaseController
         $post            = $portalPostModel->where('id', $id)->find();
         $postCategories  = $post->categories()->alias('a')->column('a.name', 'a.id');
         $postCategoryIds = implode(',', array_keys($postCategories));
-
+        $slides = $portalPostModel->findSlide();
         $themeModel        = new ThemeModel();
         $articleThemeFiles = $themeModel->getActionThemeFiles('portal/Article/index');
         $this->assign('article_theme_files', $articleThemeFiles);
         $this->assign('post', $post);
         $this->assign('post_categories', $postCategories);
         $this->assign('post_category_ids', $postCategoryIds);
-
+        $this->assign('slides', $slides);
         return $this->fetch();
     }
 
@@ -185,13 +219,20 @@ class AdminArticleController extends AdminBaseController
         if ($this->request->isPost()) {
             $data   = $this->request->param();
             $post   = $data['post'];
+            $slide = $data["slide"];
             $result = $this->validate($post, 'AdminArticle');
             if ($result !== true) {
                 $this->error($result);
             }
 
             $portalPostModel = new PortalPostModel();
-
+            if(isset($slide)) {
+                if($slide) {
+                    $data['post']['more']["slide"] = $slide;
+                }else {
+                    $data['post']['more']["slide"] = "";
+                }
+            }
             if (!empty($data['photo_names']) && !empty($data['photo_urls'])) {
                 $data['post']['more']['photos'] = [];
                 foreach ($data['photo_urls'] as $key => $url) {
@@ -207,15 +248,29 @@ class AdminArticleController extends AdminBaseController
                     array_push($data['post']['more']['files'], ["url" => $fileUrl, "name" => $data['file_names'][$key]]);
                 }
             }
-
             $portalPostModel->adminEditArticle($data['post'], $data['post']['categories']);
-
+            $article            = $portalPostModel->where('id', $data['post']["id"])->find();
+            $articleCategories  = $article->categories()->alias('a')->column('a.name', 'a.id');
             $hookParam = [
                 'is_add'  => false,
-                'article' => $data['post']
+                'article' => $data['post'],
+                'form'=> 'editPost'
             ];
             hook('portal_admin_after_save_article', $hookParam);
-
+            if(isset($slide)) {
+                if($slide) {
+                    $portalPostModel->updateSlide($data['post']["id"],[
+                        "slide_id" => $slide,
+                        "title" => $data['post']["post_title"],
+                        "image" => empty($data['post']["more"]["thumbnail"])?$data['post']['extract_img']:$data['post']["more"]["thumbnail"],
+                        "url" => cmf_url("portal/Article/index",array("id"=>$data['post']["id"],"cid"=>array_keys($articleCategories)[0]))."?id=".$data['post']["id"]."type=post",
+                        "description"=>$data['post']["post_excerpt"],
+                        "list_order"=>$data['post']["id"],
+                        "content"=>$data['post']["post_content"],
+                        "more"=>json_encode(array("aid"=>$data['post']["id"]))
+                    ]);
+                }
+            }
             $this->success('保存成功!');
 
         }
@@ -233,6 +288,11 @@ class AdminArticleController extends AdminBaseController
      *     'remark' => '文章删除',
      *     'param'  => ''
      * )
+     * 接口改为：
+     *        用户删除： user/Member/delete
+     *        管理员删除：user/Admin_Member/delete
+     *        统一返回：
+     *                状态（state）为，1 成功，0 失败
      */
     public function delete()
     {
@@ -257,6 +317,10 @@ class AdminArticleController extends AdminBaseController
 
                 Db::name('recycleBin')->insert($data);
             }
+            Db::name("plugin_reptile_post")->where(["post_id"=>$id])->update([
+                "delete_time" => time()
+            ]);
+            $portalPostModel->delSlide($id);
             $this->success("删除成功！", '');
 
         }
@@ -274,6 +338,10 @@ class AdminArticleController extends AdminBaseController
                         'name'        => $value['post_title']
                     ];
                     Db::name('recycleBin')->insert($data);
+                    Db::name("plugin_reptile_post")->where(["post_id"=>$value['id']])->update([
+                        "delete_time" => time()
+                    ]);
+                    $portalPostModel->delSlide($value['id']);
                 }
                 $this->success("删除成功！", '');
             }

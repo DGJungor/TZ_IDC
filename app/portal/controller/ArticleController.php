@@ -10,17 +10,87 @@
 // +----------------------------------------------------------------------
 namespace app\portal\controller;
 
-use app\portal\model\UserFavoriteModel;
-use app\portal\model\UserLikeLogModel;
-use app\tools\controller\AjaxController;
 use cmf\controller\HomeBaseController;
 use app\portal\model\PortalCategoryModel;
 use app\portal\service\PostService;
 use app\portal\model\PortalPostModel;
+use app\user\controller\IndexController;
 use think\Db;
 
 class ArticleController extends HomeBaseController
 {
+	// public function keywordslink() {
+	//     $page  = $this->request->param('page', 1, 'intval');
+	//     $link = [];
+	//     $tagName = [];
+	//     $test_match_count = [];
+	//     foreach($this->getPost($page,100) as $k => $v) {
+	//         $pattern = '/<a\b[^>]+\bhref="([^"]*)"[^>]*><strong>([\s\S]*?)<\/strong><\/a>/';
+	//         preg_match($pattern,$v["post_content"],$match);
+	//         if(count($match)) {
+	//             array_push($link,$match[1]);
+	//             array_push($tagName,$match[2]);
+	//             if(substr_count($match[1],"http://www.idckx.com")) {
+	//                 array_push($test_match_count,preg_replace('/<a\b[^>]+\bhref="[^"]*"[^>]*><strong>[\s\S]*?<\/strong><\/a>/',"<a href='".cmf_url('portal/List/index',['id'=>Db::name("portal_category")->where("delete_time",0)->where("name",$match[2])->find()["id"]])."'><strong>".$match[2]."</strong></a>",$v["post_content"]));
+	//             }
+	//         }
+
+	//     }
+	//     return json(array("state"=>"1","msg"=>"获取成功","data"=>[]));
+	// }
+	public function linkUrl()
+	{
+		$cid = $this->request->param('cid', 0, 'intval');
+		$aid = $this->request->param('aid', 0, 'intval');
+
+		return json(array("state" => "1", "msg" => "生成成功", "data" => cmf_url('portal/Article/index', ['id' => $aid, 'cid' => $cid])));
+	}
+	// private function setPostContent($id,$content) {
+	//     Db::name("portal_post")->where("id",$id)->update(["post_content" => $content]);
+	// }
+	// private function getPost($page,$count) {
+	//     $result = Db::name("portal_post")->where("delete_time",0)->field("id,post_content")->select();
+	//     return $result;
+	// }
+	public function publicGetUser()
+	{
+		$wgUser = cmf_get_current_user();
+		if ($wgUser) {
+			$ret = array(
+				"is_login" => 1,
+				"user"     => array(
+					"user_id"     => $wgUser["id"],
+					"nickname"    => $wgUser["user_nickname"],
+					"img_url"     => "http://183.2.242.196:3000" . $wgUser["avatar"],
+					"profile_url" => $wgUser["user_url"],
+					"sign"        => "*"
+				)
+			);
+		} else {
+			$ret = array("is_login" => 0);//未登录
+		}
+		echo $_GET['callback'] . '(' . json_encode($ret) . ')';
+	}
+
+	public function returnLogin()
+	{
+		$wgUser = cmf_get_current_user();
+		if (!$wgUser) {
+			$return = array(
+				'code'        => 1,
+				'reload_page' => 0
+			);
+		} else {
+			$index = new IndexController();
+			$index->logout();
+			$return = array(
+				'code'        => 1,
+				'reload_page' => 1
+			);
+		}
+		echo $_GET['callback'] . '(' . json_encode($return) . ')';
+	}
+
 	public function index()
 	{
 
@@ -30,7 +100,11 @@ class ArticleController extends HomeBaseController
 		$articleId  = $this->request->param('id', 0, 'intval');
 		$categoryId = $this->request->param('cid', 0, 'intval');
 		$article    = $postService->publishedArticle($articleId, $categoryId);
-
+		if ($article && $article["post_status"] == 0) {
+			if ($article["user_id"] != cmf_get_current_user_id()) {
+				$article = null;
+			}
+		}
 		if (empty($articleId)) {
 			abort(404, '文章不存在!');
 		}
@@ -46,6 +120,7 @@ class ArticleController extends HomeBaseController
 
 			if (count($categories) > 0) {
 				$this->assign('category', $categories[0]);
+				$category = $portalCategoryModel->where('id', $categories[0])->where('status', 1)->find();
 			} else {
 				abort(404, '文章未指定分类!');
 			}
@@ -66,8 +141,17 @@ class ArticleController extends HomeBaseController
 
 
 		hook('portal_before_assign_article', $article);
-		$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($category->toArray()["id"]));
-		$this->assign("tagall", $tagResult);
+		if (isset($category)) {
+			$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($category->toArray()["id"]));
+			$this->assign("tagall", $tagResult);
+		} else {
+			$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($article["category_id"]));
+			$this->assign("tagall", $tagResult);
+		}
+		// $this->assign("tagall",[]);
+		if (!$article) {
+			$this->redirect("/", 302);
+		}
 		$this->assign('article', $article);
 		$this->assign('prev_article', $prevArticle);
 		$this->assign('next_article', $nextArticle);
@@ -78,7 +162,7 @@ class ArticleController extends HomeBaseController
 	}
 
 	// 文章点赞
-	public function doLikeCmf()
+	public function doLike()
 	{
 		$this->checkUserLogin();
 		$articleId = $this->request->param('id', 0, 'intval');
@@ -171,46 +255,19 @@ tpl;
 		return $this->fetch('user/select');
 	}
 
-
 	/**
-	 *新  点赞操作
-	 *
-	 * @throws \think\Exception
-	 *
-	 *
+	 * 测试
 	 */
-	public function doLike()
-	{
-		//实例化
-		$userLikeLogModel = new UserLikeLogModel();
-
-		$this->checkUserLogin();
-		$articleId = $this->request->param('id', 0, 'intval');
-		$canLike   = cmf_check_user_action("posts$articleId", 1);
-
-		//获取用户登录ID
-		$userId = cmf_get_current_user_id();
-
-		//添加点赞记录
-		$addUserLikeLogResult = $userLikeLogModel->addUserLikeLog($userId, $articleId);
-
-		if ($canLike) {
-			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_like');
-
-			$this->success("赞好啦！");
-		} else {
-			$this->error("您已赞过啦！");
-		}
-	}
-
-
 	public function test()
 	{
-		$userLikeLogModel = new UserLikeLogModel();
 
-		$testInfo = $userLikeLogModel->addUserLikeLog(11, 2);
+//		dump('123');
 
-		dump($testInfo);
 
+		$t = get_client_ip($type = 0, $adv = false);
+
+
+
+		dump($t);
 	}
 }

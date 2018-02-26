@@ -28,11 +28,17 @@
             }
             
             $data['more']['server'] = str_replace('，', ',', $data['more']['server']);
-            // $data["post_introduction"] = $this->setPostContentAttr($data["post_introduction"]);
-            // $data["post_company_info"] = $this->setPostContentAttr($data["post_company_info"]);
-            // $data["post_advantage"] = $this->setPostContentAttr($data["post_advantage"]);
-            // $data["post_performance"] = $this->setPostContentAttr($data["post_performance"]);
-            // $data["post_recommend"] = $this->setPostContentAttr($data["post_recommend"]);
+            if(isset($data["post_excerpt"])) {
+                $data["post_introduction"] = $data["post_excerpt"];
+            }
+            if(isset($data["post_company_info"])|isset($data["post_advantage"])|isset($data["post_performance"])|isset($data["post_recommend"])) {
+                $data["post_company_info"] = $this->setPostContentAttr($data["post_company_info"]);
+                $data["post_advantage"] = $this->setPostContentAttr($data["post_advantage"]);
+                $data["post_performance"] = $this->setPostContentAttr($data["post_performance"]);
+                $data["post_recommend"] = $this->setPostContentAttr($data["post_recommend"]);
+            }
+            $data["user_type"] = 1;
+        
             
             
             $this->allowField(true)->data($data, true)->isUpdate(false)->save();

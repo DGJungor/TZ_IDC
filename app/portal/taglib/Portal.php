@@ -19,7 +19,7 @@ class Portal extends TagLib
      */
     protected $tags = [
         // 标签定义： attr 属性列表 close 是否闭合（0 或者1 默认1） alias 标签别名 level 嵌套层次
-        'articles'         => ['attr' => 'field,where,limit,order,page,relation,returnVarName,pageVarName,categoryIds', 'close' => 1],//非必须属性item
+        'articles'         => ['attr' => 'field,where,limit,order,page,relation,returnVarName,pageVarName,categoryIds,key', 'close' => 1],//非必须属性item
         'breadcrumb'       => ['attr' => 'cid', 'close' => 1],//非必须属性self
         'categories'       => ['attr' => 'where,order', 'close' => 1],//非必须属性item
         'subcategories'    => ['attr' => 'categoryId', 'close' => 1],//非必须属性item
@@ -64,7 +64,7 @@ parse;
         $relation      = empty($tag['relation']) ? '' : $tag['relation'];
         $pageVarName   = empty($tag['pageVarName']) ? '__PAGE_VAR_NAME__' : $tag['pageVarName'];
         $returnVarName = empty($tag['returnVarName']) ? 'articles_data' : $tag['returnVarName'];
-
+        $key = empty($tag["key"]) ? "i" : $tag["key"];
         $where = '""';
         if (!empty($tag['where']) && strpos($tag['where'], '$') === 0) {
             $where = $tag['where'];
@@ -115,7 +115,7 @@ parse;
 \${$pageVarName} = isset(\${$returnVarName}['page'])?\${$returnVarName}['page']:'';
 
  ?>
-<volist name="{$returnVarName}.articles" id="{$item}">
+<volist name="{$returnVarName}.articles" key="{$key}" id="{$item}">
 {$content}
 </volist>
 parse;

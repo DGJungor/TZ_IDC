@@ -179,7 +179,21 @@ class AdminCategoryController extends AdminBaseController
 
         $this->success('保存成功!');
     }
+    public function postSelect() {
+        $typeid                 = $this->request->param("typeid",0,"intval");
+        $selectedIds         = explode(',', $typeid);
+        $portalCategoryModel = new PortalCategoryModel();
 
+        $tpl = <<<tpl
+<option value='\$id' data-parent='\$parent_id' data-select='\$selected'>\$name</option>
+tpl;
+
+        $categoryTree = $portalCategoryModel->adminCategoryTableTree($selectedIds, $tpl);
+
+        $where      = ['delete_time' => 0];
+        $categories = $portalCategoryModel->where($where)->select();
+        return json(["state"=>1,"data"=>$categoryTree,"param"=>$selectedIds,"msg"=>"获取成功"]);
+    }
     /**
      * 文章分类选择对话框
      * @adminMenu(

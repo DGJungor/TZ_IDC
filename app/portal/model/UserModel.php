@@ -15,7 +15,6 @@ use think\Db;
 
 class UserModel extends Model
 {
-	//配置主键字段位ID
-	protected $pk = 'id';
+
 
 }
