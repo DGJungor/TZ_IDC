@@ -61,6 +61,27 @@ class UserTokenModel extends Model
 	}
 
 	/**
+	 * 根据条件删除Token
+	 *
+	 * @param null $con where条件
+	 * @param null $par 条件值
+	 * @return int
+	 */
+	public function deleteToken($con = null, $par = null)
+	{
+		//拼装条件
+		$where = [
+			$con => $par,
+		];
+
+		//删除数据
+		$res = $this->destroy($where);
+
+		return $res;
+
+	}
+
+	/**
 	 * 清理过期token
 	 *
 	 */

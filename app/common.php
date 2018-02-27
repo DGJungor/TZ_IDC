@@ -121,36 +121,36 @@ function idckx_token_add($userId, $token, $expireTime = 3600, $deviceType = "web
 
 
 /**
- *  删除token
+ * 根据条件类型 删除token
  *
- * 根据删除条件  删除token
- *
- * @author 张俊
- * @param $type 类型  1:token  2:user_id
- * @param $par
+ * @param $type  条件类型     1:token   2:user_id
+ * @param $par  条件值
+ * @return int
  */
 function idckx_token_del($type, $par)
 {
 
-	switch ($type)
-	{
-		//
+	//实例化token模型
+	$userTokenModel = new \app\common\model\UserTokenModel();
+
+	switch ($type) {
+
+		//token
 		case 1:
-
+			$res = $userTokenModel->deleteToken('token', $par);
+			return $res;
 			break;
 
-		//
+		//user_id
 		case 2:
-
+			$res = $userTokenModel->deleteToken('user_id', $par);
+			return $res;
 			break;
 
-
-		//位置位置类型
+		//未知类型
 		default:
 			break;
-
 	}
-
 }
 
 

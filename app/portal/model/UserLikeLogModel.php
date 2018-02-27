@@ -14,12 +14,12 @@ class UserLikeLogModel extends Model
 	protected $autoWriteTimestamp = true;
 
 
-	public function addUserLikeLog($userId = null, $postId = null)
+	public function addUserLikeLog($ip = null, $postId = null)
 	{
 
 		//封装函数
 		$data = [
-			'user_id' => $userId,
+			'ip'      => $ip,
 			'post_id' => $postId,
 		];
 

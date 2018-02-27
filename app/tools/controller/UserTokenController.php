@@ -153,10 +153,13 @@ class UserTokenController extends HomeBaseController
 
 	}
 
+	/**
+	 * 测试方法
+	 */
 	public function test()
 	{
-
-
+//		$res = idckx_token_del(2,111111);
+//		dump($res);
 	}
 
 }

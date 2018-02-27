@@ -161,10 +161,15 @@ class ArticleController extends HomeBaseController
 		return $this->fetch("/$tplName");
 	}
 
-	// 文章点赞
+	/**
+	 * 文章点赞  不需要登录
+	 *
+	 * @throws \think\Exception
+	 *
+	 */
 	public function doLike()
 	{
-		$this->checkUserLogin();
+
 		$articleId = $this->request->param('id', 0, 'intval');
 
 
@@ -173,9 +178,12 @@ class ArticleController extends HomeBaseController
 		if ($canLike) {
 			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_like');
 
-			$this->success("赞好啦！");
+			return idckx_ajax_echo(null, '赞好啦!', 1);
+//			$this->success("赞好啦！");
 		} else {
-			$this->error("您已赞过啦！");
+
+			return idckx_ajax_echo(null, '您已经赞过啦!', 0);
+//			$this->error("您已赞过啦！");
 		}
 	}
 
@@ -256,18 +264,51 @@ tpl;
 	}
 
 	/**
+	 * 点赞原方法备份
+	 * @throws \think\Exception
+	 */
+	public function doLikeCmf()
+	{
+		$this->checkUserLogin();
+		$articleId = $this->request->param('id', 0, 'intval');
+
+
+		$canLike = cmf_check_user_action("posts$articleId", 1);
+
+		if ($canLike) {
+			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_like');
+
+			$this->success("赞好啦！");
+		} else {
+			$this->error("您已赞过啦！");
+		}
+	}
+
+	/**
 	 * 测试
 	 */
 	public function test()
 	{
 
-//		dump('123');
+		//获取文章id
+		$articleId = $this->request->param('id', 0, 'intval');
 
 
-		$t = get_client_ip($type = 0, $adv = false);
+		$canLike = cmf_check_user_action("posts$articleId", 1);
+
+		if ($canLike) {
+			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_like');
+
+			$this->success("赞好啦！");
+		} else {
+			$this->error("您已赞过啦！");
+		}
+
+		//获取客户端ip地址
+		$clientIp = get_client_ip($type = 0, $adv = false);
 
 
-
-		dump($t);
+		//====================打印测试 数据=============================
+		dump($clientIp);
 	}
 }
