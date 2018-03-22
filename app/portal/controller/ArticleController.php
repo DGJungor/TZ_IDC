@@ -16,6 +16,8 @@ use app\portal\service\PostService;
 use app\portal\model\PortalPostModel;
 use app\user\controller\IndexController;
 use think\Db;
+use think\Request;
+use think\Session;
 
 class ArticleController extends HomeBaseController
 {
@@ -290,25 +292,11 @@ tpl;
 	public function test()
 	{
 
-		//获取文章id
-		$articleId = $this->request->param('id', 0, 'intval');
+//		dump(Session::get());
 
+		$t = Request::instance()->header();
 
-		$canLike = cmf_check_user_action("posts$articleId", 1);
+		dump($t);
 
-		if ($canLike) {
-			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_like');
-
-			$this->success("赞好啦！");
-		} else {
-			$this->error("您已赞过啦！");
-		}
-
-		//获取客户端ip地址
-		$clientIp = get_client_ip($type = 0, $adv = false);
-
-
-		//====================打印测试 数据=============================
-		dump($clientIp);
 	}
 }

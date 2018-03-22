@@ -55,7 +55,7 @@ class BaiduPushController extends BaseController
 	 * @throws \think\exception\DbException
 	 *
 	 */
-	public function pushOneUrl()
+	public function pushOneUrl($postId = null)
 	{
 		//实例化模型
 		$pluginReptilePostModel = new PluginReptilePostModel();
@@ -63,11 +63,16 @@ class BaiduPushController extends BaseController
 		//获取文章id
 		$pid = $this->request->param('pid');
 
+		//根据方式选择使用的参数
+		if ($pid) {
+			$postId = $pid;
+		}
+
 		//根据文章id   获取分类id
 		$cid = idckx_get_category_id($pid);
 
 		//生成文章链接
-		$urls[] = $this->request->domain() . cmf_url('portal/Article/index', ['id' => $pid, 'cid' => $cid]);
+		$urls[] = $this->request->domain() . cmf_url('portal/Article/index', ['id' => $postId, 'cid' => $cid]);
 
 		//记录 推送
 		$pluginReptilePostModel->editPushState($pid);

@@ -21,21 +21,6 @@ use app\user\model\UserTokenModel;
 class LoginController extends HomeBaseController
 {
 
-	/**
-	 *
-	 * 测试方法
-	 */
-	public function test()
-	{
-
-		$userTokenMode = new UserTokenModel();
-
-		$data = $userTokenMode->clearExpireToken();
-
-		dump($data);
-
-	}
-
 
 	/**
 	 * 判断前台用户是否已登录
@@ -339,11 +324,65 @@ class LoginController extends HomeBaseController
 		}
 	}
 
+
+	/**
+	 *参数：
+	 *     extData: 第三方返回的对象
+	 *     type: 第三方类型weibo（微博）、qq（qq）、wx微信
+	 *返回参数
+	 *    state为1就是登录成功,state为0就是登录失败
+	 *    如果要处理这些数据尽量把它处理成和普通登录一样
+	 */
+	public function extLogin()
+	{
+
+
+	}
+
+
 	/**
 	 * 第三方账号登录
+	 *
+	 * 参数  :
+	 *        $type   平台类型:  1:微信    2:微博    3:qq
 	 */
 	public function doLoginByOpenAccount()
 	{
+		//获取平台类型
+		$type = $this->request->param('type');
+//		dump($type);
+		dump(Session::get());
+		switch ($type) {
+			//微信
+			case 1:
+
+
+				break;
+
+			//微博
+			case 2:
+
+				break;
+
+			//qq
+			case 3:
+
+				break;
+
+			default :
+
+		}
+
+
+	}
+
+
+	/**
+	 * 测试控制器
+	 */
+	public function test()
+	{
+
 
 
 

@@ -175,6 +175,17 @@ function idckx_token_get($token)
 	return $res;
 }
 
+/**
+ * 第三方登录
+ *
+ * @param string $type
+ * @param null   $extData
+ */
+function idckx_open_login($type = "", $extData = null)
+{
+
+}
+
 function https_request($url, $data = null)
 {
 	$curl = curl_init();
@@ -193,22 +204,7 @@ function https_request($url, $data = null)
 
 
 
-//======================================================================================================================
-/**
- *
- * @return \think\response\Json
- */
-//function linkUrl()
-//{
-//
-//	$cid = $this->request->param('cid', 0, 'intval');
-//
-//	$aid = $this->request->param('aid', 0, 'intval');
-//
-//
-//	return json(array("state" => "1", "msg" => "生成成功", "data" => cmf_url('portal/Article/index', ['id' => $aid, 'cid' => $cid])));
-//
-//}
+
 
 
 

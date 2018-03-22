@@ -475,6 +475,16 @@ class MemberController extends UserBaseController
 		//获取参数数据
 		$postData = $this->request->param();
 
+		//处理keywords关键字
+		$postData['keyword'] = str_ireplace('，', ',', $postData['keyword']); //将中文逗号转成英文逗号
+		$postData['keyword'] = trim($postData['keyword']);                                 //去除左右两边多余空格
+		$postData['keyword'] = trim($postData['keyword'], ',');                      //去去除多余逗号
+
+		// '更多'属性
+		$more['thumbnail'] = $postData['thumbnail'];
+		$more['template']  = '';
+
+
 		//启动事务处理
 		Db::startTrans();
 
@@ -486,6 +496,9 @@ class MemberController extends UserBaseController
 			'post_content'   => $portalPostModel->setPostContentAttr($postData['content']),
 			'post_status'    => 0,
 			'published_time' => time(),
+			'post_keywords'  => $postData['keyword'],
+			'post_source'    => $postData['from'],
+			'more'           => json_encode($more),
 		];
 
 		//添加文章信息 成功则返回一个文章ID
@@ -600,7 +613,7 @@ class MemberController extends UserBaseController
 	 * 绑定第三方登录接口：user/Member/binduserid
 	 * 请求类型：post
 	 * 参数：
-	 * userId(要绑定的第三方平台获取到的userID0)
+	 * userId(要绑定的第三方平台获取到的userID)
 	 * type(要绑定的第三方平台类型，这个参数会对应idckx_user_token这个表的device_type)
 	 * 返回参数：
 	 * 成功state为1,失败state为0即可
