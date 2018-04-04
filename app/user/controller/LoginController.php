@@ -80,6 +80,7 @@ class LoginController extends HomeBaseController
 
 	}
 
+
 	/**
 	 * 登录操作
 	 *
@@ -326,12 +327,14 @@ class LoginController extends HomeBaseController
 
 
 	/**
+	 * TODO
 	 *参数：
 	 *     extData: 第三方返回的对象
 	 *     type: 第三方类型weibo（微博）、qq（qq）、wx微信
 	 *返回参数
 	 *    state为1就是登录成功,state为0就是登录失败
 	 *    如果要处理这些数据尽量把它处理成和普通登录一样
+	 *
 	 */
 	public function extLogin()
 	{
@@ -341,6 +344,8 @@ class LoginController extends HomeBaseController
 
 
 	/**
+	 * TODO
+	 *
 	 * 第三方账号登录
 	 *
 	 * 参数  :

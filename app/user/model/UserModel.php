@@ -335,6 +335,7 @@ class UserModel extends Model
 			'user_pass'     => cmf_password($data['password']),
 			'mobile'        => $data['mobile'],
 			'user_nickname' => $data['nickname'],
+			'user_email'    => $data['email'],
 			'user_status'   => $userStatus,
 			'avatar'        => '/avatar.jpg',
 		];

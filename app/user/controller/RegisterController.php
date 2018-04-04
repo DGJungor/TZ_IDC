@@ -42,6 +42,7 @@ class RegisterController extends HomeBaseController
 	 *      password：密码
 	 *      repassword：重复密码
 	 *      username：用户账号
+	 *      email:邮箱
 	 */
 	public function doRegister()
 	{
