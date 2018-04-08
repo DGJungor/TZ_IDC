@@ -429,4 +429,35 @@ class UserModel extends Model
 		return $result;
 	}
 
+
+	/**
+	 * 查询用户是否有绑定相关平台帐号
+	 *
+	 * 有绑定的就返回本站帐号id  没有则返回false
+	 *
+	 * @author ZhangJun
+	 * @param null $token
+	 * @param string $platform 平台名称   默认:微信     微信:wechat  qq:qq  新浪微博: weibo
+	 * @return array|bool|false|\PDOStatement|string|Model
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
+	public function queryBinding($token = null, $platform = 'wechat')
+	{
+
+		// 查询数据库
+		$res = Db::name("user_extension")->where($platform, $token)->field('user_id')->find();
+
+		//  判断查询结果
+		if ($res) {
+			return $res;
+		} else {
+			return false;
+		}
+
+
+	}
+
+
 }

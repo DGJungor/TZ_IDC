@@ -387,10 +387,21 @@ class LoginController extends HomeBaseController
 	 */
 	public function test()
 	{
+		//实例化模型
+		$userModel = new UserModel();
 
+		//获取参数
+		$token = $this->request->param('token');
+		$type  = $this->request->param('type');
 
+		//模型测试
+		$res = $userModel->queryBinding($token, $type);
 
+		
 
+		//打印测试参数
+		dump($token);
+		dump($res);
 
 	}
 
