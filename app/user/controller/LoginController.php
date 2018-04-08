@@ -383,6 +383,8 @@ class LoginController extends HomeBaseController
 
 
 	/**
+	 *  TODO 多平台登录  流程不确定  待开发
+	 *
 	 * 测试控制器
 	 */
 	public function test()
@@ -391,13 +393,12 @@ class LoginController extends HomeBaseController
 		$userModel = new UserModel();
 
 		//获取参数
-		$token = $this->request->param('token');
+		$token = $this->request->param('openId');
 		$type  = $this->request->param('type');
 
 		//模型测试
 		$res = $userModel->queryBinding($token, $type);
 
-		
 
 		//打印测试参数
 		dump($token);
