@@ -176,16 +176,19 @@ function idckx_token_get($token)
 }
 
 /**
- * 第三方登录
- *
- * @param string $type
- * @param null   $extData
+ * 验证是否绑定 第三方账号
  */
-function idckx_open_login($type = "", $extData = null)
+function idckx_verify_binding()
 {
+
 
 }
 
+/**
+ * @param $url
+ * @param null $data
+ * @return mixed
+ */
 function https_request($url, $data = null)
 {
 	$curl = curl_init();

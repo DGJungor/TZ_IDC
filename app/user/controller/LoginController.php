@@ -353,30 +353,57 @@ class LoginController extends HomeBaseController
 	 */
 	public function doLoginByOpenAccount()
 	{
-		//获取平台类型
-		$type = $this->request->param('type');
-//		dump($type);
-		dump(Session::get());
-		switch ($type) {
-			//微信
-			case 1:
+		//实例化模型
+		$userModel = new UserModel();
+
+		//获取参数
+		$openId = $this->request->param('openId');
+		$type   = $this->request->param('type');
+		$token  = $this->request->param('token');
+
+		//查询token
+		$dbToken = idckx_token_get($token);
+
+		//验证数据库中否存在前端发送过来的token
+		if ($dbToken) {
+
+			//验证token是否过期
+			if ($dbToken['expire_time'] > time()) {
+				//未过期
+				dump('未过期');
 
 
-				break;
 
-			//微博
-			case 2:
 
-				break;
+			} else {
+				//已过期
 
-			//qq
-			case 3:
+				//清理此条过期token
+				idckx_token_del(1,$dbToken['token']);
 
-				break;
 
-			default :
+				dump('已过期');
+
+			}
+
+			dump(time());
+			dump($dbToken['expire_time']);
+			dump($dbToken);
+
+
+		} else {
+			//不存在token
+
 
 		}
+
+		//模型测试
+//		$res = $userModel->queryBinding($openId, $type);
+
+
+		//打印测试参数
+
+//		dump($res);
 
 
 	}
@@ -389,20 +416,6 @@ class LoginController extends HomeBaseController
 	 */
 	public function test()
 	{
-		//实例化模型
-		$userModel = new UserModel();
-
-		//获取参数
-		$token = $this->request->param('openId');
-		$type  = $this->request->param('type');
-
-		//模型测试
-		$res = $userModel->queryBinding($token, $type);
-
-
-		//打印测试参数
-		dump($token);
-		dump($res);
 
 	}
 
