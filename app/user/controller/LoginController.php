@@ -350,9 +350,14 @@ class LoginController extends HomeBaseController
 	 *
 	 * 参数  :
 	 *        $type   平台类型:  wechat:微信    weibo:微博    qq:qq
+	 *
+	 * 返回参数:
+	 *      没有token5001    token过期5002
 	 */
 	public function doLoginByOpenAccount()
 	{
+
+
 		//实例化模型
 		$userModel = new UserModel();
 
@@ -364,47 +369,48 @@ class LoginController extends HomeBaseController
 		//查询token
 		$dbToken = idckx_token_get($token);
 
-		//验证数据库中否存在前端发送过来的token
-		if ($dbToken) {
 
-			//验证token是否过期
-			if ($dbToken['expire_time'] > time()) {
-				//未过期
-				dump('未过期');
+		//判断有无绑定第三方帐号
+		if (idckx_verify_binding($type, $openId)) {
+			//有绑定
 
-				dump(idckx_verify_binding($type, $openId));
+			//验证数据库中否存在前端发送过来的token
+			if ($dbToken) {
+				//存在token
+
+				//验证token是否过期
+				if ($dbToken['expire_time'] > time()) {
+					//未过期
+					dump('未过期');
+					dump(idckx_verify_binding($type, $openId));
+
+
+				} else {
+					//已过期
+
+					//清理此条过期token
+					idckx_token_del(1, $dbToken['token']);
+
+
+				}
 
 
 			} else {
-				//已过期
+				//不存在token
 
-				//清理此条过期token
-				idckx_token_del(1, $dbToken['token']);
-
-
-				dump('已过期');
 
 			}
 
-//			dump(time());
-//			dump($dbToken['expire_time']);
-//			dump($dbToken);
-
-
 		} else {
-			//不存在token
-
+			//无绑定
+			return idckx_ajax_echo(null, '无绑定本站帐号', 2);
 
 		}
 
-		//模型测试
-//		$res = $userModel->queryBinding($openId, $type);
 
-
-		//打印测试参数
-
-//		dump($res);
-
+		//			dump(time());
+//			dump($dbToken['expire_time']);
+//			dump($dbToken);
 
 	}
 
@@ -416,6 +422,13 @@ class LoginController extends HomeBaseController
 	 */
 	public function test()
 	{
+		//测试邮箱
+		for ($x = 0; $x <= 100; $x++) {
+			$info=cmf_send_email('god_zhangjun@sina.com', $x, $x);
+			dump($info);
+			dump($x);
+		}
+
 
 	}
 

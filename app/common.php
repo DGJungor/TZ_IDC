@@ -104,7 +104,7 @@ function idckx_get_category_id($portalId = null)
  * @author 张俊
  * @param        $userId
  * @param        $token
- * @param int $expireTime 默认过期时间  例:一小时:3600
+ * @param int $expireTime 默认过期时间  例:一小时:3600   7天:86400
  * @param string $deviceType 设备类型
  */
 function idckx_token_add($userId, $token, $expireTime = 3600, $deviceType = "web")
@@ -178,8 +178,9 @@ function idckx_token_get($token)
 /**
  * 查询用户是否绑定的公用函数
  *
- * @param $type
- * @param $openId
+ * @author ZhangJun
+ * @param $type //例:  wechat:微信   weibo:新浪微博    qq:腾讯qq
+ * @param $openId //开房平台中拿到的openid
  * @return bool
  * @throws \think\db\exception\DataNotFoundException
  * @throws \think\db\exception\ModelNotFoundException
