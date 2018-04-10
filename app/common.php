@@ -20,9 +20,9 @@ use cmf\lib\Storage;
  * IDCKC  AJAX 格式工具
  *
  * @author 张俊
- * @param array  $data
+ * @param array $data
  * @param string $info
- * @param int    $code
+ * @param int $code
  * @return \think\response\Json
  *
  * 前端对象输出（凡是通过ajax请求的接口都必须调用此函数输出）
@@ -104,7 +104,7 @@ function idckx_get_category_id($portalId = null)
  * @author 张俊
  * @param        $userId
  * @param        $token
- * @param int    $expireTime 默认过期时间  例:一小时:3600
+ * @param int $expireTime 默认过期时间  例:一小时:3600
  * @param string $deviceType 设备类型
  */
 function idckx_token_add($userId, $token, $expireTime = 3600, $deviceType = "web")
@@ -176,11 +176,25 @@ function idckx_token_get($token)
 }
 
 /**
- * 验证是否绑定 第三方账号
+ * 查询用户是否绑定的公用函数
+ *
+ * @param $type
+ * @param $openId
+ * @return bool
+ * @throws \think\db\exception\DataNotFoundException
+ * @throws \think\db\exception\ModelNotFoundException
+ * @throws \think\exception\DbException
  */
-function idckx_verify_binding()
+function idckx_verify_binding($type, $openId)
 {
+	//实例化
+	$userExtensionModel = new \app\common\model\UserExtensionModel();
 
+	//查询用户扩张信息
+	$extensionInfo = $userExtensionModel->queryBinding($type, $openId);
+
+	//三元运算符判断是否存在数据
+	return $extensionInfo ? true : false;
 
 }
 

@@ -344,12 +344,12 @@ class LoginController extends HomeBaseController
 
 
 	/**
-	 * TODO
+	 * TODO 第三方登录接口
 	 *
 	 * 第三方账号登录
 	 *
 	 * 参数  :
-	 *        $type   平台类型:  1:微信    2:微博    3:qq
+	 *        $type   平台类型:  wechat:微信    weibo:微博    qq:qq
 	 */
 	public function doLoginByOpenAccount()
 	{
@@ -357,7 +357,7 @@ class LoginController extends HomeBaseController
 		$userModel = new UserModel();
 
 		//获取参数
-		$openId = $this->request->param('openId');
+		$openId = $this->request->param('open_id');
 		$type   = $this->request->param('type');
 		$token  = $this->request->param('token');
 
@@ -372,23 +372,23 @@ class LoginController extends HomeBaseController
 				//未过期
 				dump('未过期');
 
-
+				dump(idckx_verify_binding($type, $openId));
 
 
 			} else {
 				//已过期
 
 				//清理此条过期token
-				idckx_token_del(1,$dbToken['token']);
+				idckx_token_del(1, $dbToken['token']);
 
 
 				dump('已过期');
 
 			}
 
-			dump(time());
-			dump($dbToken['expire_time']);
-			dump($dbToken);
+//			dump(time());
+//			dump($dbToken['expire_time']);
+//			dump($dbToken);
 
 
 		} else {

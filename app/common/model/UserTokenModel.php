@@ -100,4 +100,5 @@ class UserTokenModel extends Model
 
 	}
 
+
 }
