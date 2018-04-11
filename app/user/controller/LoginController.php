@@ -381,8 +381,9 @@ class LoginController extends HomeBaseController
 				//验证token是否过期
 				if ($dbToken['expire_time'] > time()) {
 					//未过期
-					dump('未过期');
-					dump(idckx_verify_binding($type, $openId));
+
+
+
 
 
 				} else {
@@ -391,14 +392,13 @@ class LoginController extends HomeBaseController
 					//清理此条过期token
 					idckx_token_del(1, $dbToken['token']);
 
-
+					return idckx_ajax_echo(null, 'token已过期', 5002);
 				}
 
 
 			} else {
 				//不存在token
-
-
+				return idckx_ajax_echo(null, '不存在token', 5001);
 			}
 
 		} else {
@@ -429,6 +429,9 @@ class LoginController extends HomeBaseController
 			dump($x);
 		}
 
+
+		//储存验证码
+//		cmf_verification_code_log();
 
 	}
 
