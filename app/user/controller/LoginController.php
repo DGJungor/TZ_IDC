@@ -371,7 +371,7 @@ class LoginController extends HomeBaseController
 
 
 		//判断有无绑定第三方帐号
-		if (idckx_verify_binding($type, $openId)) {
+		if ($bindingId = idckx_verify_binding($type, $openId)) {
 			//有绑定
 
 			//验证数据库中否存在前端发送过来的token
@@ -382,9 +382,8 @@ class LoginController extends HomeBaseController
 				if ($dbToken['expire_time'] > time()) {
 					//未过期
 
-
-
-
+					$result = $userModel->doLoginByOpenAccount($bindingId);
+					dump($result);
 
 				} else {
 					//已过期
@@ -408,10 +407,6 @@ class LoginController extends HomeBaseController
 		}
 
 
-		//			dump(time());
-//			dump($dbToken['expire_time']);
-//			dump($dbToken);
-
 	}
 
 
@@ -422,12 +417,23 @@ class LoginController extends HomeBaseController
 	 */
 	public function test()
 	{
-		//测试邮箱
-		for ($x = 0; $x <= 100; $x++) {
-			$info=cmf_send_email('god_zhangjun@sina.com', $x, $x);
-			dump($info);
-			dump($x);
-		}
+//		//测试邮箱
+//		for ($x = 0; $x <= 100; $x++) {
+//			$info=cmf_send_email('god_zhangjun@sina.com', $x, $x);
+//			dump($info);
+//			dump($x);
+//		}
+
+		$user = [
+			'user_login' => 'jun',
+			'user_pass'  => 'zhangjun',
+		];
+
+		$hookParam = [
+			'user'                    => $user,
+			'compare_password_result' => true
+		];
+		dump(hook_one("user_login_start", $hookParam));
 
 
 		//储存验证码

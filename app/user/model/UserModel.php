@@ -458,5 +458,43 @@ class UserModel extends Model
 
 	}
 
+	/**
+	 * 第三方登录模型
+	 *
+	 * @param $userId
+	 * @return int  //返回的为状态码    0:登录成功  1:帐号被拉黑   2:未能获取到账号信息
+	 * @throws \think\Exception
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 * @throws \think\exception\PDOException
+	 */
+	public function doLoginByOpenAccount($userId)
+	{
+		$userQuery = Db::name("user");
 
+		$result = $userQuery->where('id', $userId)->find();
+
+		//判断诗句是否为空
+		if (!empty($result)) {
+
+			//拉黑判断。
+			if ($result['user_status'] == 0) {
+				return 1;
+			}
+
+			//将登陆信息保存到  session中
+			session('user', $result);
+			$data = [
+				'last_login_time' => time(),
+				'last_login_ip'   => get_client_ip(0, true),
+			];
+			$userQuery->where('id', $result["id"])->update($data);
+			return 0;
+
+		}
+		return 2;
+
+
+	}
 }

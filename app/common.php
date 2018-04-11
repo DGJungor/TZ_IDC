@@ -195,7 +195,7 @@ function idckx_verify_binding($type, $openId)
 	$extensionInfo = $userExtensionModel->queryBinding($type, $openId);
 
 	//三元运算符判断是否存在数据
-	return $extensionInfo ? true : false;
+	return $extensionInfo ? $extensionInfo['user_id'] : false;
 
 }
 
