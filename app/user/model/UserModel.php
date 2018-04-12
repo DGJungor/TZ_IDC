@@ -475,7 +475,7 @@ class UserModel extends Model
 
 		$result = $userQuery->where('id', $userId)->find();
 
-		//判断诗句是否为空
+		//判断数据是否为空
 		if (!empty($result)) {
 
 			//拉黑判断。

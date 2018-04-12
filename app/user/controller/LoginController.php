@@ -382,8 +382,29 @@ class LoginController extends HomeBaseController
 				if ($dbToken['expire_time'] > time()) {
 					//未过期
 
-					$result = $userModel->doLoginByOpenAccount($bindingId);
-					dump($result);
+					$loginLog = $userModel->doLoginByOpenAccount($bindingId);
+				
+					switch ($loginLog) {
+						case 0:
+							//登录成功
+							// 将token加入到  session中
+							session('__token__', $dbToken['token']);
+							return idckx_ajax_echo(null, '登录成功', 1);
+							break;
+						case 1:
+
+							//帐号被拉黑
+							return idckx_ajax_echo(null, '帐号已被拉黑', 0);
+						case 2:
+							//登录失败,请重试
+							return idckx_ajax_echo(null, '登录失败 请重试', 0);
+
+							break;
+						default:
+							//未知错误
+
+					}
+
 
 				} else {
 					//已过期
