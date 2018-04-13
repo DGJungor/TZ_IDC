@@ -171,6 +171,8 @@ class LoginController extends HomeBaseController
 	}
 
 
+
+
 	/**
 	 * 登录
 	 */
@@ -344,15 +346,21 @@ class LoginController extends HomeBaseController
 
 
 	/**
-	 * TODO 第三方登录接口
-	 *
 	 * 第三方账号登录
 	 *
 	 * 参数  :
-	 *        $type   平台类型:  wechat:微信    weibo:微博    qq:qq
-	 *
+	 *           $type   平台类型:  wechat:微信    weibo:微博    qq:qq
+	 *          $open_id   开放平台获取到的唯一id
+	 *          $token  token值
 	 * 返回参数:
-	 *      没有token5001    token过期5002
+	 *       状态码: 登录成功1    未绑定2 没有token5001    token过期5002
+	 *
+	 * @return \think\response\Json
+	 * @throws \think\Exception
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 * @throws \think\exception\PDOException
 	 */
 	public function doLoginByOpenAccount()
 	{
@@ -383,7 +391,7 @@ class LoginController extends HomeBaseController
 					//未过期
 
 					$loginLog = $userModel->doLoginByOpenAccount($bindingId);
-				
+
 					switch ($loginLog) {
 						case 0:
 							//登录成功
@@ -432,7 +440,46 @@ class LoginController extends HomeBaseController
 
 
 	/**
-	 *  TODO 多平台登录  流程不确定  待开发
+	 * 第三方绑定  登录
+	 *
+	 *
+	 * @Author ZhangJun
+	 * 参数 :
+	 *   open_id:   第三方帐号的openId
+	 *    token :   第三方登录的token值
+	 *      type: 第三方平台   wechat微信
+	 *
+	 * 状态码:
+	 *  登录成功:   绑定成功 1  绑定失败2
+	 *   token  过期5001  不存在5002
+	 */
+	public function doBindingAndLogin()
+	{
+		//实例化
+		$userModel = new UserModel();
+
+		//接收参数
+		$openId = $this->request->post('open_id');
+		$token  = $this->request->post('token');
+		$type   = $this->request->post('type');
+		$user   = [
+			'user_login' => $this->request->post('username'),
+			'user_pass'  => $this->request->post('password'),
+		];
+
+
+
+
+
+
+
+
+
+	}
+
+
+	/**
+	 *
 	 *
 	 * 测试控制器
 	 */
@@ -445,20 +492,24 @@ class LoginController extends HomeBaseController
 //			dump($x);
 //		}
 
-		$user = [
-			'user_login' => 'jun',
-			'user_pass'  => 'zhangjun',
-		];
-
-		$hookParam = [
-			'user'                    => $user,
-			'compare_password_result' => true
-		];
-		dump(hook_one("user_login_start", $hookParam));
+//		$user = [
+//			'user_login' => 'jun',
+//			'user_pass'  => 'zhangjun',
+//		];
+//
+//		$hookParam = [
+//			'user'                    => $user,
+//			'compare_password_result' => true
+//		];
+//		dump(hook_one("user_login_start", $hookParam));
 
 
 		//储存验证码
 //		cmf_verification_code_log();
+
+//		dump(idckx_token_exist('e5f5092d6730dbeb6028ae86ae0b5c2d949640bbc6c257113658908fc77dc1b71'));
+
+//		return idckx_token_del(1,111111111);
 
 	}
 

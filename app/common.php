@@ -155,6 +155,31 @@ function idckx_token_del($type, $par)
 
 
 /**
+ *  验证token 是否有效   TODO  
+ */
+function idckx_token_valid($token)
+{
+
+}
+
+
+/**
+ * 查询token  是否存在
+ */
+function idckx_token_exist($token)
+{
+	//实例化token模型
+	$userTokenModel = new \app\common\model\UserTokenModel();
+
+	//查询token
+	$res = $userTokenModel->getTokenData($token);
+
+	//三元运算符判断是否存在数据
+	return $res ? true : false;
+
+}
+
+/**
  * 根据token 获取token相关 所有的数据
  *
  * @author 张俊
@@ -174,6 +199,7 @@ function idckx_token_get($token)
 
 	return $res;
 }
+
 
 /**
  * 查询用户是否绑定的公用函数
