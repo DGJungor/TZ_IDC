@@ -155,15 +155,6 @@ function idckx_token_del($type, $par)
 
 
 /**
- *  验证token 是否有效   TODO  
- */
-function idckx_token_valid($token)
-{
-
-}
-
-
-/**
  * 查询token  是否存在
  */
 function idckx_token_exist($token)
@@ -200,6 +191,39 @@ function idckx_token_get($token)
 	return $res;
 }
 
+/**
+ *  判断token是否有效
+ *
+ *  true :有效未过期    false: 无效或者过期并删除过期token
+ * @Author ZhangJun
+ * @param $token
+ * @return bool
+ * @throws \think\db\exception\DataNotFoundException
+ * @throws \think\db\exception\ModelNotFoundException
+ * @throws \think\exception\DbException
+ */
+function idckx_token_valid($token)
+{
+	//判断token是否存在
+	if (idckx_token_exist($token)) {
+		//存在
+		//获取获取token数据
+		$tokenData = idckx_token_get($token);
+		if ($tokenData['expire_time'] > time()) {
+			//未过期
+			return $tokenData;
+		} else {
+			//过期
+			//删除此过期token
+			idckx_token_del(1, $token);
+			return false;
+		}
+	} else {
+		//不存在
+		return false;
+	}
+
+}
 
 /**
  * 查询用户是否绑定的公用函数

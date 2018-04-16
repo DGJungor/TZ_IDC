@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\user\controller;
 
+use app\user\model\UserExtensionModel;
 use think\Loader;
 use think\Session;
 use think\Validate;
@@ -169,8 +170,6 @@ class LoginController extends HomeBaseController
 		}
 
 	}
-
-
 
 
 	/**
@@ -397,6 +396,7 @@ class LoginController extends HomeBaseController
 							//登录成功
 							// 将token加入到  session中
 							session('__token__', $dbToken['token']);
+							Session('user.expire_time', $dbToken['expire_time']);
 							return idckx_ajax_echo(null, '登录成功', 1);
 							break;
 						case 1:
@@ -467,12 +467,61 @@ class LoginController extends HomeBaseController
 			'user_pass'  => $this->request->post('password'),
 		];
 
+		//查询token是否有效
+		if (idckx_token_valid($token)) {
+			//有效
+
+			$log = $userModel->doName($user);
+
+			switch ($log) {
+				case 0:
+					//实例化模型
+					$userTokenModel     = new UserTokenModel();
+					$userExtensionModel = new UserExtensionModel();
+
+					//绑定第三方帐号
+					$userExtensionModel->bindUserOpenAccount(Session('user.id'), $type, $openId);
+
+					//查询token
+					$dbToken = idckx_token_get($token);
+
+					//写入过期时间
+					Session('user.expire_time', $dbToken['expire_time']);
+
+					//写入登录信息
+					cmf_user_action('login');
 
 
+					//拼装返回的数据数组
+					$resData = [
+						"id"     => Session('user.id'),
+						"avatar" => Session('user.avatar'),
+						"token"  => $token,
+					];
 
 
+					return idckx_ajax_echo($resData, '登录成功', 1);
+					break;
+				case 1:
+					return idckx_ajax_echo(null, '登录密码错误', 0);
+					break;
+				case 2:
+					return idckx_ajax_echo(null, '账户不存在', 0);
+					break;
+				case 3:
+					return idckx_ajax_echo(null, '账号禁止登录', 0);
+					break;
+				default :
+					return idckx_ajax_echo(null, '未受理请求', 0);
+					break;
+			}
 
 
+		} else {
+			//无效或或过期
+
+			return idckx_ajax_echo(null, 'token无效或过期', 5001);
+		}
 
 
 	}
@@ -510,6 +559,10 @@ class LoginController extends HomeBaseController
 //		dump(idckx_token_exist('e5f5092d6730dbeb6028ae86ae0b5c2d949640bbc6c257113658908fc77dc1b71'));
 
 //		return idckx_token_del(1,111111111);
+//		$value = session('aa','123123');
+//		$i  = Session::get();
+		dump(Session('user.id'));
+//		dump(Session::get());
 
 	}
 
