@@ -459,13 +459,15 @@ class LoginController extends HomeBaseController
 		$userModel = new UserModel();
 
 		//接收参数
-		$openId = $this->request->post('open_id');
-		$token  = $this->request->post('token');
-		$type   = $this->request->post('type');
+		$openId = $this->request->param('open_id');
+		$token  = $this->request->param('token');
+		$type   = $this->request->param('bing_type');
 		$user   = [
-			'user_login' => $this->request->post('username'),
-			'user_pass'  => $this->request->post('password'),
+			'user_login' => $this->request->param('username'),
+			'user_pass'  => $this->request->param('password'),
 		];
+
+		$token = trim($token);
 
 		//查询token是否有效
 		if (idckx_token_valid($token)) {
@@ -500,7 +502,7 @@ class LoginController extends HomeBaseController
 					];
 
 
-					return idckx_ajax_echo($resData, '登录成功', 1);
+					return idckx_ajax_echo($resData, '绑定并成功', 1);
 					break;
 				case 1:
 					return idckx_ajax_echo(null, '登录密码错误', 0);
@@ -516,13 +518,41 @@ class LoginController extends HomeBaseController
 					break;
 			}
 
-
 		} else {
 			//无效或或过期
+
 
 			return idckx_ajax_echo(null, 'token无效或过期', 5001);
 		}
 
+
+	}
+
+
+	/**
+	 * 解除绑定
+	 */
+	public function removeBinding()
+	{
+		//判断用户是否登录
+		if (cmf_is_user_login()) {
+			//已登录
+
+			//实例化模型
+			$userExtensionModel = new UserExtensionModel();
+
+			//获取参数
+			$type = $this->request->param('type');
+
+			//模型执行解绑
+			$res = $userExtensionModel->removeBinding($type);
+
+			return $res ? idckx_ajax_echo(null, '解绑成功', 1) : idckx_ajax_echo(null, '解绑失败', 0);
+		} else {
+
+			//未登录
+			return idckx_ajax_echo(null, '未登录', null);
+		}
 
 	}
 
@@ -534,33 +564,10 @@ class LoginController extends HomeBaseController
 	 */
 	public function test()
 	{
-//		//测试邮箱
-//		for ($x = 0; $x <= 100; $x++) {
-//			$info=cmf_send_email('god_zhangjun@sina.com', $x, $x);
-//			dump($info);
-//			dump($x);
-//		}
 
-//		$user = [
-//			'user_login' => 'jun',
-//			'user_pass'  => 'zhangjun',
-//		];
-//
-//		$hookParam = [
-//			'user'                    => $user,
-//			'compare_password_result' => true
-//		];
-//		dump(hook_one("user_login_start", $hookParam));
+		dump(cmf_get_current_user_id());
 
-
-		//储存验证码
-//		cmf_verification_code_log();
-
-//		dump(idckx_token_exist('e5f5092d6730dbeb6028ae86ae0b5c2d949640bbc6c257113658908fc77dc1b71'));
-
-//		return idckx_token_del(1,111111111);
-//		$value = session('aa','123123');
-//		$i  = Session::get();
+		dump(idckx_token_valid('2.00aSZU6GSmUCFBb825497896bwpGbB'));
 		dump(Session('user.id'));
 //		dump(Session::get());
 

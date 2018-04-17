@@ -16,7 +16,7 @@ class UserExtensionModel extends Model
 	 * 用户id  为用户扩展表添加空行
 	 *
 	 * @param null $userId
-	 * @param int  $userType
+	 * @param int $userType
 	 * @return false|int
 	 *
 	 */
@@ -87,6 +87,24 @@ class UserExtensionModel extends Model
 		$res = $this->save([
 			$deviceType => $openId,
 		], ['user_id' => $userId]);
+
+
+		return $res;
+
+	}
+
+	/**
+	 * 解除第三方绑定
+	 *
+	 * @author ZhangJun
+	 */
+	public function removeBinding($deviceType)
+	{
+
+
+		$res = $this->save([
+			$deviceType => null,
+		], ['user_id' => cmf_get_current_user_id()]);
 
 
 		return $res;
