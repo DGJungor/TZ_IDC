@@ -15,6 +15,7 @@ use app\user\model\UserExtensionModel;
 use cmf\controller\HomeBaseController;
 use think\Db;
 use think\Loader;
+use think\Session;
 use think\Validate;
 use app\user\model\UserModel;
 use app\tools\controller\AjaxController;
@@ -131,19 +132,14 @@ class RegisterController extends HomeBaseController
 	public function doRegisterByOpenAccount()
 	{
 
-		//判断是否接收到参数
-		if ($this->request->isPost()) {
+		//获取参数
+		$token = $this->request->param('token');
 
-			//获取注册表单的数据(POST)
-			$data = $this->request->post();
-
-
-			$res = $this->_register($data);
-
-			dump($res);
+		//验证token
+		idckx_token_valid($token);
 
 
-		}
+
 
 	}
 
@@ -316,18 +312,24 @@ class RegisterController extends HomeBaseController
 	public function test()
 	{
 
+		//初始化
+		$curl = curl_init();
+		//设置抓取的url
+		curl_setopt($curl, CURLOPT_URL, 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc06ebce515a3291b&secret=beb6ed823e4f332ac7834901918732b5');
+		//设置头文件的信息作为数据流输出
+//		curl_setopt($curl, CURLOPT_HEADER, 1);
+		//设置获取的信息以文件流的形式返回，而不是直接输出。
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		//执行命令
+		$data = curl_exec($curl);
+		//关闭URL请求
+		curl_close($curl);
+		//显示获得的数据
+//		print_r($data);
+		print($data);
 
-		$res = $this->_delUser(19);
-		dump($res);
-//		return $this->_test();
 
-//		//实例化模型
-//		$userModel = new UserModel();
-//
-//		$info = $userModel->verifyEmailExist('568171152@qq.com');
-//
-//
-//		dump($info);
+//		dump($data);
 
 	}
 

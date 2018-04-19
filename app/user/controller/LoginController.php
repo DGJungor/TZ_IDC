@@ -565,11 +565,16 @@ class LoginController extends HomeBaseController
 	public function test()
 	{
 
-		dump(cmf_get_current_user_id());
+//		dump(cmf_get_current_user_id());
+//
+//		dump(idckx_token_valid('2.00aSZU6GSmUCFBb825497896bwpGbB'));
+//		dump(Session('user.id'));
+////		dump(Session::get());
 
-		dump(idckx_token_valid('2.00aSZU6GSmUCFBb825497896bwpGbB'));
-		dump(Session('user.id'));
-//		dump(Session::get());
+
+
+
+
 
 	}
 

@@ -76,20 +76,26 @@ class UserExtensionModel extends Model
 	 * @param null $userId
 	 * @param null $deviceType
 	 * @param null $openId
-	 * @return false|int
+	 * @return false|int   false:此第三方帐号已绑定过帐号
 	 *
 	 */
 	public function bindUserOpenAccount($userId = null, $deviceType = null, $openId = null)
 	{
+		//验证第三方帐号是否已经绑定过帐号  
+		if (idckx_verify_binding($deviceType, $openId)) {
 
-//		$userData = $this->get(['user_id' => $userId]);
+			return false;
+		} else {
 
-		$res = $this->save([
-			$deviceType => $openId,
-		], ['user_id' => $userId]);
+			//绑定帐号 成功返回影响条数
+			$res = $this->save([
+				$deviceType => $openId,
+			], ['user_id' => $userId]);
 
 
-		return $res;
+			return $res;
+		}
+
 
 	}
 
@@ -110,5 +116,6 @@ class UserExtensionModel extends Model
 		return $res;
 
 	}
+
 
 }
