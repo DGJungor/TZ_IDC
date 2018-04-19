@@ -133,17 +133,138 @@ class RegisterController extends HomeBaseController
 	{
 
 		//获取参数
-		$token = $this->request->param('token');
+		$token    = $this->request->param('token');
+		$type     = $this->request->param('bing_type');
+		$nickname = $this->request->param('nickname');
+
 
 		//验证token
-		idckx_token_valid($token);
+		if (idckx_token_valid($token)) {
+			//token验证通过
+			$data = [
+				'nickname'     => $nickname,
+				'user_login'    => $data['username'],
+				'user_pass'     => cmf_password($data['password']),
+				'mobile'        => $data['mobile'],
+				'user_nickname' => $data['nickname'],
+				'user_email'    => $data['email'],
+				'user_status'   => $userStatus,
+				'avatar'        => '/avatar.jpg',
+			];
 
 
+		} else {
+			//不存在或则过期
+
+		}
+
+
+		//生成8位随机数当密码
+		$data[1] = mt_rand(10000000, 99999999);
 
 
 	}
 
 
+
+	/**
+	 * 私有   注册前台用户控制器
+	 *
+	 * @param $data
+	 * @return int
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
+	private function _register($data)
+	{
+
+		//实例化 用户模型
+		$userModel          = new UserModel();
+		$userExtensionModel = new UserExtensionModel();
+
+		//判断账户名是否存在
+		if (is_null($userModel->existUserLogin($data['username']))) {
+
+			//开启事务处理
+			Db::startTrans();
+			//添加用户表 表信息
+			$addUserId = $userModel->addUser($data);
+			//添加用户扩展表信息
+			$addUserExtensionId = $userExtensionModel->addUserExtension($addUserId);
+
+			//判断是否都添加成功
+			if ($addUserId && $addUserExtensionId) {
+				//注册成功
+				Db::commit();
+
+				return 1;
+			} else {
+				//注册失败
+				//回滚事务
+				Db::rollback();
+				return 0;
+			}
+
+		} else {
+
+			//账户名已存在
+			return 2;
+		}
+	}
+
+
+	/**
+	 * 删除用户帐号
+	 *
+	 * @authon ZhangJun
+	 * @param null $userId
+	 */
+	private function _delUser($userId = null)
+	{
+
+		//事务处理 同时删除用户表与用户扩张表
+		Db::transaction(function () use ($userId) {
+			Db::name('user')->where('id', $userId)->delete();
+			Db::name('user_extension')->where('user_id', $userId)->delete();
+		});
+
+	}
+
+	/**
+	 * 测试控制器
+	 */
+	public function test()
+	{
+
+
+		dump(mt_rand(10000000, 99999999));
+
+//++++++++++++++curl实例+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//		//初始化
+//		$curl = curl_init();
+//		//设置抓取的url
+//		curl_setopt($curl, CURLOPT_URL, 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc06ebce515a3291b&secret=beb6ed823e4f332ac7834901918732b5');
+//		//设置头文件的信息作为数据流输出
+////		curl_setopt($curl, CURLOPT_HEADER, 1);
+//		//设置获取的信息以文件流的形式返回，而不是直接输出。
+//		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+//		//执行命令
+//		$data = curl_exec($curl);
+//		//关闭URL请求
+//		curl_close($curl);
+//		//显示获得的数据
+////		print_r($data);
+//		print($data);
+
+
+	}
+
+
+//=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
 	/**
 	 * 前台用户注册
 	 */
@@ -241,97 +362,6 @@ class RegisterController extends HomeBaseController
 
 	}
 
-
-	/**
-	 * 私有   注册前台用户控制器
-	 *
-	 * @param $data
-	 * @return int
-	 * @throws \think\db\exception\DataNotFoundException
-	 * @throws \think\db\exception\ModelNotFoundException
-	 * @throws \think\exception\DbException
-	 */
-	private function _register($data)
-	{
-
-		//实例化 用户模型
-		$userModel          = new UserModel();
-		$userExtensionModel = new UserExtensionModel();
-
-		//判断账户名是否存在
-		if (is_null($userModel->existUserLogin($data['username']))) {
-
-			//开启事务处理
-			Db::startTrans();
-			//添加用户表 表信息
-			$addUserId = $userModel->addUser($data);
-			//添加用户扩展表信息
-			$addUserExtensionId = $userExtensionModel->addUserExtension($addUserId);
-
-			//判断是否都添加成功
-			if ($addUserId && $addUserExtensionId) {
-				//注册成功
-				Db::commit();
-
-				return 1;
-			} else {
-				//注册失败
-				//回滚事务
-				Db::rollback();
-				return 0;
-			}
-
-		} else {
-
-			//账户名已存在
-			return 2;
-		}
-	}
-
-
-	/**
-	 * 删除用户帐号
-	 *
-	 * @authon ZhangJun
-	 * @param null $userId
-	 */
-	private function _delUser($userId = null)
-	{
-
-		//事务处理 同时删除用户表与用户扩张表
-		Db::transaction(function () use ($userId) {
-			Db::name('user')->where('id', $userId)->delete();
-			Db::name('user_extension')->where('user_id', $userId)->delete();
-		});
-
-	}
-
-	/**
-	 * 测试控制器
-	 */
-	public function test()
-	{
-
-		//初始化
-		$curl = curl_init();
-		//设置抓取的url
-		curl_setopt($curl, CURLOPT_URL, 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc06ebce515a3291b&secret=beb6ed823e4f332ac7834901918732b5');
-		//设置头文件的信息作为数据流输出
-//		curl_setopt($curl, CURLOPT_HEADER, 1);
-		//设置获取的信息以文件流的形式返回，而不是直接输出。
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		//执行命令
-		$data = curl_exec($curl);
-		//关闭URL请求
-		curl_close($curl);
-		//显示获得的数据
-//		print_r($data);
-		print($data);
-
-
-//		dump($data);
-
-	}
 
 
 }
