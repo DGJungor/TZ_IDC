@@ -497,4 +497,21 @@ class UserModel extends Model
 
 
 	}
+
+	/**
+	 * 验证邮箱是否存已经存在
+	 *
+	 * @author ZhangJun
+	 */
+	public function verifyEmailExist($email = null)
+	{
+
+		$res = $this->get(['user_email' => $email]);
+
+		return $res ? $res : false;
+
+
+	}
+
+
 }

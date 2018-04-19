@@ -22,16 +22,6 @@ use app\tools\controller\AjaxController;
 class RegisterController extends HomeBaseController
 {
 
-	public function test()
-	{
-
-
-		$test =  cmf_get_root();
-		dump($test);
-
-
-	}
-
 
 	/**
 	 * 注册框
@@ -44,7 +34,7 @@ class RegisterController extends HomeBaseController
 	 *      username：用户账号
 	 *      email:邮箱
 	 */
-	public function doRegister()
+	public function doRegister($data = null)
 	{
 
 		//实例化ajax工具
@@ -122,6 +112,39 @@ class RegisterController extends HomeBaseController
 			$info = $ajaxTools->ajaxEcho(null, '错误请求', 0);
 			return $info;
 		}
+	}
+
+
+	/**
+	 * 第三方登录注册接口
+	 *
+	 * 参数：
+	 *    nickname: 昵称
+	 *    mobile：手机
+	 *    password：密码
+	 *    repassword：重复密码
+	 *    username：用户账号
+	 *    email:邮箱
+	 *
+	 * @author ZhangJun
+	 */
+	public function doRegisterByOpenAccount()
+	{
+
+		//判断是否接收到参数
+		if ($this->request->isPost()) {
+
+			//获取注册表单的数据(POST)
+			$data = $this->request->post();
+
+
+			$res = $this->_register($data);
+
+			dump($res);
+
+
+		}
+
 	}
 
 
@@ -221,4 +244,92 @@ class RegisterController extends HomeBaseController
 		}
 
 	}
+
+
+	/**
+	 * 私有   注册前台用户控制器
+	 *
+	 * @param $data
+	 * @return int
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 */
+	private function _register($data)
+	{
+
+		//实例化 用户模型
+		$userModel          = new UserModel();
+		$userExtensionModel = new UserExtensionModel();
+
+		//判断账户名是否存在
+		if (is_null($userModel->existUserLogin($data['username']))) {
+
+			//开启事务处理
+			Db::startTrans();
+			//添加用户表 表信息
+			$addUserId = $userModel->addUser($data);
+			//添加用户扩展表信息
+			$addUserExtensionId = $userExtensionModel->addUserExtension($addUserId);
+
+			//判断是否都添加成功
+			if ($addUserId && $addUserExtensionId) {
+				//注册成功
+				Db::commit();
+
+				return 1;
+			} else {
+				//注册失败
+				//回滚事务
+				Db::rollback();
+				return 0;
+			}
+
+		} else {
+
+			//账户名已存在
+			return 2;
+		}
+	}
+
+
+	/**
+	 * 删除用户帐号
+	 *
+	 * @authon ZhangJun
+	 * @param null $userId
+	 */
+	private function _delUser($userId = null)
+	{
+
+		//事务处理 同时删除用户表与用户扩张表
+		Db::transaction(function () use ($userId) {
+			Db::name('user')->where('id', $userId)->delete();
+			Db::name('user_extension')->where('user_id', $userId)->delete();
+		});
+
+	}
+
+	/**
+	 * 测试控制器
+	 */
+	public function test()
+	{
+
+
+		$res = $this->_delUser(19);
+		dump($res);
+//		return $this->_test();
+
+//		//实例化模型
+//		$userModel = new UserModel();
+//
+//		$info = $userModel->verifyEmailExist('568171152@qq.com');
+//
+//
+//		dump($info);
+
+	}
+
+
 }
