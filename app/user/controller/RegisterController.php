@@ -119,6 +119,8 @@ class RegisterController extends HomeBaseController
 	/**
 	 * 第三方登录注册接口
 	 *
+	 * 当通过  第三方登录并不绑定时, 自动 注册 一个帐号帐号类型为3的 第三方平台帐号
+	 *
 	 * 参数：
 	 *    nickname: 昵称
 	 *    mobile：手机
@@ -132,39 +134,59 @@ class RegisterController extends HomeBaseController
 	public function doRegisterByOpenAccount()
 	{
 
+
 		//获取参数
 		$token    = $this->request->param('token');
 		$type     = $this->request->param('bing_type');
 		$nickname = $this->request->param('nickname');
-
+		$openId   = $this->request->param('open_id');
 
 		//验证token
 		if (idckx_token_valid($token)) {
 			//token验证通过
 			$data = [
-				'nickname'     => $nickname,
-				'user_login'    => $data['username'],
-				'user_pass'     => cmf_password($data['password']),
-				'mobile'        => $data['mobile'],
-				'user_nickname' => $data['nickname'],
-				'user_email'    => $data['email'],
-				'user_status'   => $userStatus,
-				'avatar'        => '/avatar.jpg',
+				'nickname' => $nickname,
+				'username' => $type . '_' . $openId,
+				'password' => mt_rand(10000000, 99999999),
+				'mobile'   => null,
+				'email'    => null,
 			];
+
+			//添加用户信息
+			$registerUserId = $this->_register($data);
+
+			if ($registerUserId) {
+				//用户表成功
+
+				//实例化用户扩展表  模型
+				$userExtensionModel = new UserExtensionModel();
+
+				//判断是否绑定成功
+				if ($userExtensionModel->bindUserOpenAccount($registerUserId, $type, $openId)) {
+					//绑定成功
+
+
+				} else {
+					//绑定失败   删除已经创建的临时帐号
+					$this->_delUser($registerUserId);
+					return idckx_ajax_echo(null, '平台帐号绑定本地临时帐号失败', 0);
+				};
+
+
+			} else {
+				//添加用户表失败
+				return idckx_ajax_echo(null, '注册失败', 0);
+			}
 
 
 		} else {
 			//不存在或则过期
+			return idckx_ajax_echo(null, 'token无效或过期', 0);
 
 		}
 
 
-		//生成8位随机数当密码
-		$data[1] = mt_rand(10000000, 99999999);
-
-
 	}
-
 
 
 	/**
@@ -198,18 +220,18 @@ class RegisterController extends HomeBaseController
 				//注册成功
 				Db::commit();
 
-				return 1;
+				return $addUserId;
 			} else {
 				//注册失败
 				//回滚事务
 				Db::rollback();
-				return 0;
+				return false;
 			}
 
 		} else {
 
 			//账户名已存在
-			return 2;
+			return false;
 		}
 	}
 
@@ -229,16 +251,21 @@ class RegisterController extends HomeBaseController
 			Db::name('user_extension')->where('user_id', $userId)->delete();
 		});
 
+
 	}
 
 	/**
 	 * 测试控制器
 	 */
-	public function test()
+	public function test($openId)
 	{
 
+//		$this->_delUser(22);
+		$loginC = new LoginController();
+//
+		return $loginC->doLoginByOpenAccount($openId, 'weibo', '57323ced9c864af9dbaa7400f4e4ed73');
 
-		dump(mt_rand(10000000, 99999999));
+
 
 //++++++++++++++curl实例+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -361,7 +388,6 @@ class RegisterController extends HomeBaseController
 		}
 
 	}
-
 
 
 }
