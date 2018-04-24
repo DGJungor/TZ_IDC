@@ -361,17 +361,20 @@ class LoginController extends HomeBaseController
 	 * @throws \think\exception\DbException
 	 * @throws \think\exception\PDOException
 	 */
-	public function doLoginByOpenAccount()
+	public function doLoginByOpenAccount($openId = null, $type = null, $token = null)
 	{
-
 
 		//实例化模型
 		$userModel = new UserModel();
 
-		//获取参数
-		$openId = $this->request->param('open_id');
-		$type   = $this->request->param('type');
-		$token  = $this->request->param('token');
+		//若有页面传参则执行页面函数
+		if ($this->request->param()) {
+			//获取参数
+			$openId = $this->request->param('open_id');
+			$type   = $this->request->param('type');
+			$token  = $this->request->param('token');
+
+		}
 
 		//查询token
 		$dbToken = idckx_token_get($token);
@@ -570,10 +573,6 @@ class LoginController extends HomeBaseController
 //		dump(idckx_token_valid('2.00aSZU6GSmUCFBb825497896bwpGbB'));
 //		dump(Session('user.id'));
 ////		dump(Session::get());
-
-
-
-
 
 
 	}

@@ -139,7 +139,7 @@ class RegisterController extends HomeBaseController
 		$token    = $this->request->param('token');
 		$type     = $this->request->param('bing_type');
 		$nickname = $this->request->param('nickname');
-		$openId   = $this->request->param('open_id');
+		$openId   = $this->request->param('op_id');
 
 		//验证token
 		if (idckx_token_valid($token)) {
@@ -165,6 +165,10 @@ class RegisterController extends HomeBaseController
 				if ($userExtensionModel->bindUserOpenAccount($registerUserId, $type, $openId)) {
 					//绑定成功
 
+					//执行登录
+					$loginC = new LoginController();
+
+					return $loginC->doLoginByOpenAccount($openId, $type, $token);
 
 				} else {
 					//绑定失败   删除已经创建的临时帐号
@@ -266,7 +270,6 @@ class RegisterController extends HomeBaseController
 		return $loginC->doLoginByOpenAccount($openId, 'weibo', '57323ced9c864af9dbaa7400f4e4ed73');
 
 
-
 //++++++++++++++curl实例+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //		//初始化
@@ -295,7 +298,8 @@ class RegisterController extends HomeBaseController
 	/**
 	 * 前台用户注册
 	 */
-	public function indexCmf()
+	public
+	function indexCmf()
 	{
 		$redirect = $this->request->post("redirect");
 		if (empty($redirect)) {
@@ -316,7 +320,8 @@ class RegisterController extends HomeBaseController
 	/**
 	 * 前台用户注册提交
 	 */
-	public function doRegisterCmf()
+	public
+	function doRegisterCmf()
 	{
 		if ($this->request->isPost()) {
 			$rules = [
