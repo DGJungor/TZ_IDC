@@ -226,7 +226,7 @@ function idckx_token_valid($token)
 }
 
 /**
- * 查询用户是否绑定的公用函数
+ * 查询用户是否绑定的公用函数   TODO 若参数为空 取值不正确
  *
  * @author ZhangJun
  * @param $type //例:  wechat:微信   weibo:新浪微博    qq:腾讯qq
@@ -270,6 +270,21 @@ function https_request($url, $data = null)
 	return $output;
 }
 
+/**
+ * 测试函数
+ */
+function idckx_test($par1, $par2)
+{
+
+	if (empty($par1) && empty($par2)) {
+
+		return 1;
+	} else {
+
+		return 2;
+	}
+
+}
 
 
 

@@ -71,6 +71,7 @@ class LoginController extends HomeBaseController
 
 		//清空session中的信息
 		Session('user', null);
+		Session('__token__', null);
 		$data = [
 			'url' => '/',
 		];
@@ -368,20 +369,19 @@ class LoginController extends HomeBaseController
 		$userModel = new UserModel();
 
 		//若有页面传参则执行页面函数
-		if ($this->request->param()) {
+		if (empty($openId)) {
 			//获取参数
 			$openId = $this->request->param('open_id');
 			$type   = $this->request->param('type');
 			$token  = $this->request->param('token');
-
 		}
+
 
 		//查询token
 		$dbToken = idckx_token_get($token);
 
-
 		//判断有无绑定第三方帐号
-		if ($bindingId = idckx_verify_binding($type, $openId)) {
+		if ($bindingId = idckx_verify_binding($type, $dbToken['user_id'])) {
 			//有绑定
 
 			//验证数据库中否存在前端发送过来的token
@@ -451,6 +451,8 @@ class LoginController extends HomeBaseController
 	 *   open_id:   第三方帐号的openId
 	 *    token :   第三方登录的token值
 	 *      type: 第三方平台   wechat微信
+	 *
+	 *
 	 *
 	 * 状态码:
 	 *  登录成功:   绑定成功 1  绑定失败2

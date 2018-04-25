@@ -174,7 +174,7 @@ class RegisterController extends HomeBaseController
 					//绑定失败   删除已经创建的临时帐号
 					$this->_delUser($registerUserId);
 					return idckx_ajax_echo(null, '平台帐号绑定本地临时帐号失败', 0);
-				};
+				}
 
 
 			} else {
@@ -261,14 +261,14 @@ class RegisterController extends HomeBaseController
 	/**
 	 * 测试控制器
 	 */
-	public function test($openId)
+	public function test()
 	{
 
-//		$this->_delUser(22);
-		$loginC = new LoginController();
-//
-		return $loginC->doLoginByOpenAccount($openId, 'weibo', '57323ced9c864af9dbaa7400f4e4ed73');
+//		dump(idckx_verify_binding('weibo',null));
+//		dump(idckx_test(1, null));
 
+		dump(idckx_token_get('57323ced9c864af9dbaa7400f4e4ed73'));
+		dump(Session::get());
 
 //++++++++++++++curl实例+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
