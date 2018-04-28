@@ -58,7 +58,7 @@ class BaiduSitemapController extends AdminBaseController
 		foreach ($portalData as $value => $item) {
 			$cid = idckx_get_category_id($item['id']);
 			$url = $domain . cmf_url('portal/Article/index', ['id' => $item['id'], 'cid' => $cid]);
-			$sitemapModel->AddItem($url, 0);
+			$sitemapModel->AddItem($url, $item['published_time'],0);
 		}
 		$sitemapModel->SaveToFile('sitemap.xml');
 

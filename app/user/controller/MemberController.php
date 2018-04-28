@@ -493,7 +493,7 @@ class MemberController extends UserBaseController
 			'user_id'        => $userId,
 			'post_title'     => $postData['title'],
 			'post_excerpt'   => $postData['descriptions'],
-			'post_content'   => $portalPostModel->setPostContentAttr($postData['content']),
+			'post_content'   => idckx_post_removexss($postData['content']),
 			'post_status'    => 0,
 			'published_time' => time(),
 			'post_keywords'  => $postData['keyword'],

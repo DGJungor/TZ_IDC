@@ -68,7 +68,7 @@ class SitemapController extends HomeBaseController
 	//$changefreq | always 经常,hourly 每小时,daily 每天,weekly 每周,monthly 每月,yearly 每年,never 从不
 	/**************************************************************************/
 
-	function AddItem($loc, $priority, $changefreq = 'Always')
+	function AddItem($loc, $time, $priority, $changefreq = 'Always')
 	{
 		$arr           = array(
 			1,
@@ -81,7 +81,7 @@ class SitemapController extends HomeBaseController
 		$this->items[] = array(
 			'loc'        => $loc,
 			'priority'   => $arr[$priority],
-			'lastmod'    => date('Y-m-d H:i:s', time()),
+			'lastmod'    => date('Y-m-d H:i:s', $time),
 			'changefreq' => $changefreq
 		);
 	}
@@ -91,7 +91,7 @@ class SitemapController extends HomeBaseController
 	/**************************************************************************/
 	function Build()
 	{
-		$s =null;
+		$s = null;
 		$s .= "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\r\n";
 		// items
 		for ($i = 0; $i < count($this->items); $i++) {
@@ -108,8 +108,8 @@ class SitemapController extends HomeBaseController
 	}
 //	function Build()
 //	{
-/*		$s = "<?xml version='1.0' encoding='{$this->encoding}'?>\r\n";*/
-/*		$s .= "<?xml-stylesheet type='text/xsl' href='sitemap.xsl'?>";*/
+	/*		$s = "<?xml version='1.0' encoding='{$this->encoding}'?>\r\n";*/
+	/*		$s .= "<?xml-stylesheet type='text/xsl' href='sitemap.xsl'?>";*/
 //		$s .= "\t<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\r\n";
 //		// items
 //		for ($i = 0; $i < count($this->items); $i++) {

@@ -250,6 +250,16 @@ function idckx_verify_binding($type, $openId)
 }
 
 /**
+ * 过滤XSS
+ */
+function idckx_post_removexss($html)
+{
+	$removeXssC = new \app\common\controller\RemoveXssController();
+	return $removeXssC->string_remove_xss(cmf_replace_content_file_url(htmlspecialchars_decode($html), true));
+
+}
+
+/**
  * @param $url
  * @param null $data
  * @return mixed
