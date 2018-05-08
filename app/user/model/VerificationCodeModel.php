@@ -9,6 +9,18 @@ use think\Model;
 class VerificationCodeModel extends Model
 {
 
+
+	/**
+	 *   查询验证码
+	 *
+	 */
+	public function queryCode()
+	{
+
+
+	}
+
+
 	/**
 	 * 添加验证码
 	 *
@@ -38,6 +50,24 @@ class VerificationCodeModel extends Model
 		$result = Db::name('user_token')->insert($data);
 
 		return $result;
+	}
+
+
+	/**
+	 * 清理所有过期code
+	 *
+	 * @author ZhangJun
+	 */
+	public function cleanExpireCode()
+	{
+
+		$res = $this
+			->where('expire_time', '<', time())
+			->delete();
+
+		return $res;
+
+
 	}
 
 }

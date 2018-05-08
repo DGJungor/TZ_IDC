@@ -10,31 +10,13 @@
 // +----------------------------------------------------------------------
 namespace app\user\controller;
 
+use app\user\model\VerificationCodeModel;
 use cmf\controller\HomeBaseController;
 use think\Validate;
 
 class VerificationCodeController extends HomeBaseController
 {
 
-	/**
-	 * post_content 自动转化
-	 * @param $value
-	 * @return string
-	 */
-	public function getPostContentAttr($value)
-	{
-		return cmf_replace_content_file_url(htmlspecialchars_decode($value));
-	}
-
-	/**
-	 * post_content 自动转化
-	 * @param $value
-	 * @return string
-	 */
-	public function setPostContentAttr($value)
-	{
-		return htmlspecialchars(cmf_replace_content_file_url(htmlspecialchars_decode($value), true));
-	}
 
 	/**
 	 * 发送邮箱验证码   TODO
@@ -49,25 +31,37 @@ class VerificationCodeController extends HomeBaseController
 	public function sendEmailCode()
 	{
 
+
+
+
 		//获取参数
-		$email = $this->request->param('email');
+		$data['email'] = $this->request->param('email');
 
 		//实例验证类
 		$validate = new Validate([
-			'email' => 'require',
+			'email' => 'require|email',
 		]);
+
+		//设置错误提示
 		$validate->message([
 			'email.require' => '邮箱不能为空!',
+			'email.email'   => '邮箱格式错误!',
 		]);
 
+		//若验证不通过 则返回错I物提示
+		if (!$validate->check($data)) {
+			return idckx_ajax_echo(null, $validate->getError(), 0);
+		}
 
-		dump($this->string_remove_xss($email));
-		$a = $this->string_remove_xss($email);
-		dump($this->getPostContentAttr($a));
-		//测试数据
-		dump($this->setPostContentAttr($email));
-		$b = $this->setPostContentAttr($email);
-		dump($this->getPostContentAttr($b));
+		//实例化模型
+		$verificationCodeModel = new VerificationCodeModel();
+
+		
+
+		dump($verificationCodeModel->cleanExpireCode());
+
+		//打印数据
+//		dump($email);
 
 	}
 
@@ -76,11 +70,12 @@ class VerificationCodeController extends HomeBaseController
 	 */
 
 
-
-
 //=================================无用代码=========================================================================================
 
 
+	/**
+	 *
+	 */
 	public function send()
 	{
 		$validate = new Validate([
