@@ -14,8 +14,10 @@ class VerificationCodeModel extends Model
 	 *   查询验证码
 	 *
 	 */
-	public function queryCode()
+	public function queryCode($account)
 	{
+
+//		$code = $this->
 
 
 	}
@@ -24,19 +26,54 @@ class VerificationCodeModel extends Model
 	/**
 	 * 添加验证码
 	 *
+	 * 默认  1000 到 9999   4位数的随机验证码    默认过期时间   为一天后
 	 * @author ZhangJun
 	 */
-	public function addCode($account = null, $code = null, $expire_time = null)
+	public function addCode($account = null, $code = null)
 	{
 		$data = [
-			'count'     => 0,
-			'send_time' => time(),
+			'account'     => $account,
+			'count'       => 1,
+			'send_time'   => time(),
+			'code'        => $code,
+			'expire_time' => strtotime('+1day'),
 		];
+		$res  = $this->save($data);
 
+		return $res;
 
 	}
 
 
+	/**
+	 * 更新验证码
+	 *
+	 * @author ZhangJun
+	 */
+	public function updateCode($account = null, $code = null)
+	{
+		$data = $this->where('account', $account)->find();
+
+		if ($data['send_time'] > strtotime('-1day')) {
+
+
+		}
+
+		$t = $this->where('account', $account)
+			->setInc('count');
+
+		return $t;
+
+	}
+
+
+	/**
+	 * @param $userId
+	 * @param $token
+	 * @param int $expireTime
+	 * @param string $deviceType
+	 * @return int|string
+	 */
 	public function addUserTokenData($userId, $token, $expireTime = 3600, $deviceType = "web")
 	{
 		$data = [

@@ -32,8 +32,6 @@ class VerificationCodeController extends HomeBaseController
 	{
 
 
-
-
 		//获取参数
 		$data['email'] = $this->request->param('email');
 
@@ -56,9 +54,65 @@ class VerificationCodeController extends HomeBaseController
 		//实例化模型
 		$verificationCodeModel = new VerificationCodeModel();
 
-		
+		$codeData = $verificationCodeModel->get(['account' => $data['email']]);
 
-		dump($verificationCodeModel->cleanExpireCode());
+		//生成验证码
+		$code = mt_rand(1000, 9999);
+
+		//判断是否为空
+		if (empty($codeData)) {
+			//空
+
+			//添加验证码到数据库中
+			$verificationCodeModel->addCode($data['email'], $code);
+
+			//向邮箱发送验证码
+			cmf_send_email($data['email'], "【IDC快讯】", '您的验证码为:' . $code . '(24小时内有效)');
+
+			return idckx_ajax_echo(null, "发送成功", 1);
+
+		} else {
+			//不为空
+
+//			//发送时间超过24小时
+//			if ($codeData['send_time'] > strtotime('-1day')) {
+//
+//				$verificationCodeModel->updateCode('send_time', time());
+//
+//				$verificationCodeModel->save([
+//					'count'     => 'thinkphp',
+//					'send_time' => time()
+//				], ['account' => $data['email']]);
+//			}
+
+			$test = $verificationCodeModel->where('account', $data['email'])->find();
+
+//			dump();
+
+			if ($codeData['count'] > 9 && $codeData['send_time'] > strtotime('-1day')) {
+				//发送已经超过次数
+
+				return idckx_ajax_echo(null, '验证码发送超过10次,请24小时之后尝试', 0);
+
+			} else {
+				//重新发送验证码
+
+				return $verificationCodeModel->updateCode($data['email'], $code);
+
+
+			}
+
+
+			dump('不为空');
+		}
+
+
+		dump($codeData);
+
+
+		//清理过期验证码
+//		dump($verificationCodeModel->cleanExpireCode());
+
 
 		//打印数据
 //		dump($email);
