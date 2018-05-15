@@ -31,7 +31,6 @@ class VerificationCodeController extends HomeBaseController
     public function sendEmailCode()
     {
 
-
         //获取参数
         $data['email'] = $this->request->param('email');
 
@@ -67,7 +66,7 @@ class VerificationCodeController extends HomeBaseController
             $verificationCodeModel->addCode($data['email'], $code);
 
             //向邮箱发送验证码
-            cmf_send_email($data['email'], "【IDC快讯】", '您的验证码为:' . $code . '(24小时内有效)');
+            cmf_send_email($data['email'], "IDC快讯", '您的验证码为:' . $code . '(24小时内有效)');
 
             return idckx_ajax_echo(null, "发送成功", 1);
 
@@ -96,7 +95,7 @@ class VerificationCodeController extends HomeBaseController
                 //更新验证码
                 $verificationCodeModel->updateCode($data['email'], $code);
                 //向邮箱发送验证码
-                cmf_send_email($data['email'], "【IDC快讯】", '您的验证码为:' . $code . '(24小时内有效)');
+                cmf_send_email($data['email'], "IDC快讯", '您的验证码为:' . $code . '(24小时内有效)');
 
                 return idckx_ajax_echo(null, "发送成功", 1);
 
