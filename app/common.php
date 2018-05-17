@@ -34,7 +34,7 @@ use cmf\lib\Storage;
  */
 function idckx_ajax_echo($data = [], $info = "", $code = 0)
 {
-	return json(["state" => $code, "data" => $data, "msg" => $info]);
+    return json(["state" => $code, "data" => $data, "msg" => $info]);
 }
 
 
@@ -62,18 +62,18 @@ function idckx_api_baidupush($urls = array([]))
 //		'http://www.example.com/1.html',
 //		'http://www.example.com/2.html',
 //	);
-	$api     = 'http://data.zz.baidu.com/urls?site=www.idckx.com&token=Yy23pqlRJFkyBy0Z';
-	$ch      = curl_init();
-	$options = array(
-		CURLOPT_URL            => $api,
-		CURLOPT_POST           => true,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_POSTFIELDS     => implode("\n", $urls),
-		CURLOPT_HTTPHEADER     => array('Content-Type: text/plain'),
-	);
-	curl_setopt_array($ch, $options);
-	$result = curl_exec($ch);
-	return $result;
+    $api     = 'http://data.zz.baidu.com/urls?site=www.idckx.com&token=Yy23pqlRJFkyBy0Z';
+    $ch      = curl_init();
+    $options = array(
+        CURLOPT_URL            => $api,
+        CURLOPT_POST           => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POSTFIELDS     => implode("\n", $urls),
+        CURLOPT_HTTPHEADER     => array('Content-Type: text/plain'),
+    );
+    curl_setopt_array($ch, $options);
+    $result = curl_exec($ch);
+    return $result;
 }
 
 /**
@@ -89,12 +89,12 @@ function idckx_api_baidupush($urls = array([]))
 function idckx_get_category_id($portalId = null)
 {
 
-	$categoryData = Db::name('portal_category_post')
-		->field('category_id')
-		->where('post_id', $portalId)
-		->find();
+    $categoryData = Db::name('portal_category_post')
+        ->field('category_id')
+        ->where('post_id', $portalId)
+        ->find();
 
-	return $categoryData['category_id'];
+    return $categoryData['category_id'];
 }
 
 
@@ -110,13 +110,13 @@ function idckx_get_category_id($portalId = null)
 function idckx_token_add($userId, $token, $expireTime = 3600, $deviceType = "web")
 {
 
-	//实例化
-	$userTokenModel = new \app\common\model\UserTokenModel();
+    //实例化
+    $userTokenModel = new \app\common\model\UserTokenModel();
 
-	//数据库操作
-	$res = $userTokenModel->addUserTokenData($userId, $token, $expireTime, $deviceType);
+    //数据库操作
+    $res = $userTokenModel->addUserTokenData($userId, $token, $expireTime, $deviceType);
 
-	return $res;
+    return $res;
 }
 
 
@@ -130,27 +130,27 @@ function idckx_token_add($userId, $token, $expireTime = 3600, $deviceType = "web
 function idckx_token_del($type, $par)
 {
 
-	//实例化token模型
-	$userTokenModel = new \app\common\model\UserTokenModel();
+    //实例化token模型
+    $userTokenModel = new \app\common\model\UserTokenModel();
 
-	switch ($type) {
+    switch ($type) {
 
-		//token
-		case 1:
-			$res = $userTokenModel->deleteToken('token', $par);
-			return $res;
-			break;
+        //token
+        case 1:
+            $res = $userTokenModel->deleteToken('token', $par);
+            return $res;
+            break;
 
-		//user_id
-		case 2:
-			$res = $userTokenModel->deleteToken('user_id', $par);
-			return $res;
-			break;
+        //user_id
+        case 2:
+            $res = $userTokenModel->deleteToken('user_id', $par);
+            return $res;
+            break;
 
-		//未知类型
-		default:
-			break;
-	}
+        //未知类型
+        default:
+            break;
+    }
 }
 
 
@@ -159,14 +159,14 @@ function idckx_token_del($type, $par)
  */
 function idckx_token_exist($token)
 {
-	//实例化token模型
-	$userTokenModel = new \app\common\model\UserTokenModel();
+    //实例化token模型
+    $userTokenModel = new \app\common\model\UserTokenModel();
 
-	//查询token
-	$res = $userTokenModel->getTokenData($token);
+    //查询token
+    $res = $userTokenModel->getTokenData($token);
 
-	//三元运算符判断是否存在数据
-	return $res ? true : false;
+    //三元运算符判断是否存在数据
+    return $res ? true : false;
 
 }
 
@@ -182,13 +182,13 @@ function idckx_token_exist($token)
  */
 function idckx_token_get($token)
 {
-	//实例化
-	$userTokenModel = new \app\common\model\UserTokenModel();
+    //实例化
+    $userTokenModel = new \app\common\model\UserTokenModel();
 
-	//获取数据
-	$res = $userTokenModel->getTokenData($token);
+    //获取数据
+    $res = $userTokenModel->getTokenData($token);
 
-	return $res;
+    return $res;
 }
 
 /**
@@ -204,24 +204,24 @@ function idckx_token_get($token)
  */
 function idckx_token_valid($token)
 {
-	//判断token是否存在
-	if (idckx_token_exist($token)) {
-		//存在
-		//获取获取token数据
-		$tokenData = idckx_token_get($token);
-		if ($tokenData['expire_time'] > time()) {
-			//未过期
-			return $tokenData;
-		} else {
-			//过期
-			//删除此过期token
-			idckx_token_del(1, $token);
-			return false;
-		}
-	} else {
-		//不存在
-		return false;
-	}
+    //判断token是否存在
+    if (idckx_token_exist($token)) {
+        //存在
+        //获取获取token数据
+        $tokenData = idckx_token_get($token);
+        if ($tokenData['expire_time'] > time()) {
+            //未过期
+            return $tokenData;
+        } else {
+            //过期
+            //删除此过期token
+            idckx_token_del(1, $token);
+            return false;
+        }
+    } else {
+        //不存在
+        return false;
+    }
 
 }
 
@@ -238,14 +238,32 @@ function idckx_token_valid($token)
  */
 function idckx_verify_binding($type, $openId)
 {
-	//实例化
-	$userExtensionModel = new \app\common\model\UserExtensionModel();
+    //实例化
+    $userExtensionModel = new \app\common\model\UserExtensionModel();
 
-	//查询用户扩张信息
-	$extensionInfo = $userExtensionModel->queryBinding($type, $openId);
+    //查询用户扩张信息
+    $extensionInfo = $userExtensionModel->queryBinding($type, $openId);
 
-	//三元运算符判断是否存在数据
-	return $extensionInfo ? $extensionInfo['user_id'] : false;
+    //三元运算符判断是否存在数据
+    return $extensionInfo ? $extensionInfo['user_id'] : false;
+
+}
+
+/**
+ * 检查帐号中的帐号或者邮箱是否存在并唯一
+ *
+ * @author ZhangJun
+ * @param $type
+ */
+function idckx_check_account_only($account = null, $type)
+{
+
+    //实例化
+    $userModel = new \app\common\model\UserModel();
+
+    $count = $userModel->where($type, $account)->count();
+
+    return $count == 1 ? true : false;
 
 }
 
@@ -254,8 +272,8 @@ function idckx_verify_binding($type, $openId)
  */
 function idckx_post_removexss($html)
 {
-	$removeXssC = new \app\common\controller\RemoveXssController();
-	return $removeXssC->string_remove_xss(cmf_replace_content_file_url(htmlspecialchars_decode($html), true));
+    $removeXssC = new \app\common\controller\RemoveXssController();
+    return $removeXssC->string_remove_xss(cmf_replace_content_file_url(htmlspecialchars_decode($html), true));
 
 }
 
@@ -266,18 +284,18 @@ function idckx_post_removexss($html)
  */
 function https_request($url, $data = null)
 {
-	$curl = curl_init();
-	curl_setopt($curl, CURLOPT_URL, $url);
-	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-	if (!empty($data)) {
-		curl_setopt($curl, CURLOPT_POST, 1);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-	}
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-	$output = curl_exec($curl);
-	curl_close($curl);
-	return $output;
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+    if (!empty($data)) {
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    }
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $output = curl_exec($curl);
+    curl_close($curl);
+    return $output;
 }
 
 /**
@@ -286,13 +304,13 @@ function https_request($url, $data = null)
 function idckx_test($par1, $par2)
 {
 
-	if (empty($par1) && empty($par2)) {
+    if (empty($par1) && empty($par2)) {
 
-		return 1;
-	} else {
+        return 1;
+    } else {
 
-		return 2;
-	}
+        return 2;
+    }
 
 }
 

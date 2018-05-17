@@ -16,10 +16,11 @@ class VerificationCodeModel extends Model
      */
     public function queryCode($account)
     {
+        //根据地址   取出验证码
+        $codeData = $this->where('account', $account)->find();
 
-//		$code = $this->
-
-
+        //
+        return $codeData;
     }
 
 
@@ -32,13 +33,13 @@ class VerificationCodeModel extends Model
     public function addCode($account = null, $code = null)
     {
         $data = [
-            'account' => $account,
-            'count' => 1,
-            'send_time' => time(),
-            'code' => $code,
+            'account'     => $account,
+            'count'       => 1,
+            'send_time'   => time(),
+            'code'        => $code,
             'expire_time' => strtotime('+1day'),
         ];
-        $res = $this->save($data);
+        $res  = $this->save($data);
 
         return $res;
 
@@ -75,10 +76,10 @@ class VerificationCodeModel extends Model
     public function addUserTokenData($userId, $token, $expireTime = 3600, $deviceType = "web")
     {
         $data = [
-            "user_id" => $userId,
+            "user_id"     => $userId,
             "expire_time" => time() + $expireTime,
             "create_time" => time(),
-            "token" => $token,
+            "token"       => $token,
             "device_type" => $deviceType
         ];
 

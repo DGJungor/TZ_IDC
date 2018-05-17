@@ -10,8 +10,11 @@
 // +----------------------------------------------------------------------
 namespace app\user\controller;
 
+use app\user\model\UserModel;
 use app\user\model\VerificationCodeModel;
 use cmf\controller\HomeBaseController;
+use think\Loader;
+use think\Request;
 use think\Validate;
 
 class VerificationCodeController extends HomeBaseController
@@ -42,7 +45,7 @@ class VerificationCodeController extends HomeBaseController
         //设置错误提示
         $validate->message([
             'email.require' => '邮箱不能为空!',
-            'email.email' => '邮箱格式错误!',
+            'email.email'   => '邮箱格式错误!',
         ]);
 
         //若验证不通过 则返回错I物提示
@@ -56,7 +59,7 @@ class VerificationCodeController extends HomeBaseController
         $codeData = $verificationCodeModel->get(['account' => $data['email']]);
 
         //生成验证码
-        $code = mt_rand(1000, 9999);
+        $code = mt_rand(100000, 999999);
 
         //判断数据库中是否存在此帐号的验证码
         if (empty($codeData)) {
@@ -73,7 +76,7 @@ class VerificationCodeController extends HomeBaseController
         } else {
             //不为空
 
-            if ($codeData['count'] > 9 && $codeData['send_time'] > strtotime('-1day')) {
+            if ($codeData['count'] > 5 && $codeData['send_time'] > strtotime('-1day')) {
                 //发送已经超过次数
 
                 return idckx_ajax_echo(null, '验证码发送超过10次,请24小时之后尝试', 0);
@@ -87,7 +90,7 @@ class VerificationCodeController extends HomeBaseController
                 if ($codeData['send_time'] < strtotime('-1day')) {
                     $verificationCodeModel->save([
                         'send_time' => time(),
-                        'count' => 0
+                        'count'     => 0
                     ], ['account' => $data['email']]);
                 }
 
@@ -105,10 +108,123 @@ class VerificationCodeController extends HomeBaseController
 
     }
 
+
+
     /**
      * 手机发送验证码  TODO 必须功能  (延后开发)
      */
 
+
+    /**
+     * 重置密码
+     *
+     * 判断验证码是否正确 重置密码
+     *
+     *  参数:
+     *      email:邮箱
+     *      code: 验证码
+     *      password:重置后的密码
+     *
+     * @author ZhangJun
+     *
+     */
+    public function resetPassword()
+    {
+
+////        dump(idckx_check_account_only('515149416@qq.com', 'user_email'));
+//        dump(idckx_check_account_only('568171152@qq.com', 'user_email'));
+//
+//        die();
+
+//        if (0) {
+//            dump(1111);
+//
+//        } else {
+//            dump(22222);
+//
+//        }
+//        die();
+
+
+        //获取参数
+        $data = $this->request->param();
+
+        //生成验证器
+        $changePasswordValidate = Loader::validate('ChangePassword');
+
+        //验证密码格式
+        if (!$changePasswordValidate->check($data)) {
+            //密码格式错误
+            return idckx_ajax_echo(null, $changePasswordValidate->getError(), 0);
+        }
+
+        //实例化模型
+        $verificationCodeModel = new VerificationCodeModel();
+        $userModel             = new UserModel();
+
+        //查看使用此邮箱的帐号是否存在并唯一
+        if (!idckx_check_account_only($data['email'], 'user_email')) {
+            return idckx_ajax_echo(null, '帐号异常,请联系管理员!', 0);
+        }
+
+        //验证验证码是否有效
+        if ($codeInfo = cmf_check_verification_code($data['email'], $data['code'], $clear = false)) {
+            return idckx_ajax_echo(null, $codeInfo, 0);
+        }
+
+//        $userModel->emailPasswordReset($data['email'], $data['password']);
+
+        //判断密码是否重置成功  成功则起初验证码
+        if (!$userModel->emailPasswordReset($data['email'], $data['password'])) {
+
+            //清除验证码
+            cmf_clear_verification_code($data['email']);
+            return idckx_ajax_echo(null, '密码重置成功', 1);
+        } else {
+            return idckx_ajax_echo(null, '密码重置失败', 0);
+        }
+
+
+//        dump($test);
+
+        die();
+
+        //实例化模型
+        $userModel = new UserModel();
+
+        //获取用户信息
+        $userData = $userModel->where('id', cmf_get_current_user_id())->find();
+
+        //获取接收到的数据信息
+        $data['password'] = $this->request->param('password');
+
+        //生成验证器
+        $changePasswordValidate = Loader::validate('ChangePassword');
+
+        //验证新密码规则是否正确
+        if ($changePasswordValidate->check($data)) {
+
+            //判断原密码是否正确
+            if (cmf_compare_password($data['oldPassword'], $userData['user_pass'])) {
+                //修改密码并判断是否成功
+                if ($userModel->changePassword($data['password'])) {
+                    $info = $ajaxTools->ajaxEcho(null, '修改成功', 1);
+                    return $info;
+                } else {
+                    $info = $ajaxTools->ajaxEcho(null, '修改失败', 0);
+                    return $info;
+                }
+            } else {
+                $info = $ajaxTools->ajaxEcho(null, '原密码错误', 0);
+                return $info;
+            }
+
+        } else {
+            $validateResultInfo = $changePasswordValidate->getError();
+            $info               = $ajaxTools->ajaxEcho(null, $validateResultInfo, 0);
+            return $info;
+        }
+    }
 
 //=================================无用代码=========================================================================================
 
@@ -152,13 +268,13 @@ class VerificationCodeController extends HomeBaseController
 
             $emailTemplate = cmf_get_option('email_template_verification_code');
 
-            $user = cmf_get_current_user();
+            $user     = cmf_get_current_user();
             $username = empty($user['user_nickname']) ? $user['user_login'] : $user['user_nickname'];
 
             $message = htmlspecialchars_decode($emailTemplate['template']);
             $message = $this->display($message, ['code' => $code, 'username' => $username]);
             $subject = empty($emailTemplate['subject']) ? 'ThinkCMF验证码' : $emailTemplate['subject'];
-            $result = cmf_send_email($data['username'], $subject, $message);
+            $result  = cmf_send_email($data['username'], $subject, $message);
 
             if (empty($result['error'])) {
                 cmf_verification_code_log($data['username'], $code);
@@ -169,7 +285,7 @@ class VerificationCodeController extends HomeBaseController
 
         } else if ($accountType == 'mobile') {
 
-            $param = ['mobile' => $data['username'], 'code' => $code];
+            $param  = ['mobile' => $data['username'], 'code' => $code];
             $result = hook_one("send_mobile_verification_code", $param);
 
             if ($result !== false && !empty($result['error'])) {
