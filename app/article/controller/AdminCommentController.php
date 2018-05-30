@@ -7,7 +7,7 @@ use cmf\controller\AdminBaseController;
 use think\Request;
 
 /**
- * Class IndexController
+ * Class AdminIndexController
  *
  * 控制器
  *
