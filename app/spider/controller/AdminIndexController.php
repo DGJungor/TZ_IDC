@@ -9,7 +9,8 @@
 
 namespace app\spider\controller;
 
-use app\slideshow\model\AdminAddModel;
+
+use app\spider\model\SpiderPostModel;
 use cmf\controller\AdminBaseController;
 use think\Db;
 use think\Loader;
@@ -33,9 +34,36 @@ class AdminIndexController extends AdminBaseController
 
 
     /**
+     * 爬虫列表 接口
+     */
+    public function showList()
+    {
+
+        $spiderPostModel = new SpiderPostModel();
+
+        dump($spiderPostModel->count());
+
+    }
+
+
+    /**
+     * 查询文章总数
+     *
+     * @author ZhangJun
+     */
+    public function postCount()
+    {
+
+        $spiderPostModel = new SpiderPostModel();
+        return $spiderPostModel->count();
+
+    }
+
+
+    /**
      *
      */
-    public function listPost()
+    public function test()
     {
 
 //        $tableData['tableData'][0]['date']    = '2016-05-02';
@@ -43,11 +71,10 @@ class AdminIndexController extends AdminBaseController
 //        $tableData['tableData'][0]['address'] = '地址';
 
 
-        for ($i=0; $i<100; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $tableData[$i]['date']    = '2016-05-02';
-            $tableData[$i]['name']    = '王小虎';
+            $tableData[$i]['name']    = '快讯';
             $tableData[$i]['address'] = '地址';
-
         }
 //        $tableData[0]['date']    = '2016-05-02';
 //        $tableData[0]['name']    = '王小虎';

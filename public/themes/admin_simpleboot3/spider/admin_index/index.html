@@ -1,331 +1,1 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-
-    <!--引入样式文件-->
-
-    <!-- import CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <!-- import Vue before Element -->
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <!-- import JavaScript -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <!-- axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-</head>
-
-<body>
-<!-- 定义一个vue的管理区块，（MVVM中的View） -->
-<div id="main">
-    <button @click="getApiData">点击得到数据</button>
-    {{name}}
-
-    <el-row :gutter="22">
-        <el-col :span="22" :offset="1">
-            <div class="grid-content bg-purple"></div>
-
-            <div id="table">
-
-
-                <template>
-                    <el-table
-                            :data="tableData"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                fixed
-                                prop="date"
-                                label="日期"
-                                width="150">
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                label="姓名"
-                                width="120">
-                        </el-table-column>
-                        <el-table-column
-                                prop="province"
-                                label="省份"
-                                width="120">
-                        </el-table-column>
-                        <el-table-column
-                                prop="city"
-                                label="市区"
-                                width="120">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                label="地址"
-                                width="300">
-                        </el-table-column>
-                        <el-table-column
-                                prop="zip"
-                                label="邮编"
-                                width="120">
-                        </el-table-column>
-                        <el-table-column
-                                fixed="right"
-                                label="操作"
-                                width="100">
-                            <template slot-scope="scope">
-                                <!--<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>-->
-                                <el-button @click="test(scope)" type="text" size="small">查看</el-button>
-                                <el-button type="text" size="small">编辑</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </template>
-
-            </div>
-
-
-        </el-col>
-    </el-row>
-    <!--<template>-->
-        <!--<el-table-->
-                <!--:data="tableData"-->
-                <!--style="width: 100%">-->
-            <!--<el-table-column-->
-                    <!--prop="date"-->
-                    <!--label="日期"-->
-                    <!--width="180">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-                    <!--prop="name"-->
-                    <!--label="姓名"-->
-                    <!--width="180">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-                    <!--prop="address"-->
-                    <!--label="地址">-->
-            <!--</el-table-column>-->
-        <!--</el-table>-->
-    <!--</template>-->
-</div>
-
-</body>
-
-<script>
-
-    // 实例化vue对象（MVVM中的View Model）
-    new Vue({
-        // vm控制的区块为id为app的div，此div中的所有vue指令均可以被vm解析
-        el: '#main',
-        data: {
-            // 数据 （MVVM中的Model）
-            name: "123",
-            tableData: [{"date": "2016-05-02", "name": "\u738b\u5c0f\u864e", "address": "\u5730\u5740"}]
-        },
-        methods: {
-            getApiData: function () {
-                //设置请求路径
-                var url = "/spider/admin_index/listpost";
-                // 发送请求:将数据返回到一个回到函数中
-                _this = this;
-                // 并且响应成功以后会执行then方法中的回调函数
-                axios.get(url).then(function (result) {
-                    // result是所有的返回回来的数据
-                    // 包括了响应报文行
-                    // 响应报文头
-                    // 响应报文体
-                    console.log(result.data);
-                    _this.tableData = result.data;
-                });
-            },
-            test : function (res) {
-                console.log(res)
-            }
-        }
-
-
-    })
-</script>
-</html>
-
-
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--<meta charset="UTF-8">-->
-
-<!--&lt;!&ndash;引入样式文件&ndash;&gt;-->
-
-<!--&lt;!&ndash; import CSS &ndash;&gt;-->
-<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
-<!--&lt;!&ndash; import Vue before Element &ndash;&gt;-->
-<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
-<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
-<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
-<!--&lt;!&ndash; axios &ndash;&gt;-->
-<!--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
-
-<!--</head>-->
-<!--<body>-->
-<!--<div id="main">-->
-<!--<el-row :gutter="22">-->
-<!--<el-col :span="22" :offset="1">-->
-<!--<div class="grid-content bg-purple"></div>-->
-
-<!--<div id="table">-->
-<!--<template>-->
-<!--<el-table :data="tableData" style="width: 100%">-->
-<!--<el-table-column prop="date" label="日期" width="180">-->
-<!--</el-table-column>-->
-<!--<el-table-column prop="name" label="姓名" width="180">-->
-<!--</el-table-column>-->
-<!--<el-table-column prop="address" label="地址">-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--</template>-->
-
-<!--</div>-->
-
-
-<!--</el-col>-->
-<!--</el-row>-->
-
-
-<!--<button @click="postApiData">点击提交数据</button>-->
-<!--</div>-->
-
-
-<!--&lt;!&ndash;<div id="app">&ndash;&gt;-->
-<!--&lt;!&ndash;<el-button @click="visible = true">Button</el-button>&ndash;&gt;-->
-<!--&lt;!&ndash;<el-dialog :visible.sync="visible" title="Hello world">&ndash;&gt;-->
-<!--&lt;!&ndash;<p>Try Element</p>&ndash;&gt;-->
-<!--&lt;!&ndash;</el-dialog>&ndash;&gt;-->
-<!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-
-<!--</body>-->
-
-<!--<script>-->
-
-
-<!--// $.ajax({-->
-<!--//     type : "POST",-->
-<!--//     url : "/spider/admin_index/listpost",-->
-<!--//     data : {-->
-<!--//         id : 123,-->
-<!--//     },-->
-<!--//     success : function(res) {-->
-<!--//         // var message = $.parseJSON(data);//后台返回的json数据需要转为对象-->
-<!--//         // vue.selectById=message;//把后台返回的JSON数据赋给selectById-->
-<!--//     },-->
-<!--//     error : function(){-->
-<!--//         alert("错误");-->
-<!--//     }-->
-<!--//-->
-<!--// });-->
-
-<!--tableData = {-->
-<!--tableData: [{-->
-<!--date: '2016-05-02',-->
-<!--name: '王小虎',-->
-<!--address: '上海市普陀区金沙江路 1518 弄'-->
-<!--}, {-->
-<!--date: '2016-05-04',-->
-<!--name: '王小虎',-->
-<!--address: '上海市普陀区金沙江路 1517 弄'-->
-<!--}, {-->
-<!--date: '2016-05-01',-->
-<!--name: '王小虎',-->
-<!--address: '上海市普陀区金沙江路 1519 弄'-->
-<!--}, {-->
-<!--date: '2016-05-03',-->
-<!--name: '王小虎',-->
-<!--address: '上海市普陀区金沙江路 1516 弄'-->
-<!--}]-->
-<!--};-->
-
-<!--console.log(tableData);-->
-
-<!--var resData = '123';-->
-
-
-<!--new Vue(-->
-<!--{-->
-<!--el: '#main',-->
-<!--data:{-->
-<!--tableData: [{-->
-<!--date: '2016-05-02',-->
-<!--name: '王小虎',-->
-<!--address: '上海市普陀区金沙江路 1518 弄'-->
-<!--}, {-->
-<!--date: '2016-05-04',-->
-<!--name: '王小虎',-->
-<!--address: '上海市普陀区金沙江路 1517 弄'-->
-<!--}, {-->
-<!--date: '2016-05-01',-->
-<!--name: '王小虎',-->
-<!--address: '上海市普陀区金沙江路 1519 弄'-->
-<!--}, {-->
-<!--date: '2016-05-03',-->
-<!--name: '王小虎',-->
-<!--address: '上海市普陀区金沙江路 1516 弄'-->
-<!--}]-->
-<!--},-->
-
-<!--// data: function () {-->
-
-<!--// var url = "/spider/admin_index/listpost";-->
-<!--// // post有两个参数-->
-<!--// //参数1:请求的路径-->
-<!--// //参数2:提交的参数-->
-<!--// //提交参数的两种形态:-->
-<!--// //          1.可以直接传入字符串 name=张三&age=19-->
-<!--// //          2.可以以对象的形式传入{name:"三",age:19}-->
-<!--// axios.post(url, {name: "拖油瓶前来报道"}).then(function (res) {-->
-<!--//     resData = res.data;-->
-<!--//     console.log(resData);-->
-<!--//     return resData-->
-<!--//-->
-<!--//     // if (resData.status == "0") { //0表示成功，1表示失败-->
-<!--//     //     alert(resData.message);-->
-<!--//     // } else {-->
-<!--//     //     alert(resData.message);-->
-<!--//     // }-->
-<!--// });-->
-
-
-<!--// console.log(resData);-->
-
-
-<!--// return tableData;-->
-
-
-<!--// },-->
-<!--// methods: {-->
-<!--//     getApiData: function () {-->
-<!--//         var url = "/spider/admin_index/listpost";-->
-<!--//-->
-<!--//         _this = this;-->
-<!--//         // post有两个参数-->
-<!--//         //参数1:请求的路径-->
-<!--//         //参数2:提交的参数-->
-<!--//         //提交参数的两种形态:-->
-<!--//         //          1.可以直接传入字符串 name=张三&age=19-->
-<!--//         //          2.可以以对象的形式传入{name:"三",age:19}-->
-<!--//         axios.get(url).then(function (res) {-->
-<!--//             console.log(res.data);-->
-<!--//             _this.tableData = resData;-->
-<!--//         });-->
-<!--//-->
-<!--//     }-->
-<!--// }-->
-<!--})-->
-
-
-<!--//&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-<!--// new Vue({-->
-<!--//     el: '#app',-->
-<!--//     data: function () {-->
-<!--//         return {visible: false}-->
-<!--//     }-->
-<!--// }-->
-<!--// )-->
-<!--</script>-->
-
-<!--</html>-->
+<!DOCTYPE html><html><head>    <meta charset="UTF-8">    <!--引入样式文件-->    <!-- import CSS -->    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">    <!-- import Vue before Element -->    <script src="https://unpkg.com/vue/dist/vue.js"></script>    <!-- import JavaScript -->    <script src="https://unpkg.com/element-ui/lib/index.js"></script>    <!-- axios -->    <script src="https://unpkg.com/axios/dist/axios.min.js"></script></head><body><!-- 定义一个vue的管理区块，（MVVM中的View） --><div id="main">    <el-row :gutter="22">        <el-col :span="22" :offset="1">            <div class="grid-content bg-purple"></div>            <div id="table">                <template>                    <!--  文章表格  -->                    <el-table                            ref="multipleTable"                            :data="tableData"                            border                            style="width: 100%"  @selection-change="handleSelectionChange">                        <el-table-column                                type="selection"                                width="55">                        </el-table-column>                        <el-table-column                                fixed                                prop="date"                                label="ID"                                width="150">                        </el-table-column>                        <el-table-column                                prop="name"                                label="标题"                                width="120">                        </el-table-column>                        <el-table-column                                prop="province"                                label="来源"                                width="120">                        </el-table-column>                        <el-table-column                                prop="city"                                label="市区"                                width="120">                        </el-table-column>                        <el-table-column                                prop="address"                                label="地址"                                width="300">                        </el-table-column>                        <el-table-column                                prop="zip"                                label="邮编"                                width="120">                        </el-table-column>                        <el-table-column                                fixed="right"                                label="操作"                                width="100">                            <template slot-scope="scope">                                <!--<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>-->                                <el-button @click="test(scope)" type="text" size="small">查看</el-button>                                <el-button type="text" size="small">编辑</el-button>                            </template>                        </el-table-column>                    </el-table>                    <!-- 分页按钮 -->                    <div class="page">                        <!--<span class="demonstration">显示总数</span>-->                        <el-pagination                                @size-change="handleSizeChange"                                @current-change="handleCurrentChange"                                :current-page.sync="currentPage1"                                :page-size="10"                                layout=" total,prev, pager, next"                                :total="pageCount">                        </el-pagination>                    </div>                    <div style="margin-top: 20px">                        <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>                        <el-button @click="toggleSelection()">取消选择</el-button>                    </div>                </template>            </div>        </el-col>    </el-row>    <button @click="getApiData">点击得到数据</button>    <!--{{name}}--></div></body><script>    // 实例化vue对象（MVVM中的View Model）    new Vue({        // vm控制的区块为id为app的div，此div中的所有vue指令均可以被vm解析        el: '#main',        data: {            // 数据 （MVVM中的Model）            // name: "123",            tableData: [{"date": "2016-05-02", "name": "\u738b\u5c0f\u864e", "address": "\u5730\u5740"}],            currentPage1: 1,            multipleSelection: []        },        methods: {            getApiData: function (page) {                console.log(page);                //设置请求路径                var url = "/spider/admin_index/test";                // 发送请求:将数据返回到一个回到函数中                _this = this;                // 并且响应成功以后会执行then方法中的回调函数                axios.get(url).then(function (result) {                    // result是所有的返回回来的数据                    // 包括了响应报文行                    // 响应报文头                    // 响应报文体                    console.log(result.data);                    _this.tableData = result.data;                });            },            test: function (res) {                console.log(res)            },            handleSizeChange(val) {                console.log(`每页 ${val} 条`);            },            handleCurrentChange(val) {                console.log(`当前页: ${val}`);            },            toggleSelection(rows) {                if (rows) {                    rows.forEach(row => {                        this.$refs.multipleTable.toggleRowSelection(row);                    });                } else {                    this.$refs.multipleTable.clearSelection();                }            },            handleSelectionChange(val) {                this.multipleSelection = val;            }        },        created: function () {            _this = this;            this.pageCount=99;            _this.getApiData(999999);        },    })</script></html>
