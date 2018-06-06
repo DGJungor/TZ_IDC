@@ -13,10 +13,10 @@ class SpiderPostModel extends Model
      *
      * @author ZhangJun
      */
-    public function showList($offset = null, $length = null)
+    public function showList($page = null, $length = null)
     {
         $postData = $this
-            ->limit(10, 10)
+            ->page($page, $length)
             ->order('date', 'desc')
             ->select();
 

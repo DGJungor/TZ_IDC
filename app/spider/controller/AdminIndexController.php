@@ -50,27 +50,26 @@ class AdminIndexController extends AdminBaseController
     public function showList()
     {
 
+        //获取分页参数
+        $page   = $this->request->param('page');
+        $length = $this->request->param('length');
+
+
+        //  app\spider\model\SpiderPostModel
         $spiderPostModel = new SpiderPostModel();
 
-        $postData = $spiderPostModel->showList();
+        //获取文章列表数据
+        $postData = $spiderPostModel->showList($page, $length);
 
+        //将文章列表页中的时间戳 转换成'Y-m-d H:i:s' 格式
         foreach ($postData as $k => $v) {
-
             $postData[$k]['date'] = date('Y-m-d H:i:s', $postData[$k]['date']);
-
         }
 
-        dump($postData);
-        $postData[0]['date'] = 999999999;
-        dump($postData);
+        //将数组数据转换成Json格式 并返回
+        return $postData->toJson();
 
-        for ($i = 0; $i < 10; $i++) {
-            $tableData[$i]['date']    = '2016-05-02';
-            $tableData[$i]['name']    = '快讯';
-            $tableData[$i]['address'] = '地址';
-            $tableData[$i]['aa']      = '地址';
-        }
-        dump(json_encode($tableData));
+
     }
 
 
