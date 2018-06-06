@@ -62,14 +62,15 @@ class AdminIndexController extends AdminBaseController
         $postData = $spiderPostModel->showList($page, $length);
 
         //将文章列表页中的时间戳 转换成'Y-m-d H:i:s' 格式
+        $cleaRule = array(" ", "　", "\t", "\n", "\r");
         foreach ($postData as $k => $v) {
-            $postData[$k]['date'] = date('Y-m-d H:i:s', $postData[$k]['date']);
-            $postData[$k]['keywords'] = explode(',', $postData[$k]['keywords']);
+            $postData[$k]['date']     = date('Y-m-d H:i:s', $postData[$k]['date']);
+            $postData[$k]['keywords'] = explode(',', str_replace($cleaRule, '', $postData[$k]['keywords']));
         }
 
         //将数组数据转换成Json格式 并返回
         return $postData->toJson();
-
+//        dump($postData);
 
     }
 
