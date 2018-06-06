@@ -64,6 +64,7 @@ class AdminIndexController extends AdminBaseController
         //将文章列表页中的时间戳 转换成'Y-m-d H:i:s' 格式
         foreach ($postData as $k => $v) {
             $postData[$k]['date'] = date('Y-m-d H:i:s', $postData[$k]['date']);
+            $postData[$k]['keywords'] = explode(',', $postData[$k]['keywords']);
         }
 
         //将数组数据转换成Json格式 并返回
