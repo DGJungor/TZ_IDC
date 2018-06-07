@@ -10,6 +10,8 @@
 namespace app\spider\controller;
 
 
+use app\spider\model\PortalCategoryPostModel;
+use app\spider\model\PortalPostModel;
 use app\spider\model\SpiderPostModel;
 use cmf\controller\AdminBaseController;
 use think\Db;
@@ -85,6 +87,88 @@ class AdminIndexController extends AdminBaseController
 
         $spiderPostModel = new SpiderPostModel();
         return $spiderPostModel->count();
+
+    }
+
+    /**
+     *  转移文章
+     *
+     * @author 张俊
+     * @return \think\response\Json
+     *
+     * 接口地址：user/Member/postArticle
+     * 参数：
+     *      typeid栏目ID
+     *      title文章标题
+     *      content文章内容
+     *      descriptions文章描述
+     * 返回参数：
+     *          返回成功状态即可
+     *
+     */
+    public function transferArticle()
+    {
+
+        //获取爬虫文章参数
+        $spiderPostId = $this->request->param('id');
+
+        //实例化模型
+        $spiderPostModel    = new SpiderPostModel();
+        $portalPostModel    = new PortalPostModel();
+        $portalCategoryPost = new PortalCategoryPostModel();
+
+
+        //获取爬虫文章库中的数据
+        $spiderPostData = $spiderPostModel->get($spiderPostId);
+
+
+        // '更多'属性
+        $postData['thumbnail'] = '';
+        $more['thumbnail']     = $postData['thumbnail'];
+        $more['template']      = '';
+
+
+        //启动事务处理
+        Db::startTrans();
+        //拼装成添加文章表中的数组
+        $createPostData = [
+            'user_id'        => 1,
+            'post_title'     => $spiderPostData['title'],
+            'post_excerpt'   => $spiderPostData['description'],
+            'post_content'   => idckx_post_removexss($spiderPostData['content']),
+            'post_status'    => 0,
+            'published_time' => $spiderPostData['date'],
+            'post_keywords'  => $spiderPostData['keywords'],
+            'post_source'    => $spiderPostData['source'],
+            'more'           => json_encode($more),
+        ];
+
+
+        //添加文章信息 成功则返回一个文章ID
+        $portalId = $portalPostModel->postArticle($createPostData);
+
+        //添加文章分类信息
+        $portalCategoryPost = $portalCategoryPost->create([
+            'post_id'     => $portalId,
+            'category_id' => 14,       // 没有分类 文章不能显示  暂时找不到解决方法  暂时 写死在最新资讯的分类中
+        ]);
+        //获取文章分类ID
+        $portalCategoryId = $portalCategoryPost->id;
+
+        if ($portalId && $portalCategoryId) {
+            //提交事务
+            Db::commit();
+            $res['state'] = 1;
+
+        } else {
+            //事务回滚
+            Db::rollback();
+            $res['state']   = 0;
+            $res['message'] = '添加失败,请重试!';
+        }
+
+
+        return json_encode($res);
 
     }
 

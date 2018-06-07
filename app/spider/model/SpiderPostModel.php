@@ -26,4 +26,13 @@ class SpiderPostModel extends Model
 
     }
 
+    /**
+     * 获取爬虫表文章 数据
+     */
+    public function selectPost($id = '')
+    {
+
+
+    }
+
 }
