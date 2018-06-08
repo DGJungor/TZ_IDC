@@ -62,6 +62,20 @@ function idckx_api_baidupush($urls = array([]))
 //		'http://www.example.com/1.html',
 //		'http://www.example.com/2.html',
 //	);
+
+    $apiXZH  = 'http://data.zz.baidu.com/urls?appid=1549306121774721&token=0l4dfIiEDJ9atoeW&type=realtime';
+    $ch      = curl_init();
+    $options = array(
+        CURLOPT_URL            => $apiXZH,
+        CURLOPT_POST           => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POSTFIELDS     => implode("\n", $urls),
+        CURLOPT_HTTPHEADER     => array('Content-Type: text/plain'),
+    );
+    curl_setopt_array($ch, $options);
+    $resultXDH = curl_exec($ch);
+
+
     $api     = 'http://data.zz.baidu.com/urls?site=www.idckx.com&token=Yy23pqlRJFkyBy0Z';
     $ch      = curl_init();
     $options = array(
@@ -73,8 +87,11 @@ function idckx_api_baidupush($urls = array([]))
     );
     curl_setopt_array($ch, $options);
     $result = curl_exec($ch);
-    return $result;
+
+
+    return $resultXDH;
 }
+
 
 /**
  * 根据文章id获取文章的分类id
