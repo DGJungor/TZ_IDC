@@ -16,8 +16,6 @@ use app\portal\service\PostService;
 use app\portal\model\PortalPostModel;
 use app\user\controller\IndexController;
 use think\Db;
-use think\Request;
-use think\Session;
 
 class ArticleController extends HomeBaseController
 {
@@ -46,6 +44,40 @@ class ArticleController extends HomeBaseController
 		$aid = $this->request->param('aid', 0, 'intval');
 
 		return json(array("state" => "1", "msg" => "生成成功", "data" => cmf_url('portal/Article/index', ['id' => $aid, 'cid' => $cid])));
+	}
+	public function upload() {
+		$result = [];
+		// 获取表单上传文件
+		$file = request()->file('images');
+		if($file){
+			$info = $file->move(ROOT_PATH . 'public' . DS . 'upload');
+
+			if($info){
+				array_push($result,cmf_get_image_url($info->getSaveName()));
+			} else {
+				// 上传失败获取错误信息
+				return $file->getError();
+			}
+		}
+		// foreach($files as $file){
+		// 	// 移动到框架应用根目录/public/uploads/ 目录下
+		// 	$info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
+		// 	if($info){
+		// 		// 成功上传后 获取上传信息
+		// 		// 输出 jpg
+		// 		// echo $info->getExtension(); 
+		// 		// 输出 42a79759f284b767dfcb2a0197904287.jpg
+		// 		// echo $info->getFilename();
+		// 		array_push($result,$info->getSaveName());
+		// 	}else{
+		// 		// 上传失败获取错误信息
+		// 		echo $file->getError();
+		// 	}    
+		// }
+		return json([
+			"errno" => 0,
+			"data" => $result
+		]);
 	}
 	// private function setPostContent($id,$content) {
 	//     Db::name("portal_post")->where("id",$id)->update(["post_content" => $content]);
@@ -95,74 +127,194 @@ class ArticleController extends HomeBaseController
 
 	public function index()
 	{
+		if(!file_exists(THINKCMF_PUBLIC."resources/html/".$this->request->param('id', 0, 'intval').".html")) {
+			$portalCategoryModel = new PortalCategoryModel();
+			$postService         = new PostService();
 
-		$portalCategoryModel = new PortalCategoryModel();
-		$postService         = new PostService();
-
-		$articleId  = $this->request->param('id', 0, 'intval');
-		$categoryId = $this->request->param('cid', 0, 'intval');
-		$article    = $postService->publishedArticle($articleId, $categoryId);
-		if ($article && $article["post_status"] == 0) {
-			if ($article["user_id"] != cmf_get_current_user_id()) {
-				$article = null;
+			$articleId  = $this->request->param('id', 0, 'intval');
+			$categoryId = $this->request->param('cid', 0, 'intval');
+			$article    = $postService->publishedArticle($articleId, $categoryId);
+			$generate = TRUE;
+			if ($article && $article["post_status"] == 0) {
+				if ($article["user_id"] != cmf_get_current_user_id()) {
+					$article = null;
+					$articleId = 0;
+					$categoryId = 0;
+					
+				}
+				$generate = FALSE;
 			}
-		}
-		if (empty($articleId)) {
-			abort(404, '文章不存在!');
-		}
-
-
-		$prevArticle = $postService->publishedPrevArticle($articleId, $categoryId);
-		$nextArticle = $postService->publishedNextArticle($articleId, $categoryId);
-
-		$tplName = 'article';
-
-		if (empty($categoryId)) {
-			$categories = $article['categories'];
-
-			if (count($categories) > 0) {
-				$this->assign('category', $categories[0]);
-				$category = $portalCategoryModel->where('id', $categories[0])->where('status', 1)->find();
-			} else {
-				abort(404, '文章未指定分类!');
-			}
-
-		} else {
-			$category = $portalCategoryModel->where('id', $categoryId)->where('status', 1)->find();
-
-			if (empty($category)) {
+			if (empty($articleId)) {
 				abort(404, '文章不存在!');
 			}
 
-			$this->assign('category', $category);
 
-			$tplName = empty($category["one_tpl"]) ? $tplName : $category["one_tpl"];
+			$prevArticle = $postService->publishedPrevArticle($articleId, $categoryId);
+			$nextArticle = $postService->publishedNextArticle($articleId, $categoryId);
+
+			$tplName = 'article';
+
+			if (empty($categoryId)) {
+				$categories = $article['categories'];
+
+				if (count($categories) > 0) {
+					$this->assign('category', $categories[0]);
+					$category = $portalCategoryModel->where('id', $categories[0])->where('status', 1)->find();
+				} else {
+					abort(404, '文章未指定分类!');
+				}
+
+			} else {
+				$category = $portalCategoryModel->where('id', $categoryId)->where('status', 1)->find();
+
+				if (empty($category)) {
+					abort(404, '文章不存在!');
+				}
+
+				$this->assign('category', $category);
+
+				$tplName = empty($category["one_tpl"]) ? $tplName : $category["one_tpl"];
+			}
+
+			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_hits');
+
+
+			hook('portal_before_assign_article', $article);
+			if (isset($category)) {
+				$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($category->toArray()["id"]));
+				$this->assign("tagall", $tagResult);
+			} else {
+				$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($article["category_id"]));
+				$this->assign("tagall", $tagResult);
+			}
+			// $this->assign("tagall",[]);
+			if (!$article) {
+				$this->redirect("/", 302);
+			}
+			$this->assign('article', $article);
+			$this->assign('prev_article', $prevArticle);
+			$this->assign('next_article', $nextArticle);
+
+			$tplName = empty($article['more']['template']) ? $tplName : $article['more']['template'];
+
+			$html = $this->fetch("/$tplName");
+			if($generate) {
+				file_put_contents(THINKCMF_PUBLIC."resources/html/".$article["id"].".html",$this->compress_html($html));
+			}
+			return $html;
+		}else {
+			$html = file_get_contents(THINKCMF_PUBLIC."resources/html/".$this->request->param('id', 0, 'intval').".html");
+			return $html;
+			// $this->redirect($this->request->domain().'/resources/html/'.$article["id"].'.html');
 		}
-
-		Db::name('portal_post')->where(['id' => $articleId])->setInc('post_hits');
-
-
-		hook('portal_before_assign_article', $article);
-		if (isset($category)) {
-			$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($category->toArray()["id"]));
-			$this->assign("tagall", $tagResult);
-		} else {
-			$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($article["category_id"]));
-			$this->assign("tagall", $tagResult);
-		}
-		// $this->assign("tagall",[]);
-		if (!$article) {
-			$this->redirect("/", 302);
-		}
-		$this->assign('article', $article);
-		$this->assign('prev_article', $prevArticle);
-		$this->assign('next_article', $nextArticle);
-
-		$tplName = empty($article['more']['template']) ? $tplName : $article['more']['template'];
-
-		return $this->fetch("/$tplName");
 	}
+	public function updatehtml() {
+		if(file_exists(THINKCMF_PUBLIC."resources/html/".$this->request->param('id', 0, 'intval').".html")) {
+			$portalCategoryModel = new PortalCategoryModel();
+			$postService         = new PostService();
 
+			$articleId  = $this->request->param('id', 0, 'intval');
+			$categoryId = $this->request->param('cid', 0, 'intval');
+			$article    = $postService->publishedArticle($articleId, $categoryId);
+			if ($article && $article["post_status"] == 0) {
+				if ($article["user_id"] != cmf_get_current_user_id()) {
+					$article = null;
+				}
+			}
+			if (empty($articleId)) {
+				abort(404, '文章不存在!');
+			}
+
+
+			$prevArticle = $postService->publishedPrevArticle($articleId, $categoryId);
+			$nextArticle = $postService->publishedNextArticle($articleId, $categoryId);
+
+			$tplName = 'article';
+
+			if (empty($categoryId)) {
+				$categories = $article['categories'];
+
+				if (count($categories) > 0) {
+					$this->assign('category', $categories[0]);
+					$category = $portalCategoryModel->where('id', $categories[0])->where('status', 1)->find();
+				} else {
+					abort(404, '文章未指定分类!');
+				}
+
+			} else {
+				$category = $portalCategoryModel->where('id', $categoryId)->where('status', 1)->find();
+
+				if (empty($category)) {
+					abort(404, '文章不存在!');
+				}
+
+				$this->assign('category', $category);
+
+				$tplName = empty($category["one_tpl"]) ? $tplName : $category["one_tpl"];
+			}
+
+			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_hits');
+
+
+			hook('portal_before_assign_article', $article);
+			if (isset($category)) {
+				$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($category->toArray()["id"]));
+				$this->assign("tagall", $tagResult);
+			} else {
+				$tagResult = $portalCategoryModel->getTag($portalCategoryModel->typeArticle($article["category_id"]));
+				$this->assign("tagall", $tagResult);
+			}
+			// $this->assign("tagall",[]);
+			if (!$article) {
+				$this->redirect("/", 302);
+			}
+			$this->assign('article', $article);
+			$this->assign('prev_article', $prevArticle);
+			$this->assign('next_article', $nextArticle);
+
+			$tplName = empty($article['more']['template']) ? $tplName : $article['more']['template'];
+
+			$html = $this->fetch("/$tplName");
+			$oldHTML = file_get_contents(THINKCMF_PUBLIC."resources/html/".$article["id"].".html");
+			if($html!=$oldHTML) {
+				unlink(THINKCMF_PUBLIC."resources/html/".$article["id"].".html");
+				file_put_contents(THINKCMF_PUBLIC."resources/html/".$article["id"].".html",$this->compress_html($html));
+				return "更新成功";
+			}else {
+				return "不用更新";
+			}
+			
+		}else{
+			return "没有静态文件要更新的";
+		}
+	}
+	/** 
+    * 压缩html : 清除换行符,清除制表符,去掉注释标记 
+    * @param $string 
+    * @return压缩后的$string 
+    * */ 
+    private function compress_html($string){ 
+        $string=str_replace("\r\n",'',$string);//清除换行符 
+        $string=str_replace("\n",'',$string);//清除换行符 
+        $string=str_replace("\t",'',$string);//清除制表符 
+        $pattern=array( 
+        "/> *([^ ]*) *</",//去掉注释标记 
+        "/[\s]+/", 
+        "/<!--[^!]*-->/", 
+        "/\" /", 
+        "/ \"/", 
+        "'/\*[^*]*\*/'" 
+        ); 
+        $replace=array ( 
+        ">\\1<", 
+        " ", 
+        "", 
+        "\"", 
+        "\"", 
+        "" 
+        ); 
+        return preg_replace($pattern, $replace, $string); 
+    } 
 	/**
 	 * 文章点赞  不需要登录
 	 *
@@ -292,11 +444,25 @@ tpl;
 	public function test()
 	{
 
-//		dump(Session::get());
+		//获取文章id
+		$articleId = $this->request->param('id', 0, 'intval');
 
-		$t = Request::instance()->header();
 
-		dump($t);
+		$canLike = cmf_check_user_action("posts$articleId", 1);
 
+		if ($canLike) {
+			Db::name('portal_post')->where(['id' => $articleId])->setInc('post_like');
+
+			$this->success("赞好啦！");
+		} else {
+			$this->error("您已赞过啦！");
+		}
+
+		//获取客户端ip地址
+		$clientIp = get_client_ip($type = 0, $adv = false);
+
+
+		//====================打印测试 数据=============================
+		dump($clientIp);
 	}
 }

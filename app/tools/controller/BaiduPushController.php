@@ -182,7 +182,7 @@ class BaiduPushController extends BaseController
     /**
      * 熊掌号 提交历史内容
      */
-    public function pushOldPostPortalXZH($num = 2000)
+    public function pushOldPostPortalXZH($num = 200)
     {
 
 

@@ -136,7 +136,7 @@ class AdminArticleController extends AdminBaseController
                     array_push($data['post']['more']['files'], ["url" => $fileUrl, "name" => $data['file_names'][$key]]);
                 }
             }
-
+            
             $portalPostModel->adminAddArticle($data['post'], $data['post']['categories']);
             $article            = $portalPostModel->where('id', $portalPostModel->id)->find();
             $articleCategories  = $article->categories()->alias('a')->column('a.name', 'a.id');
@@ -154,7 +154,7 @@ class AdminArticleController extends AdminBaseController
                         "slide_id" => $slide,
                         "title" => $data['post']["post_title"],
                         "image" => empty($data['post']["more"]["thumbnail"])?$data['post']['extract_img']:$data['post']["more"]["thumbnail"],
-                        "url" => cmf_url("portal/Article/index",array("id"=>$portalPostModel->id,"cid"=>array_keys($articleCategories)[0]))."?id=".$portalPostModel->id."type=post",
+                        "url" => cmf_url("portal/Article/index",array("id"=>$portalPostModel->id,"cid"=>array_keys($articleCategories)[0]))."?id=".$portalPostModel->id."&type=post",
                         "description"=>$data['post']["post_excerpt"],
                         "list_order"=>$portalPostModel->id,
                         "content"=>$data['post']["post_content"],
@@ -163,7 +163,8 @@ class AdminArticleController extends AdminBaseController
                 }
             }
             
-            $this->success('添加成功!', url('AdminArticle/edit', ['id' => $portalPostModel->id]));
+            // $this->success('添加成功!', url('AdminArticle/edit', ['id' => $portalPostModel->id]));
+            $this->success('添加成功!', url('AdminArticle/index', ['id' => $portalPostModel->id]));
         }
 
     }
@@ -248,6 +249,7 @@ class AdminArticleController extends AdminBaseController
                     array_push($data['post']['more']['files'], ["url" => $fileUrl, "name" => $data['file_names'][$key]]);
                 }
             }
+
             $portalPostModel->adminEditArticle($data['post'], $data['post']['categories']);
             $article            = $portalPostModel->where('id', $data['post']["id"])->find();
             $articleCategories  = $article->categories()->alias('a')->column('a.name', 'a.id');
@@ -263,13 +265,16 @@ class AdminArticleController extends AdminBaseController
                         "slide_id" => $slide,
                         "title" => $data['post']["post_title"],
                         "image" => empty($data['post']["more"]["thumbnail"])?$data['post']['extract_img']:$data['post']["more"]["thumbnail"],
-                        "url" => cmf_url("portal/Article/index",array("id"=>$data['post']["id"],"cid"=>array_keys($articleCategories)[0]))."?id=".$data['post']["id"]."type=post",
+                        "url" => cmf_url("portal/Article/index",array("id"=>$data['post']["id"],"cid"=>array_keys($articleCategories)[0]))."?id=".$data['post']["id"]."&type=post",
                         "description"=>$data['post']["post_excerpt"],
                         "list_order"=>$data['post']["id"],
                         "content"=>$data['post']["post_content"],
                         "more"=>json_encode(array("aid"=>$data['post']["id"]))
                     ]);
                 }
+            }
+            if(file_exists(THINKCMF_PUBLIC."resources/html/".$data['post']["id"].".html")) {
+                unlink(THINKCMF_PUBLIC."resources/html/".$data['post']["id"].".html");
             }
             $this->success('保存成功!');
 
@@ -321,6 +326,9 @@ class AdminArticleController extends AdminBaseController
                 "delete_time" => time()
             ]);
             $portalPostModel->delSlide($id);
+            if(file_exists(THINKCMF_PUBLIC."resources/html/".$this->request->param('id', 0, 'intval').".html")) {
+                unlink(THINKCMF_PUBLIC."resources/html/".$this->request->param('id', 0, 'intval').".html");
+            }
             $this->success("删除成功！", '');
 
         }

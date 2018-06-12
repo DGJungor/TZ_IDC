@@ -379,7 +379,7 @@ class LoginController extends HomeBaseController
 
 		//查询token
 		$dbToken = idckx_token_get($token);
-
+		
 		//判断有无绑定第三方帐号
 		if ($bindingId = idckx_verify_binding($type, $dbToken['user_id'])) {
 			//有绑定
@@ -451,8 +451,6 @@ class LoginController extends HomeBaseController
 	 *   open_id:   第三方帐号的openId
 	 *    token :   第三方登录的token值
 	 *      type: 第三方平台   wechat微信
-	 *
-	 *
 	 *
 	 * 状态码:
 	 *  登录成功:   绑定成功 1  绑定失败2

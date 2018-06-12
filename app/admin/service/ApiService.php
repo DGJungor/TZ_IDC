@@ -36,7 +36,16 @@ class ApiService
         }
 
         $slides = Db::name('slide_item')->where('status', 1)->where('slide_id', $slideId)->order('list_order ASC')->select();
-
+        $resultData=[];
+        if(count($slides)>6) {
+            foreach($slides as $k=>$v) {
+                if($k>(count($slides)-7)) {
+                  array_push($resultData,$v);  
+                }
+            }
+            krsort($resultData);
+            return $resultData;
+        }
         return $slides;
     }
 }

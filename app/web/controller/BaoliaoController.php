@@ -8,12 +8,12 @@
 
 namespace app\web\controller;
 
-include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\ajaxEcho.php');
-include_once(dirname(dirname(dirname(__FILE__))).'\\tools\\cookie_session.php');
-use cmf\controller\AdminBaseController;
+include_once(dirname(dirname(dirname(__FILE__))).'/tools/ajaxEcho.php');
+include_once(dirname(dirname(dirname(__FILE__))).'/tools/cookie_session.php');
+use cmf\controller\HomeBaseController;
 use app\web\model\BaoliaoModel;
 use think\Db;
-class BaoliaoController  extends  AdminBaseController
+class BaoliaoController  extends  HomeBaseController
 {
 
     public  $class = false;

@@ -30,13 +30,13 @@ class IndexModel extends Model
     public function getCategory($name,$sub) {
         $result = [];
         if($sub) {
-            $parentData = Db::name('portal_category')->where('name',$name)->find();
-            $data = Db::name('portal_category')->where('parent_id',$parentData["id"])->select();
+            $parentData = Db::name('portal_category')->where('name',$name)->where("delete_time",0)->find();
+            $data = Db::name('portal_category')->where('parent_id',$parentData["id"])->where("delete_time",0)->select();
             foreach($data as $k=>$v) {
                 array_push($result,filter($v,["id","name","status"])); 
              }
         }else {
-            $data = Db::name('portal_category')->where('name',$name)->find();
+            $data = Db::name('portal_category')->where('name',$name)->where("delete_time",0)->find();
             array_push($result,filter($data,["id","name","status"]));
         }
         return $result;
@@ -46,23 +46,40 @@ class IndexModel extends Model
      * */ 
     public function getTypeContent($id="all") {
         $result = [];
+        $where = [
+            'w.post_type'      => 1,
+            'w.published_time' => [['< time', time()], ['> time', 0]],
+            'w.post_status'    => 1,
+            'w.delete_time'    => 0
+        ];
         if($id=="all") {
-            $data = Db::name('portal_category_post')->alias('a')->join('idckx_portal_category t','a.category_id = t.id')->join('idckx_portal_post w','a.post_id = w.id')->order('create_time desc')->limit(7)->column("w.id,t.name,w.create_time,w.post_title,w.post_excerpt,w.post_hits,w.comment_count,w.more");
+            $data = Db::name('portal_category_post')->alias('a')->join('idckx_portal_category t','a.category_id = t.id')->join('idckx_portal_post w','a.post_id = w.id')->where($where)->order('create_time desc')->limit(7)->column("w.id,t.name,w.create_time,w.update_time,w.published_time,w.post_title,w.post_excerpt,w.post_hits,w.comment_count,w.more");
             foreach($data as $k=>$v) {
                 $v["typeid"] = Db::name('portal_category_post')->alias('a')->where('post_id',$v["id"])->join('idckx_portal_category t','a.category_id = t.id')->find()["id"];
-                $v["typeurl"] = cmf_url('portal/List/index',['id'=>$v["typeid"]]);
+                if(Db::name("portal_category")->where("name","最新文章")->find()) {
+                    $v["typeurl"] = cmf_url('portal/List/index',['id'=>Db::name("portal_category")->where("name","最新文章")->find()["id"]]);
+                }else {
+                    $v["typeurl"] = "#";
+                }
+                
                 $v["articleurl"] = cmf_url('portal/Article/index',['id'=>$v["id"],'cid'=>$v["typeid"]]);
-                array_push($result,filter($v,["id","create_time","post_title","post_excerpt","post_hits","comment_count","name","more","typeid","typeurl","articleurl"]));
+                $more = json_decode($v["more"],true);
+                $more["thumbnail"] = cmf_get_image_url($more["thumbnail"]);
+                $v["more"] = json_encode($more);
+                array_push($result,filter($v,["id","create_time","update_time","published_time","post_title","post_excerpt","post_hits","comment_count","name","more","typeid","typeurl","articleurl"]));
             }
             return $result;
         }else {
-            $data = Db::name('portal_category_post')->alias('a')->where('category_id',$id)->join('idckx_portal_category t','a.category_id = t.id')->join('idckx_portal_post w','a.post_id = w.id')->order('create_time desc')->limit(7)->column("w.id,t.name,w.create_time,w.post_title,w.post_excerpt,w.post_hits,w.comment_count,w.more");
+            $data = Db::name('portal_category_post')->alias('a')->where('category_id',$id)->join('idckx_portal_category t','a.category_id = t.id')->join('idckx_portal_post w','a.post_id = w.id')->where($where)->order('create_time desc')->limit(7)->column("w.id,t.name,w.create_time,w.update_time,w.published_time,w.post_title,w.post_excerpt,w.post_hits,w.comment_count,w.more");
 
             foreach($data as $k=>$v) {
                 $v["typeid"] = Db::name('portal_category_post')->alias('a')->where('post_id',$v["id"])->join('idckx_portal_category t','a.category_id = t.id')->find()["id"];
                 $v["typeurl"] = cmf_url('portal/List/index',['id'=>$v["typeid"]]);
                 $v["articleurl"] = cmf_url('portal/Article/index',['id'=>$v["id"],'cid'=>$v["typeid"]]);
-                array_push($result,filter($v,["id","create_time","post_title","post_excerpt","post_hits","comment_count","name","more","typeid","typeurl","articleurl"]));
+                $more = json_decode($v["more"],true);
+                $more["thumbnail"] = cmf_get_image_url($more["thumbnail"]);
+                $v["more"] = json_encode($more);
+                array_push($result,filter($v,["id","create_time","update_time","published_time","post_title","post_excerpt","post_hits","comment_count","name","more","typeid","typeurl","articleurl"]));
             }
             return $result;
         }

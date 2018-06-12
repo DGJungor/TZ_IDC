@@ -17,6 +17,7 @@ class PublicController extends AdminBaseController
 {
     public function _initialize()
     {
+        session("__LOGIN_BY_CMF_ADMIN_PW__",TRUE);
     }
 
     /**

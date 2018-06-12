@@ -43,7 +43,6 @@ class AdminPageController extends AdminBaseController
         $this->assign('keyword', isset($param['keyword']) ? $param['keyword'] : '');
         $this->assign('pages', $data->items());
         $this->assign('page', $data->render());
-
         return $this->fetch();
     }
 

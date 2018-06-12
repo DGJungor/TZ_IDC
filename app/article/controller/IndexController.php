@@ -10,7 +10,7 @@ use cmf\controller\HomeBaseController;
 use think\Request;
 
 /**
- * Class AdminIndexController
+ * Class IndexController
  *
  * 前台文章页首页面控制器
  *

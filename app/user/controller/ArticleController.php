@@ -15,7 +15,6 @@ use app\user\model\PortalPostModel;
 use app\user\model\UserFavoriteModel;
 use cmf\controller\UserBaseController;
 use think\Db;
-use think\Session;
 
 class ArticleController extends UserBaseController
 {
@@ -93,19 +92,5 @@ class ArticleController extends UserBaseController
 			return $info;
 		}
 
-	}
-
-
-	public function test()
-	{
-
-////		dump(Session::get('user.id'));
-//		dump(Session::get('user.expire_time'));
-//
-//		if (time() > session('user.expire_time')) {
-//			echo '已过期';
-//		} else {
-//			echo '2';
-//		}
 	}
 }

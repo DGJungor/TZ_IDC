@@ -88,7 +88,7 @@ function idckx_api_baidupush($urls = array([]))
     curl_setopt_array($ch, $options);
     $result = curl_exec($ch);
 
-
+    
     return $resultXDH;
 }
 
