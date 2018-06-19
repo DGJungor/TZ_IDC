@@ -76,7 +76,7 @@ function idckx_api_baidupush($urls = array([]))
     $resultXDH = curl_exec($ch);
 
 
-    $api     = 'http://data.zz.baidu.com/urls?site=www.idckx.com&token=Yy23pqlRJFkyBy0Z';
+    $api     = 'http://data.zz.baidu.com/urls?site=www.idckx.com&token=rEKdIMKiU1WITWD1';
     $ch      = curl_init();
     $options = array(
         CURLOPT_URL            => $api,

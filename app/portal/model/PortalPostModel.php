@@ -70,51 +70,60 @@ class PortalPostModel extends Model
     {
         return strtotime($value);
     }
+
     /**
      * 获取所有幻灯片组
-     * */ 
-    public function findSlide() {
-       $slides = Db::name("slide")->select();
-       return $slides;
+     * */
+    public function findSlide()
+    {
+        $slides = Db::name("slide")->select();
+        return $slides;
     }
+
     /**
      * 为文章添加幻灯片
-     * */ 
-    public function setSlide($data) {
-      $result = Db::name("slide_item")->insert($data);
-      return $result;
+     * */
+    public function setSlide($data)
+    {
+        $result = Db::name("slide_item")->insert($data);
+        return $result;
     }
-    public function updateSlide($aid,$data) {
+
+    public function updateSlide($aid, $data)
+    {
         $slides = Db::name("slide_item")->select();
-        foreach($slides as $k=>$v) {
-            if(!empty($v["more"])) {
-                 $v["more"] = json_decode($v["more"],true);
-                 if($v["more"]["aid"]==$aid) {
-                     $slide = $v;
-                 }
-            }
-        }
-        if(isset($slide)) {
-             Db::name("slide_item")->where("id",$slide["id"])->update($data);
-        }
-    }
-    /**
-     * 删除幻灯片
-     * */ 
-    public function delSlide($aid) {
-       $slides = Db::name("slide_item")->select();
-       foreach($slides as $k=>$v) {
-           if(!empty($v["more"])) {
-                $v["more"] = json_decode($v["more"],true);
-                if($v["more"]["aid"]==$aid) {
+        foreach ($slides as $k => $v) {
+            if (!empty($v["more"])) {
+                $v["more"] = json_decode($v["more"], true);
+                if ($v["more"]["aid"] == $aid) {
                     $slide = $v;
                 }
-           }
-       }
-       if(isset($slide)) {
-            Db::name("slide_item")->where("id",$slide["id"])->update(["status"=>0]);
-       }
+            }
+        }
+        if (isset($slide)) {
+            Db::name("slide_item")->where("id", $slide["id"])->update($data);
+        }
     }
+
+    /**
+     * 删除幻灯片
+     * */
+    public function delSlide($aid)
+    {
+        $slides = Db::name("slide_item")->select();
+        foreach ($slides as $k => $v) {
+            if (!empty($v["more"])) {
+                $v["more"] = json_decode($v["more"], true);
+                if ($v["more"]["aid"] == $aid) {
+                    $slide = $v;
+                }
+            }
+        }
+        if (isset($slide)) {
+            Db::name("slide_item")->where("id", $slide["id"])->update(["status" => 0]);
+        }
+    }
+
     /**
      * 后台管理添加文章
      * @param array $data 文章数据
@@ -123,22 +132,24 @@ class PortalPostModel extends Model
      */
     public function adminAddArticle($data, $categories)
     {
-        $data['user_id'] = cmf_get_current_admin_id();
+        $data['user_id']       = cmf_get_current_admin_id();
+        $data['post_keywords'] = str_replace('，', ',', $data['post_keywords']);
+        $data['post_keywords'] = str_replace('|', ',', $data['post_keywords']);
 
         if (!empty($data['more']['thumbnail'])) {
             $data['more']['thumbnail'] = cmf_asset_relative_url($data['more']['thumbnail']);
-        }else {
-            if(isset($data["extract_img"])) {
+        } else {
+            if (isset($data["extract_img"])) {
                 $data['more']['thumbnail'] = cmf_asset_relative_url($data["extract_img"]);
             }
         }
-        if(empty($data['more']['author'])) {
-            $data['more']['author'] = Db::name("user")->where("id",cmf_get_current_admin_id())->find()["user_nickname"];
+        if (empty($data['more']['author'])) {
+            $data['more']['author'] = Db::name("user")->where("id", cmf_get_current_admin_id())->find()["user_nickname"];
         }
-        if(empty($data['post_hits'])) {
-            $data['post_hits'] = rand(100,500);
+        if (empty($data['post_hits'])) {
+            $data['post_hits'] = rand(100, 500);
         }
-        if(empty($data['post_hits'])) {
+        if (empty($data['post_hits'])) {
             $data['post']['post_hits'] = "200";
         }
         $this->allowField(true)->data($data, true)->isUpdate(false)->save();
@@ -148,7 +159,6 @@ class PortalPostModel extends Model
 
         $this->categories()->save($categories);
 
-        $data['post_keywords'] = str_replace('，', ',', $data['post_keywords']);
 
         $keywords = explode(',', $data['post_keywords']);
 
@@ -174,14 +184,17 @@ class PortalPostModel extends Model
         // }
         if (!empty($data['more']['thumbnail'])) {
             $data['more']['thumbnail'] = cmf_asset_relative_url($data['more']['thumbnail']);
-        }else {
-            if(isset($data["extract_img"])) {
+        } else {
+            if (isset($data["extract_img"])) {
                 $data['more']['thumbnail'] = cmf_asset_relative_url($data["extract_img"]);
             }
         }
-        $data['post_status'] = empty($data['post_status']) ? 0 : 1;
-        $data['is_top']      = empty($data['is_top']) ? 0 : 1;
-        $data['recommended'] = empty($data['recommended']) ? 0 : 1;
+        $data['post_status']   = empty($data['post_status']) ? 0 : 1;
+        $data['is_top']        = empty($data['is_top']) ? 0 : 1;
+        $data['recommended']   = empty($data['recommended']) ? 0 : 1;
+        $data['post_keywords'] = str_replace('，', ',', $data['post_keywords']);
+        $data['post_keywords'] = str_replace('|', ',', $data['post_keywords']);
+
 
         $this->allowField(true)->isUpdate(true)->data($data, true)->save();
 
@@ -202,8 +215,6 @@ class PortalPostModel extends Model
             $this->categories()->attach(array_values($newCategoryIds));
         }
 
-
-        $data['post_keywords'] = str_replace('，', ',', $data['post_keywords']);
 
         $keywords = explode(',', $data['post_keywords']);
 
