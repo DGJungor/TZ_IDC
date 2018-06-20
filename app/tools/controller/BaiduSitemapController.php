@@ -74,7 +74,7 @@ class BaiduSitemapController extends AdminBaseController
             ->where('status', 1)
             ->where('delete_time', 0)
             ->select();
-        
+
         //添加主域名 地图
         $sitemapModel->AddItem($domain, time(), 0, 'Always');
 
